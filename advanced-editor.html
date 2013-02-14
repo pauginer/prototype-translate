@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Advanced editor</title>
+		<script src="libs/jquery.js"></script>
+		<script src="libs/jquery.i18n.min.js"></script>
+		<script src="libs/jquery-ui.min.js"></script>
+		<script src="libs/jquery.elastic.source.js"></script>
+
+		<link rel="stylesheet" href="libs/foundation/stylesheets/foundation.css">
+		<link rel="stylesheet" href="libs/foundation/stylesheets/app.css">
+		<script src="libs/foundation/javascripts/modernizr.foundation.js"></script>
+		<script src="libs/textinputs_jquery.js"></script>
+		<link rel="stylesheet" href="style/buttons.css">
+		<link rel="stylesheet" href="style/ext.translate.editor.css">
+		<link rel="stylesheet" href="style/advanced-editor.css">
+
+<script>
+
+
+/*** Load data ***/
+lang = 'ca';
+ messages = null;
+ message = null;
+ index= null;
+ glossary = null;
+ selectedWord = null;
+ errorInfo = null;
+ isError = false;
+ errorWord = null;
+
+function loadData(file){
+	$.getJSON('messages/advanced-editor/'+file+'.json',function(data) {
+		messages=data.messages;
+		message = messages[0];
+		glossary=data.glossary;
+		errorInfo = data.error;
+		
+		loadNextTranslation();
+		
+	});
+	
+}
+
+/*** Glossary functions ***/
+function getAllTranslationsFor(word){
+	var translations=[];
+	$.each(glossary, function(i,w){
+		if(w.word == word){
+			$.each(w.trans,function(j,t){
+			translations.push(t);				
+			});
+		}
+	});
+	return translations;
+}
+
+function getAllWords(){
+	var words=[];
+	$.each(glossary, function(i,w){
+			words.push(w.word);				
+	});
+	return words;
+}
+
+function getOriginalForTranslation(translation){
+    var original= null;
+	$.each(glossary, function(i,w){
+		$.each(w.trans,function(j,t){
+			if(t.word == translation){
+				original = w.word;
+			}			
+		});
+	});
+	return original;
+}
+
+/*** Word panel: ***/
+	function spanify(e) {
+		e.each(function(){
+		    var text = $(this).html().split(' '),
+		        len = text.length,
+		        result = []; 
+		
+		    for( var i = 0; i < len; i++ ) {
+		    	var hasInfo= $.inArray($.trim(text[i]), getAllWords()) > -1;
+		    	if(hasInfo){
+			        result[i] = '<span class="word">' + text[i] + '</span>';	    		
+		    	}else{
+		    		 result[i] =  text[i];	
+		    	}
+		    }
+		    $(this).html(result.join(' '));
+		});   
+	};
+	
+	function updateInfoForWord(word){
+		var hasInfo = false;
+		clearSuggestions();
+		var translations= getAllTranslationsFor(word);
+		if(translations.length > 0){
+			showSuggestions(translations);		
+		}
+		
+		$('.word-info-panel .title').text(word);
+		var desc = $('.word-info-panel .glossary');
+		desc.empty();
+		$.each(glossary, function(i,w){
+			if(w.word == word){
+				var d = $("<div class='description'>"+w.desc+"</div>")	
+				desc.append(d);			
+				if(w.desc.length>0){ hasInfo = true; }
+				$.each(w.trans, function(i,t){
+					if(t.match == 'g'){
+						desc.append($("<div class='trans'><div class='text'>"+t.word+"</div></div>"));
+					}
+				});
+				//desc.append(d);
+			}
+		});
+		
+		$('.glossary .trans').click(insertWordSuggestion);
+		
+		return hasInfo;
+	}
+	
+	function showWordPanel(word){
+		selectedWord=word;
+		var hasInfo=updateInfoForWord(word);
+		var original= getOriginalForTranslation(word);
+		
+		if(!hasInfo && original !=null){
+			hasInfo = updateInfoForWord(original);
+		}
+
+		if(hasInfo){
+			$('.word-info-block').removeClass('hide');			
+			if(errorWord!=null && word == errorWord){
+				$('.glossary-warnings').removeClass('hide');
+			}
+		}
+		updateAutocompletion();
+	}
+	
+	function hideWordPanel(){
+		selectedWord=null;
+		$('.word-info-block').addClass('hide');
+		clearSuggestions();
+		updateAutocompletion();
+	}
+	
+	function clearAllMarkedWords() {
+		$('.word').removeClass('marked');
+		hideWordPanel();	
+	}
+	
+	function openWordPanelForWord(){
+		var e=$(this);
+		var alreadyMarked = e.hasClass("marked");
+		
+		
+		if(!alreadyMarked){
+			clearAllMarkedWords();
+			e.addClass('marked');
+			var word= e.text();
+			showWordPanel(word);
+			$('textarea.content').focus();
+		}
+		return false;
+	}
+	
+/** Suggestions **/
+function makePasteButtonCompact(){
+	$('.tux-editor-paste-original-button.extended').addClass('hide');
+	if( $("textarea.content").val() ==""){		
+		$('.tux-editor-paste-original-button.compact').removeClass('hide');
+	}
+}
+
+function makePasteButtonExtended(){
+	$('.tux-editor-paste-original-button.compact').addClass('hide');
+	if( $("textarea.content").val() ==""){	
+		$('.tux-editor-paste-original-button.extended').removeClass('hide');
+	}
+}
+
+	function clearSuggestions() {
+		var target =$(".tux-editor-insert-buttons .suggestions");
+		target.empty();
+		makePasteButtonExtended();
+	}
+	
+	function showSuggestions(words) {
+		clearSuggestions();
+		var target =$(".tux-editor-insert-buttons .suggestions");
+		$.each(words,function(i, e){
+			var text= e.word;
+			var match=e.match;
+			var type="match";
+			if(match == 'g'){
+				match = "";
+				type="match glossary";
+			}
+			target.append($("<button class='suggestion'><span class='text'>"+text+"</span><span class='"+type+"'>"+match+"</span></button>"))
+		});
+		
+		$('.suggestion',target).click(insertWordSuggestion);
+		makePasteButtonCompact();
+	}
+	function paste(text){
+		var selection = getSelectionText();
+		var inArea= isSelectionInTextarea();
+		var content = $("textarea.content").val();
+			$("textarea.content").replaceSelectedText(text);
+		$("textarea.autocomplete").val(text);
+		clearAllMarkedWords();
+		
+	}
+	
+	function pasteFromSource(){
+		var text = $('.sourcemessage').text();
+		$('.tux-editor-paste-original-button').addClass('hide');
+		paste(text);
+		
+	}
+	
+	function isSelectionInTextarea(){
+		var e = $('textarea.content')[0];
+		var start = e.selectionStart;
+		var end = e.selectionEnd;
+		
+		return start != end;
+	}
+	
+	function getSelectionText() {
+    	var text = "";
+		if (window.getSelection) {
+		        text = window.getSelection().toString();
+		    } else if (document.selection && document.selection.type != "Control") {
+		        text = document.selection.createRange().text;
+		}
+	return text;
+	}
+	
+	function updateOnSelection(){
+		var word = getSelectionText();
+		showWordPanel(word);
+	}
+	
+	function updateError(){
+		if(errorInfo !=null && errorInfo.word !=null){
+			var content = $('textarea.content').val();
+			var matches = content.match(errorInfo.exp);
+			var marker = $('.textarea-layers .error-marker');
+			if(matches){
+				marker.css('left', errorInfo.offset+"px");
+				marker.css('width', errorInfo.width+"px");
+				marker.removeClass('hide');			
+				isError = true;
+				errorWord = errorInfo.word;
+			}else{
+				marker.addClass('hide');
+				$('.glossary-warnings').addClass('hide');
+				isError = false;
+				errorWord = null;
+			}
+		}
+	}
+	
+	function insertWordSuggestion(){
+		var e = $('.text',this);
+		var text = e.text();
+		paste(text);
+	}
+	
+	function updateAutocompletion(){
+	var content = $('textarea.content').val();
+	var noEmpty= content !="";
+	var text = content;
+	var sel = $('textarea.content').getSelection();	
+	var noSelection= (sel.start == sel.end);
+	var finalPos = $('textarea.content').val().length == sel.end;
+	if(selectedWord !=null && noEmpty && noSelection && finalPos){
+		var trans = getAllTranslationsFor(selectedWord);
+		if(trans.length>0){
+		text = text + trans[0].word + " ";			
+		}
+
+	}else {
+		text = "";
+	}
+	$('textarea.autocomplete').val(text);	
+	}
+	
+	function userKey(e){
+		var sel = $('textarea.content').getSelection();	
+		var noSelection= (sel.start == sel.end);
+		var finalPos = $('textarea.content').val().length == sel.end;
+		
+		 if (e.which == 39 && noSelection && finalPos && selectedWord != null) { 
+	    $('textarea.content').val($('textarea.autocomplete').val());
+	       clearAllMarkedWords();
+	       return false;
+	  	}
+		updateAutocompletion();
+		updateError();
+		return true;		
+	}
+	
+	function userTypes(e){
+		if(e.which != 32){
+			clearAllMarkedWords();
+			//hideWordPanel();
+		}
+		
+	}
+	
+	
+	function loadNextTranslation(){
+		if(index!=null){
+			index = index + 1;
+		}else {index = 0;}
+		if(index == null || index >= messages.length){
+			index =0;
+		}
+		
+		var m = messages[index];
+		$('.sourcemessage').text(m);
+		
+		spanify($(".sourcemessage"));
+		$('.word').click(openWordPanelForWord);
+	}
+	
+	
+	$( document ).ready( function() {
+		
+		loadData(lang);
+		$('.tux-editor-paste-original-button').click(pasteFromSource);
+		hideWordPanel();
+		$('.editcolumn').click(clearAllMarkedWords);
+		//spanify($(".sourcemessage"));
+		//$('.word').click(openWordPanelForWord);
+		
+		$('textarea.content').select(updateOnSelection);
+		$('textarea.content').keypress(userTypes);
+		$('textarea.content').keyup(userKey);
+		$('.tux-editor-skip-button').click(loadNextTranslation);
+		$('.tux-editor-save-button').click(loadNextTranslation);
+
+	});
+
+	</script>
+
+	</head>
+	<body>
+
+		<div class="row message-list">
+
+			<div class="row tux-message open">
+				<div class="row tux-message-item untranslated hide">
+					<div class="eight columns tux-list-message">
+						<span class="tux-list-source" lang="en" dir="ltr">Pad Settings</span><span>‎</span><span class="tux-list-translation" lang="ca" dir="ltr"></span>
+					</div>
+					<div class="two columns tux-list-status text-center">
+						<span class="tux-status-untranslated"></span>
+					</div>
+					<div class="two column tux-list-edit text-right">
+						<a title="Edita «pad.settings.padSettings»">Edita</a>
+					</div>
+				</div>
+				<div class="row tux-message-editor">
+					<div class="seven columns editcolumn">
+						<div class="row">
+							<div class="ten columns messagekey">
+								EtherpadLite:Pad.settings.padSettings<span class="caret"></span>
+							</div>
+							<div class="two columns layout-actions">
+								<span class="one column close"></span><span class="one column editor-info-toggle editor-expand"></span>
+							</div>
+						</div>
+						<div class="row">
+							<span class="eleven column sourcemessage" lang="en" dir="ltr">The file was not found</span>
+						</div>
+						<div class="row tux-editor-editarea-block">
+							<div class="editarea eleven columns">
+								<div class="tux-warnings-block">
+									<div class="tux-more-warnings hide"> </div>
+									<div class="tux-warning hide"> </div>
+								</div>	
+								<div class="textarea-layers">
+									<textarea class="autocomplete" spellcheck='false' lang="en" dir="ltr"></textarea>					
+									<div id="textback">
+									    <div class="error-marker hide"></div>
+									</div>
+									<textarea class="content" spellcheck='false' placeholder="Your translation" lang="en" dir="ltr"></textarea>
+								</div>
+								
+</div>						</div>
+						<div class="row tux-editor-actions-block">
+							<div class="ten columns tux-editor-insert-buttons">
+								<span class="suggestions"></span>
+								<button class="tux-editor-paste-original-button compact hide">&nbsp;</button>
+								<button class="tux-editor-paste-original-button extended">Paste source text</button>
+							</div>
+							<div class="twelve columns tux-editor-control-buttons">
+								<button class="blue btn tux-editor-save-button" accesskey="s">
+									Desa la traducció
+								</button>
+								<button class="btn tux-editor-skip-button" accesskey="d">
+									Skip to next
+								</button>
+							</div>
+						</div>
+						<div class="row shortcutinfo">
+							Press "CTRL-OPTION-S" to save or "CTRL-OPTION-D" to skip to next message
+						</div>
+					</div>
+					<div class="five columns infocolumn-block">
+						<span class="caret"></span>
+						<div class="infocolumn">
+							<div class="row message-desc-editor hide">
+								<textarea placeholder="Message documentation" lang="en" dir="ltr"></textarea>
+<div class="row">      <button class="blue button tux-editor-savedoc-button" disabled="">
+										Save documentation
+									</button>
+									<button class="button tux-editor-skipdoc-button">
+										Cancel
+									</button>
+								</div>
+							</div>
+							<div class="message-desc-viewer">
+								<div class="row message-desc" lang="en" dir="ltr">
+									<p>
+										Used as heading of settings window
+									</p>
+								</div>
+								<div class="row message-desc-control">
+									<a href="http://translatewiki.net/w/i.php?action=edit&amp;title=EtherpadLite:Pad.settings.padSettings/qqq" target="_blank" class="message-desc-edit">Edit description</a>
+								</div>
+							</div>
+							<div class="row tm-suggestions-title">Suggestions</div>
+							<div class="tm-suggestions">
+								<div class="row tm-suggestion">
+									<div class="row tm-suggestion-top">
+										<div class="nine columns suggestiontext">Paràmetres del mapa</div>
+										<div class="three columns quality text-right">85% match</div>
+									</div>
+									<div class="row tm-suggestion-bottom">
+										<a class="nine columns use-this-translation">Use as translation</a><a class="three columns n-uses text-right"></a>
+									</div>
+								</div>
+								<div class="row tm-suggestion">
+									<div class="row tm-suggestion-top">
+										<div class="nine columns suggestiontext">Desa Configuració</div>
+										<div class="three columns quality text-right">78% match</div>
+									</div>
+									<div class="row tm-suggestion-bottom">
+										<a class="nine columns use-this-translation">Use as translation</a><a class="three columns n-uses text-right"></a>
+									</div>
+								</div>
+								<div class="row tm-suggestion">
+									<div class="row tm-suggestion-top">
+										<div class="nine columns suggestiontext end">Configuració de coixí</div>
+									</div>
+									<div class="row tm-suggestion-bottom">
+										<a class="nine columns use-this-translation">Use as translation</a><span class="three columns service text-right">Microsoft</span>
+									</div>
+								</div>
+							</div>
+							<div class="row in-other-languages-title">
+								In other languages
+							</div>
+							<div class="row in-other-language">
+								<div class="nine columns" lang="en" dir="ltr">
+									Pad Settings
+								</div>
+								<div class="three columns language text-right" lang="en" dir="ltr">
+									English
+								</div>
+							</div>
+							<div class="row in-other-language">
+								<div class="nine columns" lang="es" dir="ltr">
+									Configuración del Pad
+								</div>
+								<div class="three columns language text-right" lang="es" dir="ltr">
+									español
+								</div>
+							</div>
+							<div class="row help">
+								<span>Need more help?</span><a href="//translatewiki.net/w/i.php?title=Support&amp;lqt_method=talkpage_new_thread&amp;lqt_subject_field=About+%5B%5BEtherpadLite%3APad.settings.padSettings%2Fca%5D%5D" target="_blank">Ask for more information</a>
+							</div>
+						</div>
+						<div class="word-info-block">							
+						<span class="word-info-caret"></span>
+						<div class="infocolumn word-info-panel">
+							<div class="word-info-content">
+								<div class="title">File</div>
+								
+								<div class="glossary">
+									
+								</div>
+							</div>
+							<div class="glossary-warnings hide">
+								<div class="description">
+									The used term is not recommended in the glossary.
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+<hr />
+			<!--page-title2-->
+			<div class="message-pair">
+				<div class="message original row">
+					<div class="one column">
+						<div class="pre-marker"></div>
+					</div>
+					<div class="ten column">
+						<h2  class="content" data-i18n="original-page-title2"></h2>
+					</div>
+					<div class="one column">
+						<div class="post-marker"></div>
+					</div>
+				</div>
+			</div>
+			
+			
+		</div>
+
+	</body>
+</html>

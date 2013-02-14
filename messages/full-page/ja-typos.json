@@ -1,0 +1,15 @@
+{
+"page-title": "ウィキメディア·ハイライト、2012年6月",
+"page-ve-title": "第二Visual Editorのプロトタイプが打ち上げ",
+"page-ve": "ウィキメディア·プロジェクトのためのビジュアルエディタ''''の新しいプロトタイプは、ページを作成および編集することができます最初のリリースを開始しました。これにより、ユーザーは複雑なwikiテキスト構文を習得しなくても貢献していきます。",
+"page-th-title": "''茶屋''パイロットは有望な結果で締めくくり",
+"page-th": "新しいウィキペディアの編集者が、経験豊富なコミュニティメンバーからのサポートを受けることができる茶屋では、レポートおよびメトリックを公開し、英語版ウィキペディアで、その3ヶ月のパイロット·フェーズを締結しました。 568ボランティアがパイロットに参加しました。調査では、70％はわずか5％が満足していなかった間、彼らは、彼らの茶屋の経験に満足していると述べた。茶屋に招待された新しい編集者はより多くの招待を受けていない人よりも、後で編集を行う。茶屋参加者の28％が一般的にWikipediaの編集者の9％に比べ、女性である。",
+"page-th-src":"La [[en:Wikipedia:Teahouse|Casa del Té]], donde los nuevos editores de Wikipedia pueden recibir ayuda de miembros de la comunidad con experiencia, [https://blog.wikimedia.org/2012/06/15/wikipedia-teahouse-pilot-helps-new-editors-make-contributions/ concluyó su período de prueba de tres meses] en la Wikipedia en inglés, publicando un [[en:Wikipedia:Teahouse/Pilot_report|informe]] y [[en:Wikipedia:Teahouse/Host_lounge/Metrics|estadísticas]]. En total 568 voluntarios participaron en el periodo de prueba. En una encuesta, el 70% dijo encontrarse satisfecho con su experiencia en la Casa del Té, y solo el 5% no se encontró satisfecho. Los editores nuevos que fueron invitados a la Casa del Té, hicieron muchas más ediciones que aquellos que no recibieron la invitación. El 28 porciento de los participantes de la Casa del Té fueron mujeres, comparado con el 9% de editores mujeres en la Wikipedia en general.",
+"page-hk-title": "ハッカーは、ベルリンで開催",
+"page-hk":"30カ国から100以上の参加者は、ウィキメディア·ドイツと財団が共催、ベルリンHackathonのためにベルリンに来ました。彼らは、MediaWikiの開発、ToolServerをユーザー、システム管理者は、ボットの作家やメンテナ、ガジェットクリエーター、および他のウィキメディア·技術者が含まれていました。コミュニティはまたWikidataおよびレンダリングプロジェクトの詳細を学んだ。",
+"page-hk-src":"30カ国から100名以上の参加[https://blog.wikimedia.org/2012/06/02/diverse-wikimedia-tech-crowd-gathers-in-berlin/はベルリンに来た] [[MWの：ベルリンHackathon2012|ベルリンHackathon]]、共催ウィキメディア財団がドイツと。彼らは、MediaWikiの開発、ToolServerをユーザー、システム管理者は、ボットの作家やメンテナ、ガジェットクリエーター、および他のウィキメディア·技術者が含まれていました。コミュニティはまたについての詳細を学んだ[[Wikidata]]と[[RENDER]]プロジェクト。",
+"page-title2": "ウィキメディア·ハイライト、2012年8月",
+"page-ms-title": "言語サポート·ツールは、''プロジェクトミルクセーキにリリースさ''",
+"page-ms":"国際化/ローカライゼーション（I18N/L10N）チームがそのプロジェクトのミルクセーキ、標準のjQueryライブラリーなど、既存の国際化関連のJavaScriptコンポーネントを解放するための努力の進捗状況を報告した。彼らは、パラメータの置換をサポートしており、国際化フレームワークを含む文法、複数-、性別依存翻訳、ウェブフォントを（読者のコンピュータにインストールする必要はありませんフォント）をサポートするためのライブラリ、およびテキスト入力メソッドを提供するライブラリブラウザに表示されます。",
+"lang-name": "Japanese"
+}

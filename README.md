@@ -1,4 +1,4 @@
 prototype-translate
 ===================
 
-Prototypes for the MediaWiki translate Extension designs
+Prototypes for the MediaWiki Translate extension designs

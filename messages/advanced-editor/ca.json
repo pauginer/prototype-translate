@@ -1,0 +1,10 @@
+{"messages": ["The file was not found", "Can you file a bug please"],
+"glossary": [
+	{"word": "file", "desc":"File (noun). A digital asset.", "trans": [{"word":"arxiu", "match":"g"},{"word":"fitxer", "match":"20%"}]},
+	{"word": "file", "desc":"File (verb). Action of adding something into a container.", "trans": [{"word":"emplenar", "match":"g"},{"word":"complimentar", "match":"10%"}]},
+	{"word": "find", "desc":"Find (verb). The reverse of geting something lost.", "trans": [{"word":"buscar", "match":"g"},{"word":"trobar", "match":"80%"}]},
+	{"word": "was", "desc":"", "trans": [{"word":"era", "match":"90%"},{"word":"es", "match":"50%"}]},
+	{"word": "found", "desc":"Find", "trans": [{"word":"trobat", "match":"g"},{"word":"trobar", "match":"20%"}]}
+],
+"error": {"exp":"^El fitxer", "word":"fitxer", "offset":"25", "width":"36"}
+}

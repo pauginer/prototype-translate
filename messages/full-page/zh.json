@@ -1,0 +1,15 @@
+{
+"page-title": "維基亮點，2012年6月",
+"page-ve-title": "第二可視化編輯器原型推出",
+"page-ve": "一個新的原型的“可視化編輯器”為維基媒體計劃推出的第一個版本，可以創建和編輯頁面。它使用戶能夠作出貢獻，而無需學習複雜的wikitext的語法。",
+"page-th-title": "“茶館”試點總結，成績令人鼓舞",
+"page-th": "茶館，新的維基百科編輯器可以接收由經驗豐富的社區成員的支持，結束了3個月的試驗階段的英文維基百科上，發布了一份報告和度量。 568志願者參與試點。在一項調查中，70％的受訪者表示，他們感到滿意，他們的茶館體驗，而只有5％的人不滿意。誰被邀請到“茶館”的新的編輯器做更多的編輯後比那些沒有收到邀請的人。茶館參與者的28％是婦女，而維基百科上的編輯一般％至9％。",
+"page-th-src":"La [[en:Wikipedia:Teahouse|Casa del Té]], donde los nuevos editores de Wikipedia pueden recibir ayuda de miembros de la comunidad con experiencia, [https://blog.wikimedia.org/2012/06/15/wikipedia-teahouse-pilot-helps-new-editors-make-contributions/ concluyó su período de prueba de tres meses] en la Wikipedia en inglés, publicando un [[en:Wikipedia:Teahouse/Pilot_report|informe]] y [[en:Wikipedia:Teahouse/Host_lounge/Metrics|estadísticas]]. En total 568 voluntarios participaron en el periodo de prueba. En una encuesta, el 70% dijo encontrarse satisfecho con su experiencia en la Casa del Té, y solo el 5% no se encontró satisfecho. Los editores nuevos que fueron invitados a la Casa del Té, hicieron muchas más ediciones que aquellos que no recibieron la invitación. El 28 porciento de los participantes de la Casa del Té fueron mujeres, comparado con el 9% de editores mujeres en la Wikipedia en general.",
+"page-hk-title": "黑客在柏林召開",
+"page-hk":"超過100名來自30個國家和地區來到柏林，在柏林黑客馬拉松，維基德國和基金會共同舉辦的。 ，包括頁面開發人員，Toolserver用戶，系統管理員，BOT作家和維護者，小工具的創造者，和其他維基技術人員。該社區還了解到更多的Wikidata和渲染項目。",
+"page-hk-src":"超過100名來自30個國家和地區https://blog.wikimedia.org/2012/06/02/diverse-wikimedia-tech-crowd-gathers-in-berlin/來到柏林][MW：柏林黑客馬拉松2012|柏林黑客馬拉松]，共同舉辦的維基德國和基金會。 ，包括頁面開發人員，Toolserver用戶，系統管理員，BOT作家和維護者，小工具的創造者，和其他維基技術人員。社區也了解到更多關於[Wikidata]]和[[RENDER]項目。",
+"page-title2": "維基亮點，2012年8月",
+"page-ms-title": "語言支持工具發布“項目奶昔'",
+"page-ms":"國際化/本地化（I18N/L10N）小組匯報了工作進度項目奶昔，努力釋放其現有的國際化相關的的JavaScript組件作為標準的jQuery庫。其中包括一個i18n的框架，支持參數替換和語法的，多和性別相關的翻譯，一個庫，以支持網絡字體（字體，也沒有需要向被安裝在讀者的計算機上），和一個庫提供文字輸入法在瀏覽器中。",
+"lang-name": "Chinese"
+}

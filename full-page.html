@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Full-page</title>
+		<link rel="localization" hreflang="en" href="messages/full-page/en.json" type="application/l10n+json"/>
+   	    <link rel="localization" hreflang="es" href="messages/full-page/es-typos.json" type="application/l10n+json"/>   		
+   		<link rel="localization" hreflang="fr" href="messages/full-page/fr-typos.json" type="application/l10n+json"/>
+		<link rel="localization" hreflang="fi" href="messages/full-page/fi-typos.json" type="application/l10n+json"/>
+		<link rel="localization" hreflang="ml" href="messages/full-page/ml-typos.json" type="application/l10n+json"/>
+		<link rel="localization" hreflang="he" href="messages/full-page/he-typos.json" type="application/l10n+json"/>
+		<link rel="localization" hreflang="ru" href="messages/full-page/ru-typos.json" type="application/l10n+json"/>
+		<link rel="localization" hreflang="hi" href="messages/full-page/hi-typos.json" type="application/l10n+json"/>
+		<link rel="localization" hreflang="zh" href="messages/full-page/zh-typos.json" type="application/l10n+json"/>
+		<link rel="localization" hreflang="ja" href="messages/full-page/ja-typos.json" type="application/l10n+json"/>
+		<script src="libs/jquery.js"></script>
+   		<script src="libs/jquery.i18n.min.js"></script>
+   		  <script src="libs/jquery-ui.min.js"></script>
+  <script src="libs/jquery.elastic.source.js"></script>
+
+   		<link rel="stylesheet" href="libs/foundation/stylesheets/foundation.css">
+  		<link rel="stylesheet" href="libs/foundation/stylesheets/app.css">
+  		<script src="libs/foundation/javascripts/modernizr.foundation.js"></script>
+  		<link rel="stylesheet" href="style/buttons.css">
+  		<link rel="stylesheet" href="style/full-page.css">
+  		<script>
+  		function visibility(original,trans){
+  			if(original){
+  				$(".message.original").show()
+  			}else{
+  				$(".message.original").hide()
+  			}
+  			
+  			if(trans){
+  				$(".message.translated").show()
+  			}else{
+  				$(".message.translated").hide()
+  			}
+
+  		}
+  		
+  		function activeView(name){
+  			$(".view-buttons .button").removeClass("active");
+  			$(".view-buttons .button."+name).addClass("active");
+  			
+  			if(name=="compare"){
+  				$(".button.side-by-side").show();
+  			}else{
+  				$(".button.side-by-side").hide();
+  			}
+  			
+  			if(name == "compare" && preferSideBySide && !sideBySide){
+  				toggleSideBySide();
+  			}else if(name != "compare" && sideBySide){
+  				toggleSideBySide();
+  				
+  			}
+  			
+  			
+  		}
+  		
+  		var proofReadingMode=false;
+  		
+  		function actionProofreading(mode){
+  			
+  			var markers=$(".original.message .post-marker");
+  			if(sideBySide){
+  				markers=$(".translated.message .post-marker");
+  			}
+  			if(mode){//Enable:
+  				$(".button.proofread").addClass("active");
+  				markers.show();
+  				//markers.removeClass("hidden");
+  				
+  			}else{ //Disable:
+  				$(".button.proofread").removeClass("active");
+  				markers.hide();
+  				//markers.addClass("hidden");
+  			}
+  			proofReadingMode= !proofReadingMode;
+  			
+  			if(proofReadingMode){
+  				updateProofreadProgress();
+  			}else{
+  				updateTranslationProgress();
+  			}
+  			
+  		}
+  		
+  		function actionCheck(src){
+  			if(proofReadingMode){
+  				var elt=$(src);
+  				if(elt.hasClass("post-marker")){
+  					elt=$(".post-marker",elt.parents(".message-pair"))
+  				}else{
+  				elt = $(".post-marker",elt)
+  				}
+  				
+  				elt.toggleClass("active");
+  				updateProofreadProgress();
+  			}else{
+  				editTranslation(elt);
+  			}
+  		}
+  		
+  		
+  		//Side-by-side:
+  		var preferSideBySide=false;
+  		var sideBySide=preferSideBySide;
+  		
+  		function toggleSideBySide(){
+  			$(".message").toggleClass("row");
+  			$(".message-pair").toggleClass("row");
+  			$(".message.original>div:nth-child(3)").toggleClass("one column");
+  			
+  			$(".message>div:nth-child(2)").toggleClass("ten");
+  			$(".message>div:nth-child(2)").toggleClass("five");
+  			
+  			$(".message.translated>div:nth-child(1)").toggleClass("one column");
+  				
+  			$(".side-by-side.button").toggleClass("active");
+  			if(proofReadingMode){
+  				$(".post-marker").toggle();
+  			}
+  			sideBySide=!sideBySide;
+  			
+  		}
+  		
+  		function updateProgress(label,val){
+  			$(".progress-view .counter").html(label);
+  		    $(".progress .meter").css("width",val+"%")
+  		    if(val==100){
+  		    	$(".progress-view .counter").addClass("complete");
+  		    }else{
+  		    	$(".progress-view .counter").removeClass("complete");
+  		    }
+  		}
+  		
+  		function updateProofreadProgress(){
+	  		var active=$(".post-marker.active").length;
+	  		var total=$(".post-marker").length;	
+	  		var val= (active/total)*100;
+	  		val=Math.round(val);
+			updateProgress(String(val) + "% proofread",val);
+  		}
+  		
+  		function updateTranslationProgress(){
+  			var pending=$('.pre-marker.translate').length;
+  			var total= $('.message.original').length;
+  			var val= ((total-pending)/total)*100;
+  			val=Math.round(val);
+  			updateProgress(String(val) + "% translated",val);
+  		}
+  		
+  		function editTranslation(src){
+  			closeAllTranslations();
+  			//Open this
+  			
+  			
+  			var elt=src;
+  			if(!elt.hasClass("message-pair")){
+  				elt= src.parents(".message-pair");
+  			}
+  			elt.addClass("editor");
+  			
+  			var trans = $(".message.translated .content",elt); 
+  			var trans_content=trans.html();
+  			var trans_area = $("<textarea placeholder='Your translation' />");
+    		trans_area.val(trans_content);
+    		trans_area.attr("data-original",trans_content);
+    		$(trans).replaceWith(trans_area);
+    		trans_area.elastic();
+    		trans_area.focus();
+  		}
+  		
+  		function closeAllTranslations(){
+  			$(".message-pair.editor").each(function(){
+  				 closeTranslation($(this), false); });
+  		}
+  		
+  		function closeTranslation(src,save){
+  	
+  			var elt=$(src);
+  			if(!elt.hasClass("message-pair")){
+  				elt= elt.parents(".message-pair");
+  			}
+  			elt.removeClass("editor");
+  			var trans_area = $("textarea",elt);
+  			var trans_content = trans_area.val().trim();
+  			if(!save){
+  				trans_content = trans_area.attr('data-original').trim();;
+  			}
+  			
+ 
+  			var orig = $(".message.original .content",elt)
+  			var tagName=$(orig).prop("tagName");
+  			
+  			
+  			var trans=$('<'+tagName+' class="content"></'+tagName+'>');
+  			$(trans_area).replaceWith(trans);
+  			trans.html(trans_content);
+  			
+  			if(save){
+  				if(trans_content){
+	  				$(".message.original .pre-marker",elt).removeClass("translate");
+	  				$(".btn.translate",elt).addClass("hidden");
+  					$(".no-post-marker",elt).removeClass('no-post-marker').addClass("post-marker");
+  				  	
+  				  					
+  				}else{
+  					$(".message.original .pre-marker",elt).addClass("translate");
+  					$(".btn.translate",elt).removeClass("hidden");
+	  				$(".post-marker",elt).removeClass('post-marker').addClass("no-post-marker");
+  					
+  				}
+  				
+  				//Highlight change
+  				$(trans).effect("highlight", {}, 500);
+  				
+  				updateTranslationProgress();
+  			}
+  	
+  		}
+  		
+  		function pairAction(elt){ //Opens or checks depending on mode
+  			if(!elt.hasClass("editor")){
+  				if(proofReadingMode){
+				 	actionCheck(elt);
+  				}else{
+  					editTranslation(elt);
+  			}
+
+  			}
+  		}
+  		
+  			$( document ).ready( function() {
+				//Aditional elements:
+				$(".message.translated div:nth-child(3) div").after($('<a class="edit-action" href="#action">Edit</a>'));
+				$(".message.translated div:nth-child(2)").append($('<div class="translate controls"><div class="save btn blue">Update translation</div> <div class="skip btn">Cancel</div> </div>'));
+				$(".message-pair").prepend($('<div class="close controls"><img src="img/x.png"></div>'));
+				
+				
+				updateTranslationProgress();
+				
+				//Handlers:
+				
+				//View-buttons config:
+				$(".original.button").click(function(e){visibility(true,false); activeView("original"); e.stopPropagation()});
+				$(".compare.button").click(function(e){visibility(true,true); activeView("compare"); e.stopPropagation()});
+				$(".translated.button").click(function(e){visibility(false,true); activeView("translated"); e.stopPropagation()});
+				//Proofreading
+				$(".button.proofread").click(function(e){actionProofreading(!proofReadingMode); e.stopPropagation()});
+				$(".message-pair").click(function(e){pairAction($(this)); e.stopPropagation();});
+				$(".post-marker").click(function(e){pairAction($(this)); e.stopPropagation();});
+				//Edit action
+				$(".edit-action").click(function(e){editTranslation($(this)); e.stopPropagation();});
+				$(".btn.translate").click(function(e){editTranslation($(this)); e.stopPropagation();});
+				$(".message-pair .close img").click(function(e){closeTranslation($(this),false); e.stopPropagation();});
+				$(".message-pair .controls .skip").click(function(e){closeTranslation($(this),false); e.stopPropagation();});
+				$(".message-pair .controls .save").click(function(e){closeTranslation($(this),true); e.stopPropagation();});
+				$("body").click(function(e){closeAllTranslations();});
+				//Side-by-side
+				$(".button.side-by-side").click(function(){toggleSideBySide(); preferSideBySide=sideBySide;})
+				
+			
+				
+				//URL parameters
+				var hash = window.location.hash;
+				var args=hash.replace('#','').split('-');
+				args.forEach(function(e){
+				if(e.length == 2){
+					//CODE TO CHANGE LANGUAGE TO LOCALE e 
+					//$.i18n.locale=e;
+					$.i18n.defaults.locale=e;
+					//$("html").attr("lang",e);
+					if(e=="he"){
+						$("head").append('<link rel="stylesheet" href="style/rtl.css">');
+					}
+					
+  				}
+  					toggleSideBySide(); preferSideBySide=sideBySide;
+  						
+				});
+				
+  				
+ 
+				$(document).i18n();
+			});
+			
+  		</script>
+    </head>
+    <body>
+
+	   <div class="row top-bar">
+	   	<div class="three columns">&lt; Back to message list</div>
+	   	<div class="four columns view-buttons">
+	   		<div class="button-bar">
+			  <ul class="button-group">
+			    <li><a href="#" class="small secondary original button">Original</a></li>
+			    <li><a href="#" class="small secondary compare button active">Compare</a></li>
+			    <li><a href="#" class="small secondary translated button">Translated</a></li>
+			  </ul>
+	   	  	<a href="#" class="small secondary side-by-side button">&#8759;</a></li>
+			</div>
+	   	</div>
+	   	<div class="two columns">
+				<a href="#action" class="small secondary proofread button">&#10004; Proofread</a></li>		   
+	   			
+	   	</div>
+	   	<div class="two columns"> <div class="language-selector"> <span  data-i18n="lang-name">Language</span> &#9662;</div></div>
+		<div class="one column close"> <img src="img/x.png"/>	   		
+	   	</div>
+			 
+	   </div>     
+	   
+ 
+   <div class="row message-list">
+
+
+
+      
+      
+
+      	<!--page-title-->
+      <div class="message-pair">
+      <div class="message original row">
+      	<div class="one column"><div class="pre-marker"></div></div>
+      	<div class="ten column"><h2 class="content" data-i18n="original-page-title"> </h2></div>
+      	<div class="one column"><div class="post-marker"></div></div>
+      </div>
+      
+      <div class="message translated row">
+      	<div class="one column"><div class="pre-marker"></div></div>
+      	<div class="ten column"><h2 class="content" data-i18n="page-title"></h2><a class="btn translate" href="#action">Translate</a></div>
+      	<div class="one column"><div class="post-marker"></div></div>
+      </div>
+      </div>
+      
+    
+
+	<!--page-ve-title-->
+	<div class="message-pair">
+      <div class="message original row">
+      	<div class="one column"><div class="pre-marker"></div></div>
+      	<div class="ten column"><h3 class="content" data-i18n="original-page-ve-title"> </h3></div>
+      	<div class="one column"><div class="post-marker"></div></div>
+      </div>
+      
+      <div class="message translated row">
+      	<div class="one column"><div class="pre-marker"></div></div>
+      	<div class="ten column"><h3  class="content" data-i18n="page-ve-title"></h3><a class="btn translate" href="#action">Translate</a></div>
+      	<div class="one column"><div class="post-marker"></div></div>
+      </div>
+    </div>
+      
+      
+        <!--page-ve-->
+      <div class="message-pair">
+       <div class="message original row">
+      	<div class="one column"><div class="pre-marker"></div></div>
+      	<div class="ten column"><p  class="content" data-i18n="original-page-ve"> </p></div>
+      	<div class="one column"><div class="post-marker"></div></div>
+       </div>
+      
+      <div class="message translated row">
+      	<div class="one column"><div class="pre-marker"></div></div>
+      	<div class="ten column"><p  class="content" data-i18n="page-ve"></p><a class="btn translate" href="#action">Translate</a></div>
+      	<div class="one column"><div class="post-marker"></div></div>
+      </div>
+    </div>
+      
+      
+      <!--original-page-ve-tr -->
+      <div class="message-pair">
+       <div class="message original row">
+      	<div class="one column"><div class="pre-marker translate"></div></div>
+      	<div class="ten column"><p  class="content" data-i18n="original-page-ve-tr"> </p></div>
+      	<div class="one column"><div class="no-post-marker"></div></div>
+       </div>
+      <div class="message translated row">
+      	<div class="one column"><div class="pre-marker"></div></div>
+      	<div class="ten column"><p class="content"></p><a class="btn translate" href="#action">Translate</a></div>
+      	<div class="one column"><div class="no-post-marker"></div></div>
+      </div>
+    </div>   
+      
+      
+      
+      
+<!--page-th-title-->
+	<div class="message-pair">
+      <div class="message original row">
+      	<div class="one column"><div class="pre-marker"></div></div>
+      	<div class="ten column"><h3  class="content" data-i18n="original-page-th-title"> </h3></div>
+      	<div class="one column"><div class="post-marker"></div></div>
+      </div>
+      
+      <div class="message translated row">
+      	<div class="one column"><div class="pre-marker"></div></div>
+      	<div class="ten column"><h3  class="content" data-i18n="page-th-title"></h3><a class="btn translate" href="#action">Translate</a></div>
+      	<div class="one column"><div class="post-marker"></div></div>
+      </div>
+    </div>
+      
+    <!--page-th-->
+      <div class="message-pair">
+       <div class="message original row">
+      	<div class="one column"><div class="pre-marker"></div></div>
+      	<div class="ten column"><p  class="content" data-i18n="original-page-th"> </p></div>
+      	<div class="one column"><div class="post-marker"></div></div>
+       </div>
+      
+      <div class="message translated row">
+      	<div class="one column"><div class="pre-marker"></div></div>
+      	<div class="ten column"><p  class="content" data-i18n="page-th"></p><a class="btn translate" href="#action">Translate</a></div>
+      	<div class="one column"><div class="post-marker"></div></div>
+      </div>
+    </div>
+    
+    <!--page-hk-title-->
+	<div class="message-pair">
+      <div class="message original row">
+      	<div class="one column"><div class="pre-marker"></div></div>
+      	<div class="ten column"><h3  class="content" data-i18n="original-page-hk-title"> </h3></div>
+      	<div class="one column"><div class="post-marker"></div></div>
+      </div>
+      
+      <div class="message translated row">
+      	<div class="one column"><div class="pre-marker"></div></div>
+      	<div class="ten column"><h3  class="content" data-i18n="page-hk-title"></h3><a class="btn translate" href="#action">Translate</a></div>
+      	<div class="one column"><div class="post-marker"></div></div>
+      </div>
+    </div>
+    
+    <!--page-hk-->
+      <div class="message-pair">
+       <div class="message original row">
+      	<div class="one column"><div class="pre-marker outdated"></div></div>
+      	<div class="ten column"><p  class="content" data-i18n="original-page-hk"> </p></div>
+      	<div class="one column"><div class="post-marker"></div></div>
+       </div>
+      
+      <div class="message translated row">
+      	<div class="one column"><div class="pre-marker"></div></div>
+      	<div class="ten column"><p  class="content" data-i18n="page-hk"></p><a class="btn translate" href="#action">Translate</a></div>
+      	<div class="one column"><div class="post-marker"></div></div>
+      </div>
+    </div>
+    
+      
+   
+      <hr />
+      
+      	<!--page-title2-->
+      <div class="message-pair">
+      <div class="message original row">
+      	<div class="one column"><div class="pre-marker"></div></div>
+      	<div class="ten column"><h2  class="content" data-i18n="original-page-title2"> </h2></div>
+      	<div class="one column"><div class="post-marker"></div></div>
+      </div>
+      
+      <div class="message translated row">
+      	<div class="one column"><div class="pre-marker"></div></div>
+      	<div class="ten column"><h2  class="content" data-i18n="page-title2"></h2><a class="btn translate" href="#action">Translate</a></div>
+      	<div class="one column"><div class="post-marker"></div></div>
+      </div>
+      </div>
+      
+      
+      
+      	<!-- page-ms-title -->
+      <div class="message-pair">
+      <div class="message original row">
+      	<div class="one column"><div class="pre-marker"></div></div>
+      	<div class="ten column"><h3  class="content" data-i18n="original-page-ms-title"> </h3></div>
+      	<div class="one column"><div class="post-marker"></div></div>
+      </div>
+      
+      <div class="message translated row">
+      	<div class="one column"><div class="pre-marker"></div></div>
+      	<div class="ten column"><h3  class="content" data-i18n="page-ms-title"></h3><a class="btn translate" href="#action">Translate</a></div>
+      	<div class="one column"><div class="post-marker"></div></div>
+      </div>
+      </div>
+      
+           	<!-- page-ms-title -->
+      <div class="message-pair">
+      <div class="message original row">
+      	<div class="one column"><div class="pre-marker"></div></div>
+      	<div class="ten column"><p  class="content" data-i18n="original-page-ms"> </p></div>
+      	<div class="one column"><div class="post-marker"></div></div>
+      </div>
+      
+      <div class="message translated row">
+      	<div class="one column"><div class="pre-marker"></div></div>
+      	<div class="ten column"><p  class="content" data-i18n="page-ms"></p><a class="btn translate" href="#action">Translate</a></div>
+      	<div class="one column"><div class="post-marker"></div></div>
+      </div>
+      </div>
+      
+      
+      
+      
+
+  </div>
+  
+  <div class="row bottom-bar">
+	  	<div class="two columns progress-view"> <span class="counter">0% proofread</span> 	</div>
+  	   	<div class="two columns">
+	  	   		<!-- <div class="counter">0% Proofread</div> -->
+	  	   	   <div class="progress"> <span class="meter" ></span></div>
+	  	   	
+	  		</div>
+	   	<div class="six columns"> </div>
+	
+	   	<div class="three columns last">
+		   	<!--<div href="#" class="small secondary button split dropdown">
+			  <a href="#">Split Button</a>
+			  <span></span>
+			  <ul>
+			    <li><a href="#">Dropdown Item</a></li>
+			    <li><a href="#">Another Dropdown Item</a></li>
+			    <li class="divider"></li>
+			    <li><a href="#">Last Item</a></li>
+			  </ul>
+			</div>-->
+			
+  		</div>
+  </div>     
+    
+  
+    </body>
+</html>

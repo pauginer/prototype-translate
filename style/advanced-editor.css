@@ -1,0 +1,176 @@
+body{
+	background:#fbfbfb;
+}
+
+.message-list{
+margin: 60px auto;	
+padding: 60px 0;
+width:90%;
+max-width:1200px;
+min-width:900px;
+background:white;
+border: solid 1px #bbb;
+/*box-shadow: 2px  2px  5px 1px #ccc;*/
+}
+
+hr{
+	margin: 80px 0;
+}
+
+a, a:hover{
+	color: #36b;
+}
+
+.btn.translate{
+	display: none;
+	margin:15px 20%;
+}
+.content:empty+.btn.translate{
+	display: block;
+}
+
+.textarea-layers{
+	position: relative;
+	
+}
+
+.textarea-layers textarea.autocomplete {
+	color: #aaa;
+}
+
+.textarea-layers textarea.content {
+    background: transparent;
+    position: absolute;
+    top:0;
+	z-index: 102;
+}
+
+.textarea-layers .error-marker {
+    position: absolute;
+    top: 5px;
+    background-color: transparent;
+    border-bottom: 1px solid #f26522;
+    height: 20px;
+    z-index: 101;
+    
+}
+
+.word-info-caret:before {
+	border-top: 20px solid transparent;
+	border-right: 20px solid #9D9D9D;
+	border-bottom: 20px solid transparent;
+	content: "";
+	display: inline-block;
+	left: -10px;
+	position: absolute;
+	bottom: 50%;
+}
+
+.word-info-caret:after {
+	border-top: 20px solid transparent;
+	border-right: 20px solid white;
+	border-bottom: 20px solid transparent;
+	content: "";
+	display: inline-block;
+	left: -9px;
+	position: absolute;
+	bottom: 50%;
+	z-index: 301;
+}
+
+
+.word-info-panel {
+	border-left: 1px solid #9D9D9D;
+	z-index: 300;
+	background: white url(../images/documentation.png) 10px 14px no-repeat;
+	background-image: -webkit-linear-gradient(transparent, transparent), url(../images/documentation.svg);
+	background-image: -moz-linear-gradient(transparent, transparent), url(../images/documentation.svg);
+	background-image: linear-gradient(transparent, transparent), url(../images/documentation.svg);
+	background-size: 25px;
+}
+.word-info-content{
+	padding: 10px 45px !important;	
+}
+
+.word-info-panel .title {
+	font-size: 24px;
+	margin-bottom: 10px;	
+}
+
+.glossary .trans{
+font-size: 14px;
+border: 1px solid #ddd;
+/*border-left: 2px solid #3366BB;*/
+padding: 5px 5px 5px 5px;
+background-color: #f5f5f5;
+margin: 0 0 10px 0;
+display: inline-block;
+clear: both;
+cursor: pointer;
+}
+
+.glossary .description {
+ font-size: 16px;
+ padding: 8px 0;
+}
+
+.word {
+	padding: 0 2px;
+	margin: 0 -2px;
+}
+.word:hover {
+	background: #f0f0f0;
+	cursor: pointer;
+	border-radius: 4px;
+	color: black;
+}
+
+.word.marked{
+	background: #FFF5AA;
+	cursor: pointer;
+	border-radius: 4px;
+	color: black;
+}
+
+.tux-editor-insert-buttons button.suggestion:empty{
+	display:none;	
+}
+
+.tux-editor-insert-buttons button.suggestion .match{
+	font-size: 10px;
+	color: #777;
+	margin-left:4px;
+}
+
+
+.tux-editor-insert-buttons button.suggestion .match.glossary {
+	background: transparent url(../images/documentation-suggestion.png) center center no-repeat;
+	background-image: -webkit-linear-gradient(transparent, transparent), url(../images/documentation-suggestion.svg);
+	background-image: -moz-linear-gradient(transparent, transparent), url(../images/documentation-suggestion.svg);
+	background-image: linear-gradient(transparent, transparent), url(../images/documentation-suggestion.svg);
+	display: inline-block;
+	width:15px;
+	height: 11px;
+	background-size: contain;
+	vertical-align: baseline
+}
+
+
+
+.tux-editor-paste-original-button.compact{
+	background-position: center;
+}
+
+.glossary-warnings{
+	background: #fec880;
+	display: inline-block;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0px;
+	padding: 10px;
+}
+
+.hide{
+	display:none !important;
+}
