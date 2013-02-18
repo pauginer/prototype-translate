@@ -1,0 +1,10 @@
+{"messages": ["The file was not found", "Can you file a bug please"],
+"glossary": [
+	{"word": "file", "desc":"File (noun). A digital asset.", "trans": [{"word":"tiedosto", "match":"g"},{"word":"viila", "match":"20%"}]},
+	{"word": "file", "desc":"File (verb). Action of adding something into a container.", "trans": [{"word":"arkistoida", "match":"g"},{"word":"jättää", "match":"10%"}]},
+	{"word": "find", "desc":"Find (verb). The reverse of geting something lost.", "trans": [{"word":"löytää", "match":"g"},{"word":"etsiä", "match":"80%"}]},
+	{"word": "was", "desc":"", "trans": [{"word":"oli", "match":"90%"},{"word":"aikakausi", "match":"50%"}]},
+	{"word": "found", "desc":"Find", "trans": [{"word":"löytyi", "match":"g"},{"word":"perustaa", "match":"20%"}]}
+],
+"error": {"exp":"^Tiedostoa", "word":"fitxer", "offset":"7", "width":"71"}
+}
