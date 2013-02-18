@@ -1,0 +1,10 @@
+{"messages": ["The file was not found", "Can you file a bug please"],
+"glossary": [
+	{"word": "file", "desc":"File (noun). A digital asset.", "trans": [{"word":"dossier", "match":"g"},{"word":"fichier", "match":"20%"}]},
+	{"word": "file", "desc":"File (verb). Action of adding something into a container.", "trans": [{"word":"ficher", "match":"g"},{"word":"déposer", "match":"10%"}]},
+	{"word": "find", "desc":"Find (verb). The reverse of geting something lost.", "trans": [{"word":"trouver", "match":"g"},{"word":"retrouver", "match":"60%"}]},
+	{"word": "was", "desc":"", "trans": [{"word":"était", "match":"90%"},{"word":"ère", "match":"50%"}]},
+	{"word": "found", "desc":"Find", "trans": [{"word":"trouvé", "match":"g"},{"word":"fonder", "match":"20%"}]}
+],
+"error": {"exp":"^Le fichier", "word":"fichier", "offset":"28", "width":"42"}
+}

@@ -335,6 +335,19 @@ function makePasteButtonExtended(){
 	
 	$( document ).ready( function() {
 		
+		//URL parameters
+		var hash = window.location.hash;
+		var args=hash.replace('#','').split('-');
+		args.forEach(function(e){
+			if(e.length == 2){
+				lang=e;
+				if(e=="he"){
+					$("head").append('<link rel="stylesheet" href="style/rtl.css">');
+				}
+				
+			}
+		});
+
 		loadData(lang);
 		$('.tux-editor-paste-original-button').click(pasteFromSource);
 		hideWordPanel();
