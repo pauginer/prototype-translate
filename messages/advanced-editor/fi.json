@@ -6,5 +6,5 @@
 	{"word": "was", "desc":"", "trans": [{"word":"oli", "match":"90%"},{"word":"aikakausi", "match":"50%"}]},
 	{"word": "found", "desc":"Find", "trans": [{"word":"löytyi", "match":"g"},{"word":"perustaa", "match":"20%"}]}
 ],
-"error": {"exp":"^Tiedostoa", "word":"fitxer", "offset":"7", "width":"71"}
+"error": {"exp":"^Tiedostoa", "word":"tiedosto", "offset":"7", "width":"71"}
 }
