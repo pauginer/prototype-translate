@@ -1,0 +1,10 @@
+{"messages": ["The file was not found", "Can you file a bug please"],
+"glossary": [
+	{"word": "file", "desc":"File (noun). A digital asset.", "trans": [{"word":"档案", "match":"g"},{"word":"文件", "match":"70%"}]},
+	{"word": "file", "desc":"File (verb). Action of adding something into a container.", "trans": [{"word":"归档", "match":"g"},{"word":"填", "match":"10%"}]},
+	{"word": "find", "desc":"Find (verb). The reverse of geting something lost.", "trans": [{"word":"搜索", "match":"g"},{"word":"搜寻", "match":"80%"}]},
+	{"word": "was", "desc":"", "trans": [{"word":"是", "match":"90%"},{"word":"时代", "match":"50%"}]},
+	{"word": "found", "desc":"Find", "trans": [{"word":"发现", "match":"g"},{"word":"搜索", "match":"20%"}]}
+],
+"error": {"exp":"^文件", "word":"文件", "offset":"4", "width":"34"}
+}
