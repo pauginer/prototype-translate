@@ -1,0 +1,11 @@
+{"messages": ["The file was not found", "Can you file a bug please"],
+"glossary": [
+	{"word": "file", "desc":"File (noun). A digital asset.", "trans": [{"word":"नत्थी", "match":"g"},{"word":"फ़ाइल", "match":"20%"}]},
+	{"word": "file", "desc":"File (verb). Action of adding something into a container.", "trans": [{"word":"दाखिल करना", "match":"g"},{"word":"उन्नति करना", "match":"10%"}]},
+	{"word": "find", "desc":"Find (verb). The reverse of geting something lost.", "trans": [{"word":"पता लगाना", "match":"g"},{"word":"पाना", "match":"80%"}]},
+	{"word": "was", "desc":"", "trans": [{"word":"था", "match":"90%"},{"word":"है", "match":"50%"}]},
+	{"word": "not", "desc":"", "trans": [{"word":"नहीं", "match":"95%"},{"word":"न", "match":"15%"}]},
+	{"word": "found", "desc":"Find", "trans": [{"word":"पाया", "match":"g"},{"word":"नींव डालना", "match":"20%"}]}
+],
+"error": {"exp":"^फ़ाइल", "word":"फ़ाइल", "offset":"5", "width":"37"}
+}
