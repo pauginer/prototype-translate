@@ -228,7 +228,7 @@
 				 	actionCheck(elt);
   				}else{
   					editTranslation(elt);
-  			}
+  				}
 
   			}
   		}
@@ -250,7 +250,7 @@
 				$(".translated.button").click(function(e){visibility(false,true); activeView("translated"); e.stopPropagation()});
 				//Proofreading
 				$(".button.proofread").click(function(e){actionProofreading(!proofReadingMode); e.stopPropagation()});
-				$(".message-pair").click(function(e){pairAction($(this)); e.stopPropagation();});
+				//$(".message-pair").click(function(e){pairAction($(this)); e.stopPropagation();});
 				$(".post-marker").click(function(e){pairAction($(this)); e.stopPropagation();});
 				//Edit action
 				$(".edit-action").click(function(e){editTranslation($(this)); e.stopPropagation();});

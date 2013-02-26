@@ -79,11 +79,11 @@ border: solid 1px #bbb;
 .row.message-pair{
 	padding-top:1em;
 	padding-bottom:1em;	
-	min-height: 92px;
+	min-height: 99px;
 }
 .message-pair:hover{
 	background: #fbfbfb;
-	cursor:pointer;
+
 }
 
 
@@ -173,8 +173,9 @@ border: solid 1px #bbb;
 .post-marker{
 	background: url("../images/uncheck.png")  right center no-repeat;
 	width:auto;
-	height:30px;
+	height:35px;
 	display:none;
+	cursor:pointer;
 
 }
 
@@ -190,6 +191,15 @@ border: solid 1px #bbb;
 .message-pair:hover .post-marker.others {
 	background: url("../images/others-hi.png")  right center no-repeat;
 }
+
+.post-marker.me,
+.message-pair:hover .post-marker.me.active,
+.post-marker.me.active,
+.message-pair:hover .post-marker.me {
+	background: url("../images/me.png")  right center no-repeat;
+	height:50px;
+}
+
 
 .post-marker.active{
 	background: url("../images/check.png")  right center no-repeat;
