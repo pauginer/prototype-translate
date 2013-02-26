@@ -178,6 +178,19 @@ border: solid 1px #bbb;
 
 }
 
+.post-marker.others {
+	background: url("../images/others.png")  right center no-repeat;
+}
+
+.message-pair:hover .post-marker.others.active,
+.post-marker.others.active {
+	background: url("../images/others-active.png")  right center no-repeat;
+}
+
+.message-pair:hover .post-marker.others {
+	background: url("../images/others-hi.png")  right center no-repeat;
+}
+
 .post-marker.active{
 	background: url("../images/check.png")  right center no-repeat;
 
