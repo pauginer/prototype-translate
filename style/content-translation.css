@@ -1,0 +1,132 @@
+	.grid {
+		font-size:0;
+	}
+	.grid__item {
+		font-size: 1rem;
+	}
+
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700&subset=latin,cyrillic-ext,greek-ext,greek,vietnamese,latin-ext,cyrillic);
+
+body{
+	font-family: 'Open Sans', sans-serif;
+	margin-bottom:0;
+	line-height: 1.4em;
+	color: #222;
+}
+
+.translation-bar {
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 10px;
+		
+}
+
+.translation-area {
+	background: #f8f8f8;
+}
+
+.article-panel {
+	background: white;
+	overflow:auto;
+	padding-left: 60px;
+}
+
+.message {padding-right: 20px;}
+
+
+.message-pair:hover {
+	/*background: #fbfbfb;*/
+	cursor: default;
+}
+
+.message-pair .source.message {
+	
+}
+
+.message-pair.active .source.message, 
+.message-pair.active:hover .source.message{
+	background: #FFFEEC;
+	cursor: inherit;
+}
+
+
+.message-pair.active .translated.message a {
+	background: #E5F0F9;
+	border-radius: 13px;
+	/*
+	text-decoration: none;
+	 color: white;
+	outline: 1px #55A2E7;*/
+}
+
+.message-pair .translated .actions {
+	visibility: hidden;
+	padding-bottom: 10px;
+}
+
+.message-pair.active .translated .actions {
+	visibility:visible;
+}
+
+.progress {
+	display: inline-block;
+	position: relative;
+	background: #eee;
+	height: 4px;
+}
+
+.progress .bar {
+	background: red;	
+	display: inline-block;
+	height: 4px;
+	width: 0%;
+	position: absolute;
+	left:0;
+	top:0;
+	transition: width 1s;
+}
+
+.tools .tool {
+	float:right;
+	display: inline-block;
+	margin-top: 5px;
+}
+
+.tools .tool.search {
+	background: transparent url(../images/search.png) center left no-repeat;
+	background-image: linear-gradient(transparent, transparent), url(../images/search.svg);
+	padding-left: 28px;
+	min-height: 25px;
+	background-size: 25px auto;
+}
+
+.tools .tool.settings {
+	background: transparent url(../images/cog.png) center right no-repeat;
+	background-image: linear-gradient(transparent, transparent), url(../images/cog.svg);
+	padding-left: 28px;
+	min-height: 25px;
+	min-width: 30px;
+	background-size: auto 25px;
+}
+
+.tools .searchbox {
+	min-height: 25px;
+	display:none;
+	margin:0;
+	min-width: 200px;
+}
+
+.tools .tool.search:hover .searchbox, .tools .searchbox:focus {
+	display: inline-block;
+}
+
+.context-panel h2{
+	font-weight: lighter;
+	color: #3892E3;
+}
+
+
+
+*[contenteditable="true"]:focus{
+	border:none;
+	outline:none;
+}

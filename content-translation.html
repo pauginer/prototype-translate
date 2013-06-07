@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Content transation</title>
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0">
+	<script src="libs/jquery.js"></script>
+	<script src="libs/jquery.i18n.min.js"></script>
+	<script src="libs/jquery-ui.min.js"></script>
+	<script src="libs/rangy-core.js"></script>
+	<script src="libs/rangy-cssclassapplier.js"></script>
+		<script src="libs/rangy-highlighter.js"></script>
+	<script src="libs/rangy-selectionsaverestore.js"></script>
+	<script src="libs/rangy-serializer.js"></script>
+	<script src="libs/rangy-textrange.js"></script>
+	<script src="libs/handlebars.js"></script>
+	
+	<link rel="stylesheet" href="libs/csswizardry-grids.css">
+	<link rel="stylesheet" href="style/buttons.css">
+	<link rel="stylesheet" href="style/content-translation.css">
+	
+	<script id="aids-template" type="text/x-handlebars-template">
+		<div class="grid__item one-whole">
+			<h2>Suggestions</h2>
+		</div>
+		
+	</script>
+	
+	<script>
+	function cursorToEnd(elt){
+		var element = elt.get(0); //jquery to HTML node
+	       var range = rangy.createRange();
+					range.selectNodeContents(element);
+					var sel = rangy.getSelection();
+					sel.setSingleRange(range);
+					sel.collapseToEnd();
+	}
+
+function focusOnSearchbox(){
+	$(".tools .searchbox").focus();	
+}
+
+	function updateProgress(percent) {
+		$(".progress .bar").css("width",percent+"%")
+	}
+
+	function adjustSize(){
+		var h = $(window).height() - $(".article-panel").offset().top;
+  			$(".article-panel").css("max-height",h);
+	}
+	
+	function activeMessagePair(elt){
+		$('.message-pair').removeClass("active");
+		if(elt != null){
+			elt.addClass("active");
+		}
+	}
+	
+	function updateTranslationAids(){
+		var context = {title: "My New Post", body: "This is my first post!"}
+		var html    = aids_template(context);
+		$(".context-panel .aids").html(html);
+	}
+	
+	
+	var aids_template = Handlebars.compile($("#aids-template").html());
+	
+	
+	$( document ).ready( function() {
+		adjustSize();
+		updateTranslationAids();
+		
+		
+		
+		$(".message-pair").click(function(){
+				var elt = $(".translated.message p",$(this));
+				activeMessagePair($(this));
+				if(!elt.text().trim().length){
+					elt.html("here will come <b>the best</b> suggestion");
+					cursorToEnd(elt);
+				}
+				elt.focus();
+				return false;
+		});
+		
+		$(".tools .tool.search").click(focusOnSearchbox);
+		
+		$(window).resize(function() {
+  			adjustSize();
+		});
+		
+		$('.translated.message p').blur(function(){
+			console.debug("changed!");
+		});
+		
+		
+		$("body").click(function(){activeMessagePair(null)});
+	});
+  	</script>
+</head>
+<body>
+	
+
+
+    
+<div class="grid">
+	<div class="logo grid__item one-third">
+			   Logo
+	</div>
+	
+	<div class="grid__item two-thirds">
+			  Login info	
+	</div>
+</div>
+
+<div class="translation-bar grid">
+	<div class="back-action grid__item one-sixth">
+		Translation center
+	</div>
+	<div class="language-labels grid__item two-thirds">
+		keyboard icon
+		<button>Review and publish</button>
+	</div>
+	
+</div>
+
+<div class="translation-area grid">
+	
+	<div class="article-panel grid__item two-thirds">
+		<div class="grid">
+			<div class="source message grid__item one-half">
+				<h1>Ludwig Mies van der Rohe</h1>
+			</div>
+			<div class="translated message grid__item one-half">
+				<h1>Ludwig Mies van der Rohe</h1>
+			</div>
+			
+			<div class="message-pair">
+				<div class="source message grid__item one-half">
+					<p><b>Ludwig Mies van der Rohe</b> (born <b>Maria Ludwig Michael Mies</b>; March 27, 1886 – August 19, 1969) was a German-American <a href="#" title="Architect">architect</a>.<sup id="cite_ref-obit_1-0" class="reference"><a href="#cite_note-obit-1"><span>[</span>1<span>]</span></a></sup> He is commonly referred to, and was addressed, as <b>Mies</b>, his surname. He served as the last director of Berlin's <a href="/wiki/Bauhaus" title="Bauhaus">Bauhaus</a>, and then headed the department of architecture, <a href="/wiki/Illinois_Institute_of_Technology" title="Illinois Institute of Technology">Illinois Institute of Technology</a> in Chicago, where he developed the <a href="/wiki/Chicago_school_(architecture)" title="Chicago school (architecture)">Second Chicago School</a>. Along with <a href="/wiki/Le_Corbusier" title="Le Corbusier">Le Corbusier</a>, <a href="/wiki/Alvar_Aalto" title="Alvar Aalto">Alvar Aalto</a>, and <a href="/wiki/Frank_Lloyd_Wright" title="Frank Lloyd Wright">Frank Lloyd Wright</a>, he is widely regarded as one of the pioneering masters of <a href="/wiki/Modern_architecture" title="Modern architecture">modern architecture</a>.</p>
+		
+				</div>
+				<div class="translated message grid__item one-half">
+					<p contenteditable="true"><b>Ludwig Mies van der Rohe</b> (born <b>Maria Ludwig Michael Mies</b>; March 27, 1886 – August 19, 1969) was a German-American <a href="#" title="Architect">architect</a>.<sup id="cite_ref-obit_1-0" class="reference"><a href="#cite_note-obit-1"><span>[</span>1<span>]</span></a></sup> He is commonly referred to, and was addressed, as <b>Mies</b>, his surname. He served as the last director of Berlin's <a href="/wiki/Bauhaus" title="Bauhaus">Bauhaus</a>, and then headed the department of architecture, <a href="/wiki/Illinois_Institute_of_Technology" title="Illinois Institute of Technology">Illinois Institute of Technology</a> in Chicago, where he developed the <a href="/wiki/Chicago_school_(architecture)" title="Chicago school (architecture)">Second Chicago School</a>. Along with <a href="/wiki/Le_Corbusier" title="Le Corbusier">Le Corbusier</a>, <a href="/wiki/Alvar_Aalto" title="Alvar Aalto">Alvar Aalto</a>, and <a href="/wiki/Frank_Lloyd_Wright" title="Frank Lloyd Wright">Frank Lloyd Wright</a>, he is widely regarded as one of the pioneering masters of <a href="/wiki/Modern_architecture" title="Modern architecture">modern architecture</a>.</p>
+					<div class="actions"><button class="btn blue">Done</button><button class="btn disabled">Revert</button></div>
+				</div>
+			</div>
+			<div class="message-pair">
+				<div class="source message grid__item one-half">
+					<p>Mies, like many of his post-<a href="/wiki/World_War_I" title="World War I">World War I</a> contemporaries, sought to establish a new architectural style that could represent modern times just as <a href="/wiki/Classical_architecture" title="Classical architecture">Classical</a> and <a href="/wiki/Gothic_architecture" title="Gothic architecture">Gothic</a> did for their own eras. He created an influential twentieth century architectural style, stated with extreme clarity and simplicity. His mature buildings made use of modern materials such as industrial steel and <a href="/wiki/Plate_glass" title="Plate glass" class="mw-redirect">plate glass</a> to define interior spaces. He strove toward an architecture with a minimal framework of structural order balanced against the implied freedom of free-flowing open space. He called his buildings "skin and bones" architecture. He sought a rational approach that would guide the creative process of architectural design, but he was always concerned with expressing the spirit of the modern era. He is often associated with his quotation of the aphorisms, "<a href="/wiki/Minimalist_architecture" title="Minimalist architecture" class="mw-redirect">less is more</a>" and "<a href="/wiki/God_is_in_the_detail" title="God is in the detail">God is in the details</a>".</p>	
+				</div>
+				<div class="translated message grid__item one-half"  >
+					<p contenteditable="true"> </p>
+				</div>
+			</div>
+		</div>
+			   
+	
+			   
+	</div>
+	<div class="context-panel source-article grid__item one-third">
+				<div class="grid">
+					<div class="progress grid__item one-whole"><span class="bar"></span></div>
+					<div class="tools grid__item one-whole">
+							<span class="tool settings"></span>
+						<span class="tool search"><input type="search" class="searchbox" placeholder="Search info for a word"></input></span>
+
+						
+					</div>
+				</div>
+				<div class="aids grid">
+					
+				</div>
+			   <div class="panel">Translation aids</div>	
+	</div>
+	
+</div>
+
+
+
+
+
+
+
+
+</body>
+</html>
+  	
