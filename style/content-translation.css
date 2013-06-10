@@ -1,18 +1,69 @@
-	.grid {
+/*	.grid {
 		font-size:0;
 	}
 	.grid__item {
 		font-size: 1rem;
-	}
+	}*/
+	
+.grid {
+  letter-spacing: -0.31em;
+}
+
+/* Opera hack */
+.opera:-o-prefocus,
+.grid {
+  word-spacing: -0.43em;
+}
+
+.grid__item {
+  letter-spacing: normal;
+  word-spacing: normal;
+}
 
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700&subset=latin,cyrillic-ext,greek-ext,greek,vietnamese,latin-ext,cyrillic);
 
 body{
 	font-family: 'Open Sans', sans-serif;
-	margin-bottom:0;
+	margin:0;
 	/*line-height: 1.4em;*/
 	color: #222;
+	font-size: 15px;
 }
+
+
+.personal-toolbar {
+	text-align: right !important;
+	color: #0645AD;
+}
+
+.back-action:before {
+	content: "";
+	display: inline-block;
+	border: 4px solid transparent;
+	border-right-color: #555;
+	margin: 0 8px 0 0;
+	
+}
+
+.back-action:hover {
+	background: #f8f8f8;
+	border: 1px solid #eee;
+	border-radius: 3px;
+
+}
+
+.back-action {
+	padding: 4px 8px;
+	margin-left: 15px;
+	border:	 1px solid transparent;
+	cursor: pointer;
+
+}
+
+.document-actions {
+	text-align: right;
+}
+
 
 .translation-bar {
 	border-bottom: 1px solid #ddd;
@@ -38,12 +89,21 @@ body{
 }
 
 .message-pair .source.message {
+
 	
 }
 
+
+.message-pair .source.message:hover {
+	background: #FFFEEC;
+	cursor: pointer;
+	
+	
+}
 .message-pair.active .source.message, 
 .message-pair.active:hover .source.message{
-	background: #FFFEEC;
+    background: white;
+    transition: background 1s;
 	cursor: inherit;
 }
 
@@ -57,6 +117,10 @@ body{
 	outline: 1px #55A2E7;*/
 }
 
+.message-pair .translated.message em {
+	font-style: normal;
+}
+
 .message-pair .translated .actions {
 	visibility: hidden;
 	padding-bottom: 10px;
@@ -64,6 +128,10 @@ body{
 
 .message-pair.active .translated .actions {
 	visibility:visible;
+}
+
+.message-pair .actions .btn {
+	margin-right: 5px;
 }
 
 .progress {
@@ -94,21 +162,21 @@ body{
 	background: transparent url(../images/search.png) center left no-repeat;
 	background-image: linear-gradient(transparent, transparent), url(../images/search.svg);
 	padding-left: 28px;
-	min-height: 25px;
-	background-size: 25px auto;
+	min-height: 23px;
+	background-size: 23px auto;
 }
 
 .tools .tool.settings {
 	background: transparent url(../images/cog.png) center right no-repeat;
 	background-image: linear-gradient(transparent, transparent), url(../images/cog.svg);
 	padding-left: 28px;
-	min-height: 25px;
+	min-height: 23px;
 	min-width: 30px;
-	background-size: auto 25px;
+	background-size: auto 23px;
 }
 
 .tools .searchbox {
-	min-height: 25px;
+	min-height: 23px;
 	display:none;
 	margin:0;
 	min-width: 200px;
@@ -123,7 +191,69 @@ body{
 	color: #3892E3;
 }
 
+.suggestion-list {
+	padding: 0 15px;
+}
 
+.context-panel .suggestion {
+	color: #555;
+	padding: 10px;
+	margin: 10px 0;	
+	background: white;
+	border: 1px solid #ddd;
+	cursor: pointer;
+}
+
+.context-panel .suggestion:hover {
+	box-shadow: 0px 0px 1px #ccc;
+		border: 1px solid #ccc;
+}
+
+
+.context-panel .suggestion:first-child {
+	display:none;
+}
+.context-panel .suggestion em {
+	color: #222;
+	font-style: normal;
+	font-weight: bolder;
+	}
+
+.context-panel .suggestion:hover em {
+	color: #222;
+	font-style: normal;
+	background:#FFFCD3;
+	}
+
+.suggestion-list:empty + .suggestion-actions { display:none;}
+
+
+.suggestion-action {
+	color: #3892E3;
+	cursor: pointer;
+	padding: 5px 0;
+	margin-left: 20px;
+}
+
+.suggestion-action.paste{
+	background: transparent url(../images/paste.png) center left no-repeat;
+	background-image: linear-gradient(transparent, transparent), url(../images/paste.svg);
+	padding-left: 25px;
+	background-size: auto 16px;
+}
+
+.suggestion-action.clear{
+	background: transparent url(../images/close.png) center left no-repeat;
+	background-image: linear-gradient(transparent, transparent), url(../images/close.svg);
+	padding-left: 25px;
+	background-size: auto 16px;
+}
+
+
+
+.highlight {
+	background: #FFFCD3;
+}
 
 *[contenteditable="true"]:focus{
 	border:none;

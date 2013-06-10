@@ -1,0 +1,15 @@
+{
+"glossary": [
+	{"word": "file", "desc":"File (noun). A digital asset.", "trans": [{"word":"arxiu", "match":"g"},{"word":"fitxer", "match":"20%"}]},
+	{"word": "file", "desc":"File (verb). Action of adding something into a container.", "trans": [{"word":"emplenar", "match":"g"},{"word":"complimentar", "match":"10%"}]},
+	{"word": "find", "desc":"Find (verb). The reverse of geting something lost.", "trans": [{"word":"buscar", "match":"g"},{"word":"trobar", "match":"80%"}]},
+	{"word": "was", "desc":"", "trans": [{"word":"era", "match":"90%"},{"word":"es", "match":"50%"}]},
+	{"word": "found", "desc":"Find", "trans": [{"word":"trobat", "match":"g"},{"word":"trobar", "match":"20%"}]}
+],
+"suggestions": [
+	{ "p": 2, "texts": ["<b>Ludwig Mies van der Rohe</b> (<em data-ref='a'>nacida</em> <b>Maria Ludwig Michael Mies</b>, 27 marzo 1886 hasta 19 agosto 1969) fue un arquitecto germano-estadounidense [1] <em data-ref='b'>Él se conoce</em> comúnmente, y <em data-ref='c'> se dirigió</em>, como Mies, su apellido.. Él sirvió como el último director de la Bauhaus de Berlín, y luego dirigió el departamento de arquitectura, Illinois Institute of Technology de Chicago, donde desarrolló la Segunda Escuela de Chicago. Junto con Le Corbusier, Alvar Aalto y Frank Lloyd Wright, que es ampliamente considerado como uno de los maestros pioneros de la arquitectura moderna.",
+						"Ludwig Mies van der Rohe (<em data-ref='a'>nacido</em> Maria Ludwig Michael Mies, 27 marzo &hellip;",
+						" <em data-ref='b'>Se le conoce</em> comúnmente, y <em data-ref='c'> se le referencia</em>, como Mies&hellip;"
+						] }
+]
+}
