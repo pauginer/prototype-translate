@@ -145,7 +145,8 @@ function focusOnSearchbox(){
 		var thisPair = $(this).parents(".message-pair");
 		var nextPair = thisPair.next();
 		activeMessagePair(nextPair);
-		$("p",nextPair).focus();
+		$(".translated p",nextPair).focus();
+		//$(".translated p",nextPair).effect("highlight", {}, 500);
 		return false;
 	}
 	
@@ -200,7 +201,7 @@ function focusOnSearchbox(){
 		loadData(lang);
 		adjustSize();
 		updateTranslationAids();
-		
+		updateProgressBar();
 		
 		
 		$(".message-pair").click(function(){
