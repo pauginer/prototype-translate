@@ -85,7 +85,7 @@ body{
 
 .message-pair:hover {
 	/*background: #fbfbfb;*/
-	cursor: default;
+	
 }
 
 .message-pair .source.message {

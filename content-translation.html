@@ -73,6 +73,15 @@ function focusOnSearchbox(){
 		$(".progress .bar").css("width",percent+"%")
 	}
 
+	function updateProgressBar() {
+		var pending = $(".translated.message:visible p:empty").length;	
+		var total = $(".source.message:visible").length;
+		var val = 100*((total - pending)/ total);
+		val=Math.round(val);
+		console.debug(val);
+		updateProgress(val);
+	}
+	
 	function adjustSize(){
 		var h = $(window).height() - $(".article-panel").offset().top;
 		
@@ -126,11 +135,21 @@ function focusOnSearchbox(){
 		//Handlers:
 		$(".context-panel .suggestion").hover(previewSuggestion,previewSuggestionClean);
 		$(".context-panel .suggestion").click(applySuggestion);
+		$('.context-panel .paste').click(pasteSource);
+		$('.context-panel .clear').click(clearSuggestion);
 	}
 	
+	function translationDone(){
+		
+		updateProgressBar();
+		var thisPair = $(this).parents(".message-pair");
+		var nextPair = thisPair.next();
+		activeMessagePair(nextPair);
+		$("p",nextPair).focus();
+		return false;
+	}
 	
-	
-	function applySuggestion(){
+	function applySuggestion(event){
 		var elt = $(this);
 		$("em", elt).each(function(i,e){ 
 			var ref = $(e).data('ref');
@@ -138,8 +157,10 @@ function focusOnSearchbox(){
 			$(matches).addClass('highlight');
 			
 			$(matches).text($(e).text());
-			
+			$(".message-pair.active .translated.message p").focus();
+			cursorToEnd(matches);
 			});
+			event.stopPropagation();
 	}
 	
 	function previewSuggestion(){
@@ -150,9 +171,27 @@ function focusOnSearchbox(){
 			$(matches).addClass('highlight');
 			});
 	}
+	
 	function previewSuggestionClean(){
 		$(".message-pair .translated.message em").removeClass("highlight");
 	}
+	
+	function pasteSource(){
+		var src=$(".message-pair.active .source.message p");
+		var target = $(".message-pair.active .translated.message p");
+		target.html(src.html());
+		
+		cursorToEnd(target);
+		target.effect("highlight", {}, 500);
+	}
+	
+	function clearSuggestion() {
+		var target = $(".message-pair.active .translated.message p");
+		target.html("");
+		target.focus();
+		target.effect("highlight", {}, 500);
+	}
+	
 	
 	var aids_template = Handlebars.compile($("#aids-template").html());
 	
@@ -181,6 +220,7 @@ function focusOnSearchbox(){
 			console.debug("changed!");
 		});
 		
+		$(".actions .done").click(translationDone);
 		
 		$("body").click(function(e){
 			console.debug(e	);
@@ -236,7 +276,7 @@ function focusOnSearchbox(){
 				</div>
 				<div class="translated message grid__item one-half">
 					<p contenteditable="true"></p>
-					<div class="actions"><button class="btn blue">Done</button><button class="btn disabled">Revert</button></div>
+					<div class="actions"><button class="done btn blue">Done</button><button class="btn disabled">Revert</button></div>
 				</div>
 			</div>
 			<div class="message-pair">
@@ -244,7 +284,7 @@ function focusOnSearchbox(){
 					<p>Mies, like many of his post-<a href="/wiki/World_War_I" title="World War I">World War I</a> contemporaries, sought to establish a new architectural style that could represent modern times just as <a href="/wiki/Classical_architecture" title="Classical architecture">Classical</a> and <a href="/wiki/Gothic_architecture" title="Gothic architecture">Gothic</a> did for their own eras. He created an influential twentieth century architectural style, stated with extreme clarity and simplicity. His mature buildings made use of modern materials such as industrial steel and <a href="/wiki/Plate_glass" title="Plate glass" class="mw-redirect">plate glass</a> to define interior spaces. He strove toward an architecture with a minimal framework of structural order balanced against the implied freedom of free-flowing open space. He called his buildings "skin and bones" architecture. He sought a rational approach that would guide the creative process of architectural design, but he was always concerned with expressing the spirit of the modern era. He is often associated with his quotation of the aphorisms, "<a href="/wiki/Minimalist_architecture" title="Minimalist architecture" class="mw-redirect">less is more</a>" and "<a href="/wiki/God_is_in_the_detail" title="God is in the detail">God is in the details</a>".</p>	
 				</div>
 				<div class="translated message grid__item one-half"  >
-					<p contenteditable="true"> </p>
+					<p contenteditable="true"></p>
 				</div>
 			</div>
 		</div>
