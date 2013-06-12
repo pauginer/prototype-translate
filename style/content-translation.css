@@ -85,7 +85,14 @@ body{
 
 .message-pair:hover {
 	/*background: #fbfbfb;*/
-	
+	cursor: pointer;
+		
+}
+
+.message-pair.active:hover {
+	/*background: #fbfbfb;*/
+	cursor: auto;
+		
 }
 
 .message-pair .source.message {
@@ -94,10 +101,9 @@ body{
 }
 
 
-.message-pair .source.message:hover {
+.message-pair:hover .source.message {
 	background: #FFFEEC;
 	cursor: pointer;
-	
 	
 }
 .message-pair.active .source.message, 
@@ -107,6 +113,10 @@ body{
 	cursor: inherit;
 }
 
+
+.message-pair.active .translated.message { 
+	color: #444;	
+}
 
 .message-pair.active .translated.message a {
 	background: #E5F0F9;
@@ -129,6 +139,22 @@ body{
 .message-pair.active .translated .actions {
 	visibility:visible;
 }
+
+
+
+.message-pair:hover .translated p:empty + .add-translation {
+	display: block;
+	text-align: center;
+	font-size: 20px;
+	font-weight:lighter;
+	color: #AAA;
+	
+}
+
+.message-pair .translated .add-translation {
+	display: none;
+}
+
 
 .message-pair .actions .btn {
 	margin-right: 5px;

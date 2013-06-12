@@ -89,11 +89,16 @@ function focusOnSearchbox(){
 	}
 	
 	function activeMessagePair(elt){
-		$('.message-pair').removeClass("active");
-		if(elt != null){
-			elt.addClass("active");
-			updateTranslationAids();
+		var isAlreadyActive = elt.hasClass("active");
+		
+		if(!isAlreadyActive){
+			$('.message-pair').removeClass("active");
+			if(elt != null){
+				elt.addClass("active");
+				updateTranslationAids();
+			}
 		}
+		
 	}
 	
 	function suggestionsForPar(par){
@@ -218,6 +223,7 @@ function focusOnSearchbox(){
 		
 		$('.translated.message p').blur(function(){
 			console.debug("changed!");
+			updateProgressBar();
 		});
 		
 		$(".actions .done").click(translationDone);
@@ -276,6 +282,7 @@ function focusOnSearchbox(){
 				</div>
 				<div class="translated message grid__item one-half">
 					<p contenteditable="true"></p>
+					<div class="add-translation">+ Add translation</div>
 					<div class="actions"><button class="done btn blue">Done</button><button class="btn disabled">Revert</button></div>
 				</div>
 			</div>
@@ -285,6 +292,7 @@ function focusOnSearchbox(){
 				</div>
 				<div class="translated message grid__item one-half"  >
 					<p contenteditable="true"></p>
+					<div class="add-translation">+ Add translation</div>
 				</div>
 			</div>
 		</div>
