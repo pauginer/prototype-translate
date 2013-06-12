@@ -48,7 +48,7 @@
 				Use source text
 			</div>
 			<div class="clear suggestion-action grid__item one-whole">
-				Clear suggestion
+				Clear translation
 			</div>
 		
 		</div>
@@ -149,7 +149,7 @@ function spanifyElement(elt){
 	$("i",elt).click(function(){
 			$("i").removeClass("active");
 			$(this).addClass("active");
-			updateTranslationAids();
+			//updateTranslationAids();
 		return false;
 	});
 }
@@ -190,7 +190,7 @@ function focusOnSearchbox(){
 
 	function updateProgressBar() {
 		var pending = $(".translated.message:visible p:empty").length;	
-		var total = $(".source.message:visible").length;
+		var total = $(".source.message:visible").length - 1;
 		var val = 100*((total - pending)/ total);
 		val=Math.round(val);
 		updateProgress(val);
@@ -212,12 +212,11 @@ function focusOnSearchbox(){
 				updateTranslationAids();
 			}
 			
-		 $(".message-pair.active .message").each(function(i,e){
-				spanifyElement($(e));
-				});
-		
+		//$(".message-pair.active .message").each(function(i,e){
+			//	spanifyElement($(e));
+			//	});		
 		}
-		
+		updateProgressBar();
 	}
 	
 	function suggestionsForPar(par){
@@ -243,12 +242,18 @@ function focusOnSearchbox(){
 			if( suggest != null){
 				trans.html(suggest[0]);
 			}
+			
+				$(".message-pair.active .message").each(function(i,e){
+				spanifyElement($(e));
+				});	
+			
+			
 			if(trans.length){
 			cursorToEnd(trans);
 			}
 			
 		}
-		trans.focus();
+		//trans.focus();
 		
 		
 		var activeWord = null;
@@ -280,10 +285,15 @@ function focusOnSearchbox(){
 		var elt = $(this);
 		var text = $(".word", elt).text();
 		var target = $(".translated.message i.active");
-		if(target){
+		if(target.length){
 			target.text(text);
 			$(".message-pair.active .translated.message p").focus();
 			cursorToEnd(target);
+		}else{
+			var t = $(".message-pair.active .translated.message p");
+			t.html(t.html()+" "+text);
+			$(".message-pair.active .translated.message p").focus();
+			cursorToEnd(t);
 		}
 		
 		event.stopPropagation();

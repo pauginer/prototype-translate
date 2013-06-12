@@ -1,8 +1,8 @@
 {
 "glossary": [
-	{"word": "file", "desc":"<b>File (noun).</b> A digital asset.", "trans": [{"word":"arxiu", "match":"g"},{"word":"fitxer", "match":"20%"}]},
-	{"word": "file", "desc":"<b>File (verb).</b> Action of adding something into a container.", "trans": [{"word":"emplenar", "match":"g"},{"word":"complimentar", "match":"10%"}]},
-	{"word": "find", "desc":"Find (verb). The reverse of geting something lost.", "trans": [{"word":"buscar", "match":"g"},{"word":"trobar", "match":"80%"}]},
+	{"word": "march", "desc":"<b>March (noun).</b> Third month of the year", "trans": [{"word":"Marzo", "match":"90%"},{"word":"marzo", "match":"20%"}]},
+	{"word": "headed", "desc":"<b>Head (noun).</b>The part of the body of an animal or human which contains the brain, mouth and main sense organs.", "trans": [{"word":"cabeza", "match":"50%"},{"word":"testa", "match":"10%"}]},
+	{"word": "headed", "desc":"<b>Head (verb).</b>To be in command of.", "trans": [{"word":"lideró", "match":"100%"},{"word":"dirigió", "match":"80%"}]},
 	{"word": "was", "desc":"", "trans": [{"word":"era", "match":"90%"},{"word":"es", "match":"50%"}]},
 	{"word": "found", "desc":"Find", "trans": [{"word":"trobat", "match":"g"},{"word":"trobar", "match":"20%"}]}
 ],

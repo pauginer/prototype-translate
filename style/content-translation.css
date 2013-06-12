@@ -154,15 +154,17 @@ body{
 .message-pair .translated .actions {
 	visibility: hidden;
 	padding-bottom: 10px;
+	display:none;
 }
 
 .message-pair.active .translated .actions {
 	visibility:visible;
+display:none;
 }
 
 
 
-.message-pair:hover .translated p:empty + .add-translation {
+.message-pair:hover .translated p:empty + .add-translation  {
 	display: block;
 	text-align: center;
 	font-size: 20px;
@@ -171,9 +173,11 @@ body{
 	
 }
 
-.message-pair .translated .add-translation {
+.message-pair .translated .add-translation, 
+.message-pair.active:hover .translated.message .add-translation {
 	display: none;
 }
+
 
 
 .message-pair .actions .btn {
