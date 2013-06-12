@@ -127,6 +127,26 @@ body{
 	outline: 1px #55A2E7;*/
 }
 
+
+.message-pair i {
+	font-style: normal;
+	border-radius: 4px;
+	padding: 0 1px;
+}
+
+.message-pair .translated.message:hover i,
+.message-pair .source.message:hover i{
+	background: #f0f0f0;
+}
+
+.message-pair .message i:hover,
+.message-pair .message i.active{
+	background: #FFFCD3 !important;
+	cursor: pointer;
+}
+
+
+.message-pair .translated.message i,
 .message-pair .translated.message em {
 	font-style: normal;
 }
@@ -236,7 +256,25 @@ body{
 }
 
 
-.context-panel .suggestion:first-child {
+.glossary.suggestion-list .description {
+	padding: 5px 0;
+}
+
+.glossary.suggestion-list .suggestion {
+	margin-right: 5px;
+}
+
+.glossary.suggestion {
+	width:auto;
+	
+}
+.glossary.suggestion .match {
+	color: #888;
+	font-size: 12px;
+	padding-left: 10px;
+}
+
+.context-panel .paragraph.suggestion:first-child {
 	display:none;
 }
 .context-panel .suggestion em {

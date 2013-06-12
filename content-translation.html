@@ -20,11 +20,26 @@
 	<link rel="stylesheet" href="style/content-translation.css">
 	
 	<script id="aids-template" type="text/x-handlebars-template">
+			{{#if glossary}}	
+			<div class="grid__item one-whole">
+				<h2>{{activeWord}}</h2>
+			</div>
+			{{/if}}
+			<div class="glossary suggestion-list">{{#each glossary}}
+			<div class="description grid__item one-whole">{{{desc}}}</div>
+				{{#each trans}}
+				<div class="glossary suggestion grid__item">
+					<span class="word">{{word}}</span>&nbsp;<span class="match">{{match}}</span>
+				</div>
+				{{/each}}
+			{{/each}}</div>
+
+		{{#if suggestions}}
 		<div class="grid__item one-whole">
 			<h2>Suggestions</h2>
 		</div>
 		<div class="suggestion-list">{{#each suggestions}}
-			<div class="suggestion grid__item one-whole">
+			<div class="paragraph suggestion grid__item one-whole">
 				{{{this}}}	
 			</div>
 			{{/each}}</div>
@@ -37,6 +52,7 @@
 			</div>
 		
 		</div>
+		{{/if}}
 		
 		
 	</script>
@@ -44,17 +60,115 @@
 	<script>
 	lang = "es";
 	suggestions = null;
+	glossary = null;
 	
 	
 	function loadData(file){
 	$.getJSON('messages/content-translation/'+file+'.json',function(data) {
 		suggestions=data.suggestions;
-		
+		glossary=data.glossary;
+		updateTranslationAids();
 	});
 	
+	}
+
+/*** Glossary functions ***/
+function getAllTranslationsFor(word){
+	var translations=[];
+	$.each(glossary, function(i,w){
+		if(w.word == word){
+			$.each(w.trans,function(j,t){
+			translations.push(t);				
+			});
+		}
+	});
+	return translations;
 }
 
+function getAllWords(){
+	var words=[];
+	$.each(glossary, function(i,w){
+			words.push(w.word);				
+	});
+	return words;
+}
 
+function getOriginalForTranslation(translation){
+    var original= null;
+	$.each(glossary, function(i,w){
+		$.each(w.trans,function(j,t){
+			if(t.word == translation){
+				original = w.word;
+			}			
+		});
+	});
+	return original;
+}
+
+function getAllDifferentWords(){
+	var words=[];
+	$.each(glossary, function(i,w){
+		if($.inArray(w,words)==-1)
+			words.push(w.word);
+	});
+	
+	$.each(words,function(i,w){
+		var trans = getAllTranslationsFor(w);
+		$.each(trans,function(j,t){
+			if($.inArray(w,t.word)==-1)
+			words.push(t.word);
+		});
+	});
+	return words;
+}
+
+function getGlossaryMatch(word){
+	var words=[];
+	var original = getOriginalForTranslation(word);
+	if(original!=null)
+		word= original;
+	
+	
+	if(word!=null)
+	$.each(glossary, function(i,w){
+		if(w.word==word)
+			words.push(w);
+	});
+	
+	
+	
+	return words;
+}
+
+function spanifyElement(elt){
+	var words = getAllDifferentWords();
+	$.each(words, function(i,w){
+		spanify(elt,w);
+	});
+	
+	$("i",elt).click(function(){
+			$("i").removeClass("active");
+			$(this).addClass("active");
+			updateTranslationAids();
+		return false;
+	});
+}
+
+function spanify(elt,word){
+	var text = elt.html();
+	var re = new RegExp(" "+word+"(?!</i>)","g");
+	text = text.replace(re, " <i>"+word+"</i>");
+	elt.html(text);
+}
+
+function getWord() {
+    var range = window.getSelection().getRangeAt(0);
+    if (range.collapsed) {
+        text = range.startContainer.textContent.substring(0, range.startOffset+1);
+        return text.split(/\b/g).pop();
+    }
+    return '';
+}
 
 	function cursorToEnd(elt){
 		var element = elt.get(0); //jquery to HTML node
@@ -63,6 +177,7 @@
 					var sel = rangy.getSelection();
 					sel.setSingleRange(range);
 					sel.collapseToEnd();
+					sel.detach();
 	}
 
 function focusOnSearchbox(){
@@ -78,7 +193,6 @@ function focusOnSearchbox(){
 		var total = $(".source.message:visible").length;
 		var val = 100*((total - pending)/ total);
 		val=Math.round(val);
-		console.debug(val);
 		updateProgress(val);
 	}
 	
@@ -89,14 +203,19 @@ function focusOnSearchbox(){
 	}
 	
 	function activeMessagePair(elt){
-		var isAlreadyActive = elt.hasClass("active");
+		var isAlreadyActive = elt!= null && elt.hasClass("active");
 		
-		if(!isAlreadyActive){
+		if(elt!= null && !isAlreadyActive){
 			$('.message-pair').removeClass("active");
 			if(elt != null){
 				elt.addClass("active");
 				updateTranslationAids();
 			}
+			
+		 $(".message-pair.active .message").each(function(i,e){
+				spanifyElement($(e));
+				});
+		
 		}
 		
 	}
@@ -132,20 +251,22 @@ function focusOnSearchbox(){
 		trans.focus();
 		
 		
-		
-		var context = {suggestions: suggestionsForPar(p)}
+		var activeWord = null;
+		activeWord=$(".message-pair.active i.active").text();
+		var context = {suggestions: suggestionsForPar(p), glossary:getGlossaryMatch(activeWord),activeWord:activeWord}
 		var html    = aids_template(context);
 		$(".context-panel .aids").html(html);
 		
 		//Handlers:
-		$(".context-panel .suggestion").hover(previewSuggestion,previewSuggestionClean);
-		$(".context-panel .suggestion").click(applySuggestion);
+		$(".context-panel .paragraph.suggestion").hover(previewSuggestion,previewSuggestionClean);
+		$(".context-panel .paragraph.suggestion").click(applySuggestion);
+		$(".context-panel .glossary.suggestion").click(applyGlossarySuggestion);
 		$('.context-panel .paste').click(pasteSource);
 		$('.context-panel .clear').click(clearSuggestion);
 	}
 	
 	function translationDone(){
-		
+		console.debug("done");
 		updateProgressBar();
 		var thisPair = $(this).parents(".message-pair");
 		var nextPair = thisPair.next();
@@ -153,6 +274,19 @@ function focusOnSearchbox(){
 		$(".translated p",nextPair).focus();
 		//$(".translated p",nextPair).effect("highlight", {}, 500);
 		return false;
+	}
+	
+	function applyGlossarySuggestion(event){
+		var elt = $(this);
+		var text = $(".word", elt).text();
+		var target = $(".translated.message i.active");
+		if(target){
+			target.text(text);
+			$(".message-pair.active .translated.message p").focus();
+			cursorToEnd(target);
+		}
+		
+		event.stopPropagation();
 	}
 	
 	function applySuggestion(event){
@@ -201,17 +335,24 @@ function focusOnSearchbox(){
 	
 	var aids_template = Handlebars.compile($("#aids-template").html());
 	
+	var savedSel = null;
+	
+	
 	$( document ).ready( function() {
 		loadData(lang);
 		adjustSize();
-		updateTranslationAids();
 		updateProgressBar();
 		
+		$('p[contenteditable]').keypress(function(){
+			console.debug("***");
+		});
 		
 		$(".message-pair").click(function(){
-				//var elt = $(".translated.message p",$(this));
+			//savedSel = rangy.saveSelection();
+			//console.debug(savedSel);	
 				activeMessagePair($(this));
-				//elt.focus();
+				//rangy.restoreSelection(savedSel);
+				updateTranslationAids();
 				return false;
 		});
 		
@@ -222,15 +363,18 @@ function focusOnSearchbox(){
 		});
 		
 		$('.translated.message p').blur(function(){
-			console.debug("changed!");
 			updateProgressBar();
+			
 		});
+		
+		
 		
 		$(".actions .done").click(translationDone);
 		
 		$("body").click(function(e){
-			console.debug(e	);
-			activeMessagePair(null)});
+			activeMessagePair(null)
+			});
+			
 	});
   	</script>
 </head>
