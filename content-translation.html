@@ -53,15 +53,36 @@
 		
 		</div>
 		{{/if}}
+	</script>
+	
+	<script id="article-template" type="text/x-handlebars-template">
+			<div class="source message grid__item one-half">
+				<h1>{{sourceTitle}}</h1>
+			</div>
+			<div class="translated message grid__item one-half">
+				<h1>{{translatedTitle}}</h1>
+			</div>
+			{{#each messages}}
+			<div class="message-pair">
+				<div class="source message grid__item one-half">
+					<p class="{{class}}">{{{text}}}</p>
 		
-		
+				</div>
+				<div class="translated message grid__item one-half">
+					<p class="{{class}}" contenteditable="true"></p>
+					<div class="add-translation">+ Add translation</div>
+					<div class="actions"><button class="done btn blue">Done</button><button class="btn disabled">Revert</button></div>
+				</div>
+			</div>
+			{{/each}}
 	</script>
 	
 	<script>
 	lang = "es";
+	article = "mies";
 	suggestions = null;
 	glossary = null;
-	
+
 	
 	function loadData(file){
 	$.getJSON('messages/content-translation/'+file+'.json',function(data) {
@@ -70,6 +91,48 @@
 		updateTranslationAids();
 	});
 	
+	}
+	
+	function loadArticle(file){
+		
+		$.getJSON('messages/content-translation/'+file+'.json',function(data) {
+		var context = data;
+		var html    = article_template(context);
+		$(".article-panel .grid").html(html);
+		//Article handlers:
+		
+		$('p[contenteditable]').keypress(function(){
+			console.debug("***");
+		});
+		
+		$(".message-pair").click(function(){
+			//savedSel = rangy.saveSelection();
+			//console.debug(savedSel);	
+				activeMessagePair($(this));
+				//rangy.restoreSelection(savedSel);
+				updateTranslationAids();
+				return false;
+		});
+		
+		
+		
+		$(window).resize(function() {
+  			adjustSize();
+		});
+		
+		$('.translated.message p').blur(function(){
+			updateProgressBar();
+			
+		});
+		
+		
+		$(".actions .done").click(translationDone);
+		
+		$(".message-pair .source.message p").each(function(i,e){
+				spanifyElement($(e));
+			});
+
+	});
 	}
 
 /*** Glossary functions ***/
@@ -154,6 +217,19 @@ function spanifyElement(elt){
 	});
 }
 
+function spanifyText(text){
+	var result = text;
+	var words = getAllDifferentWords();
+	$.each(words, function(i,w){
+		var re = new RegExp(" "+w+"(?!</i>)","g");
+		result = result.replace(re, " <i>"+w+"</i>");
+	});
+	return result;
+	
+}
+
+
+
 function spanify(elt,word){
 	var text = elt.html();
 	var re = new RegExp(" "+word+"(?!</i>)","g");
@@ -232,24 +308,37 @@ function focusOnSearchbox(){
 	}
 	
 	function updateTranslationAids(){
+		
 		var pair = $('.message-pair.active');
 		var p = pair.index();
-		var trans = $(".translated p",pair);
+		//var trans = $(".translated p",pair);
+		var trans = $(".message-pair.active .translated p");
 		var isTranslationEmpty = trans.text().trim().length <= 0;
 		var suggest = null;
 		if(isTranslationEmpty ){
+			
 			suggest = suggestionsForPar(p);
 			if( suggest != null){
-				trans.html(suggest[0]);
+				trans.html(spanifyText(suggest[0]));
+				
 			}
 			
-				$(".message-pair.active .message").each(function(i,e){
+			$("i",pair).click(function(){
+					$("i").removeClass("active");
+					$(this).addClass("active");
+					updateTranslationAids();
+				return false;
+			});
+			
+				/*$(".message-pair.active .message").each(function(i,e){
 				spanifyElement($(e));
-				});	
-			
-			
-			if(trans.length){
-			cursorToEnd(trans);
+				});	*/
+
+			if(trans!=null && trans.length > 0){
+				console.debug(trans);
+				trans.focus();
+				cursorToEnd(trans);
+		
 			}
 			
 		}
@@ -344,45 +433,35 @@ function focusOnSearchbox(){
 	
 	
 	var aids_template = Handlebars.compile($("#aids-template").html());
+	var article_template = Handlebars.compile($("#article-template").html());
 	
 	var savedSel = null;
 	
 	
 	$( document ).ready( function() {
+		//URL parameters
+		var hash = window.location.hash;
+		var args=hash.replace('#','').split('-');
+		args.forEach(function(e){
+			if(e.length == 2){
+				lang=e;
+				if(e=="he"){
+					$("head").append('<link rel="stylesheet" href="style/rtl.css">');
+				}
+				
+			}
+		});
+		
+		loadArticle(article);
 		loadData(lang);
 		adjustSize();
 		updateProgressBar();
-		
-		$('p[contenteditable]').keypress(function(){
-			console.debug("***");
-		});
-		
-		$(".message-pair").click(function(){
-			//savedSel = rangy.saveSelection();
-			//console.debug(savedSel);	
-				activeMessagePair($(this));
-				//rangy.restoreSelection(savedSel);
-				updateTranslationAids();
-				return false;
-		});
-		
 		$(".tools .tool.search").click(focusOnSearchbox);
 		
-		$(window).resize(function() {
-  			adjustSize();
-		});
-		
-		$('.translated.message p').blur(function(){
-			updateProgressBar();
-			
-		});
-		
-		
-		
-		$(".actions .done").click(translationDone);
 		
 		$("body").click(function(e){
-			activeMessagePair(null)
+			activeMessagePair(null);
+			
 			});
 			
 	});

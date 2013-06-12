@@ -162,7 +162,11 @@ body{
 display:none;
 }
 
-
+.message-pair p.section {
+	font-size: 18px;
+	font-weight: bolder;
+	
+}
 
 .message-pair:hover .translated p:empty + .add-translation  {
 	display: block;
@@ -170,6 +174,8 @@ display:none;
 	font-size: 20px;
 	font-weight:lighter;
 	color: #AAA;
+	position: relative;
+	top: -30px;
 	
 }
 
