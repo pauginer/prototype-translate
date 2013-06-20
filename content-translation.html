@@ -141,6 +141,11 @@
   			adjustSize();
 		});
 		
+		$(window).scroll(function() {
+  			scroll();
+		});
+
+		
 		$('.translated.message p').blur(function(){
 			updateProgressBar();
 			
@@ -299,9 +304,17 @@ function focusOnSearchbox(){
 	}
 	
 	function adjustSize(){
-		var h = $(window).height() - $(".article-panel").offset().top;
+		/*var h = $(window).height() - $(".article-panel").offset().top;
 		
-  			$(".article-panel").css("max-height",h);
+  			$(".article-panel").css("max-height",h);*/
+  		}
+  function scroll(){
+  		var header = $(".translation-area");
+		var target = $(".context-panel");
+		
+		var origOffsetY = header.offset().top;
+		window.scrollY >= origOffsetY ? target.addClass('sticky') :
+                                  target.removeClass('sticky');
 	}
 	
 	function activeMessagePair(elt){
@@ -533,7 +546,7 @@ function focusOnSearchbox(){
 
 <div class="translation-area grid">
 	
-	<div class="article-panel grid__item two-thirds">
+	<div class="article-panel grid__item two-thirds palm--one-whole">
 		<div class="grid">
 			<div class="source message grid__item one-half">
 				<h1>Ludwig Mies van der Rohe</h1>
@@ -546,7 +559,7 @@ function focusOnSearchbox(){
 	
 			   
 	</div>
-	<div class="context-panel source-article grid__item one-third">
+	<div class="context-panel source-article grid__item one-third palm--one-whole">
 				<div class="grid">
 					<div class="progress grid__item one-whole"><span class="bar"></span></div>
 					<div class="tools grid__item one-whole">

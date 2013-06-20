@@ -242,6 +242,18 @@ display:none;
 	display: inline-block;
 }
 
+.context-panel {
+  top: 15px;
+  position:static;
+  background:#f8f8f8;
+}
+
+
+.context-panel.sticky {
+  position: fixed;
+  top: 0;
+}
+
 .context-panel h2{
 	font-weight: lighter;
 	color: #3892E3;
@@ -378,7 +390,27 @@ display:none;
 	background: #FFFCD3;
 }
 
+
+
 *[contenteditable="true"]:focus{
 	border:none;
 	outline:none;
+}
+
+
+
+@media only screen and (max-width: 480px) {
+	.context-panel,
+	.context-panel.sticky {
+		border-top:#aaa;
+		box-shadow: 0px -1px 2px #aaa;
+		position: fixed;
+		top: auto;
+		bottom: 0;
+		left: 0;
+		overflow-x: hidden;
+		overflow-y: auto;
+		max-height: 50%;
+	
+	}
 }
