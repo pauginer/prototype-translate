@@ -14,33 +14,54 @@
 	<script src="libs/rangy-serializer.js"></script>
 	<script src="libs/rangy-textrange.js"></script>
 	<script src="libs/handlebars.js"></script>
-	
+	<script src="libs/handlebars-helpers.js"></script>
 	<link rel="stylesheet" href="libs/csswizardry-grids.css">
 	<link rel="stylesheet" href="style/buttons.css">
 	<link rel="stylesheet" href="style/content-translation.css">
 	
 	<script id="aids-template" type="text/x-handlebars-template">
+		{{#if noSelection}}
+			<div class="grid__item one-whole">
+				<h2>Create a translation</h2>
+			</div>
+			
+			{{#unless progress}}
+			<div class="initial-instructions grid__item one-whole">
+			
+					<ol>
+						<li>Add some paragraphs to the translation.</li>
+						<li>Adjust the automatic translations provided to ensure quality.</li>
+						<li>When you are happy with the result, select "review and publish" to tweak text formatting, and publish it as a new article.</li>
+					</ol>
+					<a href="http://en.wikipedia.org/wiki/Wikipedia:Translation#How_to_translate" target="_blank"> View translation guidelines</a>
+				
+			</div>
+			{{/unless}}
+		{{/if}}
+			
 			{{#if glossary}}	
 			<div class="grid__item one-whole">
 				<h2>{{activeWord}}</h2>
 			</div>
-			{{/if}}
+			
 			<div class="glossary suggestion-list">{{#each glossary}}
 			<div class="description grid__item one-whole">{{{desc}}}</div>
 				{{#each trans}}
-				<div class="glossary suggestion grid__item">
-					<span class="word">{{word}}</span>&nbsp;<span class="match">{{match}}</span>
+				<div class="glossary suggestion grid__item {{#ifeq word ../../../activeWord}} active {{/ifeq}}">
+					<span class="word">{{word}}</span>&nbsp;<span class="match">{{match}}</span> 
 				</div>
 				{{/each}}
 			{{/each}}</div>
-
+			{{/if}}
 		{{#if suggestions}}
-		<div class="grid__item one-whole">
-			<h2>Suggestions</h2>
+		<div class="suggestions-header grid__item one-whole">
+			<h2>Automatic translation</h2>
+			<span class="translation-service">from Apertium</span>
 		</div>
 		<div class="suggestion-list">{{#each suggestions}}
 			<div class="paragraph suggestion grid__item one-whole">
 				{{{this}}}	
+				<div class="translation-service"> Google Translate <span class="action">revert</span></div>
 			</div>
 			{{/each}}</div>
 		<div class="suggestion-actions">
@@ -264,10 +285,15 @@ function focusOnSearchbox(){
 		$(".progress .bar").css("width",percent+"%")
 	}
 
-	function updateProgressBar() {
+	function calculateProgress() {
 		var pending = $(".translated.message:visible p:empty").length;	
 		var total = $(".source.message:visible").length - 1;
 		var val = 100*((total - pending)/ total);
+		return val;
+	}
+	
+	function updateProgressBar() {
+		var val = calculateProgress();
 		val=Math.round(val);
 		updateProgress(val);
 	}
@@ -335,7 +361,6 @@ function focusOnSearchbox(){
 				});	*/
 
 			if(trans!=null && trans.length > 0){
-				console.debug(trans);
 				trans.focus();
 				cursorToEnd(trans);
 		
@@ -347,7 +372,14 @@ function focusOnSearchbox(){
 		
 		var activeWord = null;
 		activeWord=$(".message-pair.active i.active").text();
-		var context = {suggestions: suggestionsForPar(p), glossary:getGlossaryMatch(activeWord),activeWord:activeWord}
+		var suggestions = suggestionsForPar(p);
+		
+		//Initial:
+		var progress= calculateProgress();
+		
+		var noSelection = (activeWord == "" && suggestions == null)
+		
+		var context = {suggestions: suggestions, glossary:getGlossaryMatch(activeWord),activeWord:activeWord, progress: progress, noSelection: noSelection}
 		var html    = aids_template(context);
 		$(".context-panel .aids").html(html);
 		
@@ -385,11 +417,13 @@ function focusOnSearchbox(){
 			cursorToEnd(t);
 		}
 		
+		updateTranslationAids();
 		event.stopPropagation();
 	}
 	
 	function applySuggestion(event){
 		var elt = $(this);
+		elt.addClass("applied");
 		$("em", elt).each(function(i,e){ 
 			var ref = $(e).data('ref');
 			var matches=$(".message-pair.active .translated.message p em[data-ref="+ref+"]")
@@ -452,8 +486,8 @@ function focusOnSearchbox(){
 			}
 		});
 		
-		loadArticle(article);
 		loadData(lang);
+		loadArticle(article);
 		adjustSize();
 		updateProgressBar();
 		$(".tools .tool.search").click(focusOnSearchbox);
@@ -507,28 +541,7 @@ function focusOnSearchbox(){
 			<div class="translated message grid__item one-half">
 				<h1>Ludwig Mies van der Rohe</h1>
 			</div>
-			
-			<div class="message-pair"> <!-- 2 -->
-				<div class="source message grid__item one-half">
-					<p><b>Ludwig Mies van der Rohe</b> (born <b>Maria Ludwig Michael Mies</b>; March 27, 1886 – August 19, 1969) was a German-American <a href="#" title="Architect">architect</a>.<sup id="cite_ref-obit_1-0" class="reference"><a href="#cite_note-obit-1"><span>[</span>1<span>]</span></a></sup> He is commonly referred to, and was addressed, as <b>Mies</b>, his surname. He served as the last director of Berlin's <a href="/wiki/Bauhaus" title="Bauhaus">Bauhaus</a>, and then headed the department of architecture, <a href="/wiki/Illinois_Institute_of_Technology" title="Illinois Institute of Technology">Illinois Institute of Technology</a> in Chicago, where he developed the <a href="/wiki/Chicago_school_(architecture)" title="Chicago school (architecture)">Second Chicago School</a>. Along with <a href="/wiki/Le_Corbusier" title="Le Corbusier">Le Corbusier</a>, <a href="/wiki/Alvar_Aalto" title="Alvar Aalto">Alvar Aalto</a>, and <a href="/wiki/Frank_Lloyd_Wright" title="Frank Lloyd Wright">Frank Lloyd Wright</a>, he is widely regarded as one of the pioneering masters of <a href="/wiki/Modern_architecture" title="Modern architecture">modern architecture</a>.</p>
-		
-				</div>
-				<div class="translated message grid__item one-half">
-					<p contenteditable="true"></p>
-					<div class="add-translation">+ Add translation</div>
-					<div class="actions"><button class="done btn blue">Done</button><button class="btn disabled">Revert</button></div>
-				</div>
 			</div>
-			<div class="message-pair">
-				<div class="source message grid__item one-half">
-					<p>Mies, like many of his post-<a href="/wiki/World_War_I" title="World War I">World War I</a> contemporaries, sought to establish a new architectural style that could represent modern times just as <a href="/wiki/Classical_architecture" title="Classical architecture">Classical</a> and <a href="/wiki/Gothic_architecture" title="Gothic architecture">Gothic</a> did for their own eras. He created an influential twentieth century architectural style, stated with extreme clarity and simplicity. His mature buildings made use of modern materials such as industrial steel and <a href="/wiki/Plate_glass" title="Plate glass" class="mw-redirect">plate glass</a> to define interior spaces. He strove toward an architecture with a minimal framework of structural order balanced against the implied freedom of free-flowing open space. He called his buildings "skin and bones" architecture. He sought a rational approach that would guide the creative process of architectural design, but he was always concerned with expressing the spirit of the modern era. He is often associated with his quotation of the aphorisms, "<a href="/wiki/Minimalist_architecture" title="Minimalist architecture" class="mw-redirect">less is more</a>" and "<a href="/wiki/God_is_in_the_detail" title="God is in the detail">God is in the details</a>".</p>	
-				</div>
-				<div class="translated message grid__item one-half"  >
-					<p contenteditable="true"></p>
-					<div class="add-translation">+ Add translation</div>
-				</div>
-			</div>
-		</div>
 			   
 	
 			   
