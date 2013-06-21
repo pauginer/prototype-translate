@@ -1,0 +1,19 @@
+{
+"glossary": [
+	{"word": "march", "desc":"<b>March (noun).</b> Third month of the year", "trans": [{"word":"Marzo", "match":"90%"},{"word":"marzo", "match":"20%"}]},
+	{"word": "headed", "desc":"<b>Head (noun).</b>The part of the body of an animal or human which contains the brain, mouth and main sense organs.", "trans": [{"word":"cabeza", "match":"50%"},{"word":"testa", "match":"10%"}]},
+	{"word": "headed", "desc":"<b>Head (verb).</b>To be in command of.", "trans": [{"word":"lideró", "match":"100%"},{"word":"dirigió", "match":"80%"}]},
+	{"word": "was", "desc":"", "trans": [{"word":"era", "match":"90%"},{"word":"es", "match":"50%"}]},
+	{"word": "found", "desc":"Find", "trans": [{"word":"trobat", "match":"g"},{"word":"trobar", "match":"20%"}]}
+],
+"suggestions": [
+	{ "p": 2, "texts": ["<b>Ludwig Mies van der Rohe</b> (<em data-ref='a'>nacida</em> <b>Maria Ludwig Michael Mies</b>, 27 marzo 1886 hasta 19 agosto 1969) fue un arquitecto germano-estadounidense [1] <em data-ref='b'>Él se conoce</em> comúnmente, y <em data-ref='c'> se dirigió</em>, como Mies, su apellido.. Él sirvió como el último director de la Bauhaus de Berlín, y luego dirigió el departamento de arquitectura, Illinois Institute of Technology de Chicago, donde desarrolló la Segunda Escuela de Chicago. Junto con Le Corbusier, Alvar Aalto y Frank Lloyd Wright, que es ampliamente considerado como uno de los maestros pioneros de la arquitectura moderna.",
+						"Ludwig Mies van der Rohe (<em data-ref='a'>nacido</em> Maria Ludwig Michael Mies, 27 marzo &hellip;",
+						" <em data-ref='b'>Se le conoce</em> comúnmente, y <em data-ref='c'> se le referencia</em>, como Mies&hellip;"
+						] },
+	{"p": 3, "texts": ["Mies, como muchos de su <em data-ref='a'>post-Guerra Mundial</em> contemporáneos, <em data-ref='b'>buscaron</em> establecer un nuevo estilo arquitectónico que podría representar la modernidad tal como lo hizo clásico y gótico para sus propias épocas. Creó un estilo arquitectónico del siglo XX influyente, afirmó con extrema claridad y sencillez. Sus edificios maduros hicieron uso de materiales modernos como el acero industrial y vidrio plano para definir los espacios interiores. Se esforzó hacia una arquitectura con un marco mínimo de orden estructural balanceado contra la libertad implícita de los espacios abiertos de flujo libre. Llamó a la arquitectura de sus edificios 'piel y huesos'. Buscaba un enfoque racional que guiaría el proceso creativo de diseño arquitectónico, pero él siempre estaba preocupado por expresar el espíritu de la era moderna. A menudo se asocia con la cotización de los aforismos, \"menos es más\" y \"Dios está en los detalles\".",
+	"Mies, como muchos de su <em data-ref='a'>Diccionario básico primera guerra</em> contemporáneos, <em data-ref='b'>intentó</em> establecer un&hellip;"]},
+	{"p": 5, "texts": ["Mies, como muchos de su <em data-ref='a'>post-Guerra Mundial</em> contemporáneos, <em data-ref='b'>buscaron</em> establecer un nuevo estilo arquitectónico que podría representar la modernidad tal como lo hizo clásico y gótico para sus propias épocas. Creó un estilo arquitectónico del siglo XX influyente, afirmó con extrema claridad y sencillez. Sus edificios maduros hicieron uso de materiales modernos como el acero industrial y vidrio plano para definir los espacios interiores. Se esforzó hacia una arquitectura con un marco mínimo de orden estructural balanceado contra la libertad implícita de los espacios abiertos de flujo libre. Llamó a la arquitectura de sus edificios 'piel y huesos'. Buscaba un enfoque racional que guiaría el proceso creativo de diseño arquitectónico, pero él siempre estaba preocupado por expresar el espíritu de la era moderna. A menudo se asocia con la cotización de los aforismos, \"menos es más\" y \"Dios está en los detalles\".",
+	"Mies, como muchos de su <em data-ref='a'>Diccionario básico primera guerra</em> contemporáneos, <em data-ref='b'>intentó</em> establecer un&hellip;"]}
+	]
+}

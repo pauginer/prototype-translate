@@ -61,7 +61,7 @@
 		<div class="suggestion-list">{{#each suggestions}}
 			<div class="paragraph suggestion grid__item one-whole">
 				{{{this}}}	
-				<div class="translation-service"> Google Translate <span class="action">revert</span></div>
+				<div class="translation-service"> Google Translate <span class="action revert">Revert</span> <span class="action discard">Discard</span> </div>
 			</div>
 			{{/each}}</div>
 		<div class="suggestion-actions">
@@ -100,13 +100,14 @@
 	
 	<script>
 	lang = "es";
-	article = "mies";
+	articles=["mies", "curiosity", "dhara","queen"];
+	article = articles[0];
 	suggestions = null;
 	glossary = null;
 
 	
-	function loadData(file){
-	$.getJSON('messages/content-translation/'+file+'.json',function(data) {
+	function loadData(art,ln){
+	$.getJSON('messages/content-translation/'+art+'-'+ln+'.json',function(data) {
 		suggestions=data.suggestions;
 		glossary=data.glossary;
 		updateTranslationAids();
@@ -229,18 +230,24 @@ function getGlossaryMatch(word){
 	return words;
 }
 
+/*function spanifyHandlers(elt){
+	$("i",elt).click(function(){
+		var wasActive = $(this).hasClass("active");
+			$("i").removeClass("active");
+			if(!wasActive)
+			$(this).addClass("active");
+			updateTranslationAids();
+		return false;
+	});
+}*/
+
 function spanifyElement(elt){
 	var words = getAllDifferentWords();
 	$.each(words, function(i,w){
 		spanify(elt,w);
 	});
 	
-	$("i",elt).click(function(){
-			$("i").removeClass("active");
-			$(this).addClass("active");
-			updateTranslationAids();
-		return false;
-	});
+	//spanifyHandlers(elt);
 }
 
 function spanifyText(text){
@@ -363,8 +370,10 @@ function focusOnSearchbox(){
 			}
 			
 			$("i",pair).click(function(){
+					var alreadyActive = $(this).hasClass("active");
 					$("i").removeClass("active");
-					$(this).addClass("active");
+					if(!alreadyActive)
+						$(this).addClass("active");
 					updateTranslationAids();
 				return false;
 			});
@@ -402,6 +411,12 @@ function focusOnSearchbox(){
 		$(".context-panel .glossary.suggestion").click(applyGlossarySuggestion);
 		$('.context-panel .paste').click(pasteSource);
 		$('.context-panel .clear').click(clearSuggestion);
+		$('.translation-service .action.discard').click(reoveSuggestion);
+	}
+	
+	function reoveSuggestion(e){
+		$(this).parents(".suggestion").fadeOut();
+		e.stopPropagation();
 	}
 	
 	function translationDone(){
@@ -496,10 +511,12 @@ function focusOnSearchbox(){
 					$("head").append('<link rel="stylesheet" href="style/rtl.css">');
 				}
 				
+			} else if ($.inArray(e,articles)!=-1){
+				article = e;
 			}
 		});
 		
-		loadData(lang);
+		loadData(article,lang);
 		loadArticle(article);
 		adjustSize();
 		updateProgressBar();

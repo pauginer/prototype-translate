@@ -339,19 +339,29 @@ display:none;
 	/*visibility: hidden;*/
 	background: #fbfbfb;
 	border-top: 1px solid #f0f0f0;
+	cursor: default;
 }
 
 
 .suggestion-list .suggestion.applied .translation-service {
 }
 
-.suggestion-list .suggestion .translation-service .action {
+.suggestion-list .suggestion .translation-service .action{
 	color: #3892E3;	
-	visibility: hidden;
+	float: right;	
+	cursor: pointer;
+	border-left: 1px solid #f0f0f0;
+	padding: 0 5px 0 15px;
 }
 
-.suggestion-list .suggestion.applied .translation-service .action {
-	visibility: visible;
+.suggestion-list .suggestion.applied .translation-service .action.discard,
+.suggestion-list .suggestion .translation-service .action.revert {
+	display:none;
+}
+
+.suggestion-list .suggestion.applied .translation-service .action.revert,
+.suggestion-list .suggestion .translation-service .action.discard {
+	display: inline-block;
 }
 
 
