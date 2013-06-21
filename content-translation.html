@@ -104,21 +104,29 @@
 	article = articles[0];
 	suggestions = null;
 	glossary = null;
+	translatedTitle=null;
 
 	
 	function loadData(art,ln){
 	$.getJSON('messages/content-translation/'+art+'-'+ln+'.json',function(data) {
 		suggestions=data.suggestions;
 		glossary=data.glossary;
+		translatedTitle=data.translatedTitle;
+		loadArticle(art);
 		updateTranslationAids();
 	});
 	
+	}
+	
+	function clearWordInfo(){
+		$("i").removeClass("active");
 	}
 	
 	function loadArticle(file){
 		
 		$.getJSON('messages/content-translation/'+file+'.json',function(data) {
 		var context = data;
+		context.translatedTitle=translatedTitle;
 		var html    = article_template(context);
 		$(".article-panel .grid").html(html);
 		//Article handlers:
@@ -131,6 +139,7 @@
 			//savedSel = rangy.saveSelection();
 			//console.debug(savedSel);	
 				activeMessagePair($(this));
+				clearWordInfo();
 				//rangy.restoreSelection(savedSel);
 				updateTranslationAids();
 				return false;
@@ -372,7 +381,7 @@ function focusOnSearchbox(){
 			$("i",pair).click(function(){
 					var alreadyActive = $(this).hasClass("active");
 					$("i").removeClass("active");
-					if(!alreadyActive)
+					//if(!alreadyActive)
 						$(this).addClass("active");
 					updateTranslationAids();
 				return false;
@@ -517,7 +526,7 @@ function focusOnSearchbox(){
 		});
 		
 		loadData(article,lang);
-		loadArticle(article);
+		
 		adjustSize();
 		updateProgressBar();
 		$(".tools .tool.search").click(focusOnSearchbox);

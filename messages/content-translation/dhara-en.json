@@ -1,0 +1,18 @@
+{"translatedTitle": "Dharamsala",
+"glossary": [
+	{"word": "घिरा", "desc":"<b>घिरा (noun).</b> To extend on all sides of simultaneously", "trans": [{"word":"surrounded", "match":"90%"},{"word":"encircled", "match":"20%"}]},
+	{"word": "headed", "desc":"<b>Head (noun).</b>The part of the body of an animal or human which contains the brain, mouth and main sense organs.", "trans": [{"word":"cabeza", "match":"50%"},{"word":"testa", "match":"10%"}]},
+	{"word": "headed", "desc":"<b>Head (verb).</b>To be in command of.", "trans": [{"word":"lideró", "match":"100%"},{"word":"dirigió", "match":"80%"}]},
+	{"word": "was", "desc":"", "trans": [{"word":"era", "match":"90%"},{"word":"es", "match":"50%"}]},
+	{"word": "found", "desc":"Find", "trans": [{"word":"trobat", "match":"g"},{"word":"trobar", "match":"20%"}]}
+],
+"suggestions": [
+	{ "p": 2, "texts": ["<b>Dharamsala<\/b> <a href=\"http:\/\/translate.googleusercontent.com\/translate_c?depth=1&amp;hl=ca&amp;rurl=translate.google.es&amp;sl=hi&amp;tl=en&amp;u=http:\/\/hi.wikipedia.org\/wiki\/%25E0%25A4%25AD%25E0%25A4%25BE%25E0%25A4%25B0%25E0%25A4%25A4&amp;usg=ALkJrhjmK6QqlLC78lNEglz3jA0ozKFFKw\" title=\"India\">in India<\/a> 's <a href=\"http:\/\/translate.googleusercontent.com\/translate_c?depth=1&amp;hl=ca&amp;rurl=translate.google.es&amp;sl=hi&amp;tl=en&amp;u=http:\/\/hi.wikipedia.org\/wiki\/%25E0%25A4%25B9%25E0%25A4%25BF%25E0%25A4%25AE%25E0%25A4%25BE%25E0%25A4%259A%25E0%25A4%25B2_%25E0%25A4%25AA%25E0%25A5%258D%25E0%25A4%25B0%25E0%25A4%25A6%25E0%25A5%2587%25E0%25A4%25B6&amp;usg=ALkJrhgc8WX_m8OWLjCSAZJGC85xnBx72w\" title=\"Himachal Pradesh\">Himachal Pradesh<\/a><a href=\"http:\/\/translate.googleusercontent.com\/translate_c?depth=1&amp;hl=ca&amp;rurl=translate.google.es&amp;sl=hi&amp;tl=en&amp;u=http:\/\/hi.wikipedia.org\/wiki\/%25E0%25A4%25AA%25E0%25A5%258D%25E0%25A4%25B0%25E0%25A4%25BE%25E0%25A4%25A8%25E0%25A5%258D%25E0%25A4%25A4&amp;usg=ALkJrhjstNIyUh1tP7oqNSq2CBE4bHwcqw\" title=\"Province\" class=\"mw-redirect\"> <em data-ref='b'>province </em></a> <em data-ref='a'>is the city</em>. Hospice height of 1,250 meters (4,400 feet) and 2,000 meters (6,460 feet) between. The town is surrounded by mountains on 3 and it is south valley. It is known for its natural beauty, where the tall pine trees, tea gardens and large timber-producing tree height, appear to be standing here with peace and holiness. <em data-ref='c'>From</em> 1960, <em data-ref='d'>when</em> the Dalai Lama made his temporary headquarters here, Dharamshala, India's international reputation has soared as little Lhasa.",
+						"Pradesh <em data-ref='b'>is the city</em><em data-ref='a'> of the province</em>.",
+						"<em data-ref='c'>Year</em> 1960, <em data-ref='d'>since</em> the&hellip;"
+						] },
+	{"p": 3, "texts": ["Hospice Oak, Cedar, Pine & Timber late elegant way with outstanding views. British Viceroy of India (186) Lord Elgin hospice natural beauty in England used to look like their own home, Scotland.",
+	"Mies, como muchos de su <em data-ref='a'>Diccionario básico primera guerra</em> contemporáneos, <em data-ref='b'>intentó</em> establecer un&hellip;"]}
+	
+	]
+}
