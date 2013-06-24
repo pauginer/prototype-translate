@@ -373,7 +373,7 @@ display:none;
 	padding-bottom: 15px;
 }
 
-.suggestion-action {
+.suggestion-action, .restore-action {
 	color: #3892E3;
 	cursor: pointer;
 	padding: 5px 0;

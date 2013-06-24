@@ -56,7 +56,7 @@
 		{{#if suggestions}}
 		<div class="suggestions-header grid__item one-whole">
 			<h2>Automatic translation</h2>
-			<span class="translation-service">from Apertium</span>
+			<span class="translation-service">from Apertium</span> {{#if translationDirty}}<span class="restore-action">Restore initial translation</span>{{/if}}
 		</div>
 		<div class="suggestion-list">{{#each suggestions}}
 			<div class="paragraph suggestion grid__item one-whole">
@@ -105,7 +105,8 @@
 	suggestions = null;
 	glossary = null;
 	translatedTitle=null;
-
+	
+	translationDirty = false;
 	
 	function loadData(art,ln){
 	$.getJSON('messages/content-translation/'+art+'-'+ln+'.json',function(data) {
@@ -133,6 +134,10 @@
 		
 		$('p[contenteditable]').keypress(function(){
 			console.debug("***");
+			if(translationDirty == false){
+				translationDirty = true;
+				updateTranslationAids();
+			}
 		});
 		
 		$(".message-pair").click(function(){
@@ -369,13 +374,14 @@ function focusOnSearchbox(){
 		//var trans = $(".translated p",pair);
 		var trans = $(".message-pair.active .translated p");
 		var isTranslationEmpty = trans.text().trim().length <= 0;
+		var hasBeenCleared = trans.hasClass("cleared");
 		var suggest = null;
-		if(isTranslationEmpty ){
+		if(isTranslationEmpty && !hasBeenCleared){
 			
 			suggest = suggestionsForPar(p);
 			if( suggest != null){
 				trans.html(spanifyText(suggest[0]));
-				
+				translationDirty = false;
 			}
 			
 			$("i",pair).click(function(){
@@ -410,7 +416,7 @@ function focusOnSearchbox(){
 		
 		var noSelection = (activeWord == "" && suggestions == null)
 		
-		var context = {suggestions: suggestions, glossary:getGlossaryMatch(activeWord),activeWord:activeWord, progress: progress, noSelection: noSelection}
+		var context = {suggestions: suggestions, glossary:getGlossaryMatch(activeWord),activeWord:activeWord, progress: progress, noSelection: noSelection, translationDirty:translationDirty}
 		var html    = aids_template(context);
 		$(".context-panel .aids").html(html);
 		
@@ -420,6 +426,7 @@ function focusOnSearchbox(){
 		$(".context-panel .glossary.suggestion").click(applyGlossarySuggestion);
 		$('.context-panel .paste').click(pasteSource);
 		$('.context-panel .clear').click(clearSuggestion);
+		$('.context-panel .restore-action').click(restoreInitialSuggestion);
 		$('.translation-service .action.discard').click(reoveSuggestion);
 	}
 	
@@ -467,10 +474,18 @@ function focusOnSearchbox(){
 			$(matches).addClass('highlight');
 			
 			$(matches).text($(e).text());
+			translationDirty = true;
 			$(".message-pair.active .translated.message p").focus();
 			cursorToEnd(matches);
 			});
 			event.stopPropagation();
+			updateTranslationAids();
+	}
+	function restoreInitialSuggestion(){
+		var target = $(".message-pair.active .translated.message p");
+		target.removeClass("cleared");
+		target.html("");
+		updateTranslationAids();
 	}
 	
 	function previewSuggestion(){
@@ -493,6 +508,7 @@ function focusOnSearchbox(){
 		
 		cursorToEnd(target);
 		target.effect("highlight", {}, 500);
+		target.addClass("cleared");
 	}
 	
 	function clearSuggestion() {
@@ -500,6 +516,7 @@ function focusOnSearchbox(){
 		target.html("");
 		target.focus();
 		target.effect("highlight", {}, 500);
+		target.addClass("cleared");
 	}
 	
 	
@@ -591,7 +608,6 @@ function focusOnSearchbox(){
 					<div class="tools grid__item one-whole">
 							<span class="tool settings"></span>
 						<span class="tool search"><input type="search" class="searchbox" placeholder="Search info for a word"></input></span>
-
 						
 					</div>
 				</div>
