@@ -197,6 +197,15 @@ display:none;
 	height: 4px;
 }
 
+.progress.big {
+	height: 10px;
+	border-radius: 10px;
+	border: 1px solid #ddd;
+	background: #fbfbfb;
+	vertical-align: middle;
+	padding-left: 10px;
+}
+
 .progress .bar {
 	background: #3892E3;	
 	display: inline-block;
@@ -206,6 +215,12 @@ display:none;
 	left:0;
 	top:0;
 	transition: width 1s;
+}
+
+.progress.big .bar {
+	height: 10px;
+	border-radius: 10px;
+	top:-1px;
 }
 
 .tools .tool {
@@ -395,11 +410,33 @@ display:none;
 }
 
 
+.title.message {
+	margin-bottom: 20px;
+}
+
+.title.message h1 {
+	margin-bottom: 2px;
+}
+
+.title-options .language-name {
+	color: #777;
+	padding: 0 10px 0 0;
+}
+
+.title-options .actions {
+	color: #3892E3;		
+	cursor: pointer;
+}
+
+
 
 .highlight {
 	background: #FFFCD3;
 }
 
+.hidden {
+	display: none !important;
+}
 
 
 *[contenteditable="true"]:focus{

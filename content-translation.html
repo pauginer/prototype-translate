@@ -31,7 +31,7 @@
 					<ol>
 						<li>Add some paragraphs to the translation.</li>
 						<li>Adjust the automatic translations provided to ensure quality.</li>
-						<li>When you are happy with the result, select "review and publish" to tweak text formatting, and publish it as a new article.</li>
+						<li>When you are happy with the result, select "publish" to create a new article.</li>
 					</ol>
 					<a href="http://en.wikipedia.org/wiki/Wikipedia:Translation#How_to_translate" target="_blank"> View translation guidelines</a>
 				
@@ -77,11 +77,13 @@
 	</script>
 	
 	<script id="article-template" type="text/x-handlebars-template">
-			<div class="source message grid__item one-half">
+			<div class="source title message grid__item one-half">
 				<h1>{{sourceTitle}}</h1>
+				<div class="title-options source"> <span class="language-name">{{sourceLanguage}}</span> <span class="actions">view article</span></div>
 			</div>
-			<div class="translated message grid__item one-half">
+			<div class="translated title message grid__item one-half">
 				<h1>{{translatedTitle}}</h1>
+				<div class="title-options source"> <span class="language-name">{{translatedLanguage}}</span> <span class="actions"></span></div>
 			</div>
 			{{#each messages}}
 			<div class="message-pair">
@@ -105,6 +107,7 @@
 	suggestions = null;
 	glossary = null;
 	translatedTitle=null;
+	translatedLanguage = null;
 	
 	translationDirty = false;
 	
@@ -113,6 +116,7 @@
 		suggestions=data.suggestions;
 		glossary=data.glossary;
 		translatedTitle=data.translatedTitle;
+		translatedLanguage= data.translatedLanguage;
 		loadArticle(art);
 		updateTranslationAids();
 	});
@@ -128,6 +132,7 @@
 		$.getJSON('messages/content-translation/'+file+'.json',function(data) {
 		var context = data;
 		context.translatedTitle=translatedTitle;
+		context.translatedLanguage = translatedLanguage;
 		var html    = article_template(context);
 		$(".article-panel .grid").html(html);
 		//Article handlers:
@@ -332,10 +337,17 @@ function focusOnSearchbox(){
   function scroll(){
   		var header = $(".translation-area");
 		var target = $(".context-panel");
-		
+		var progress = $(".context-panel .progress");
 		var origOffsetY = header.offset().top;
-		window.scrollY >= origOffsetY ? target.addClass('sticky') :
-                                  target.removeClass('sticky');
+		if(window.scrollY >= origOffsetY) { 
+			target.addClass('sticky');
+			progress.removeClass("hidden");
+		}else{			
+            target.removeClass('sticky');
+            progress.addClass("hidden");
+		}
+          
+
 	}
 	
 	function activeMessagePair(elt){
@@ -584,11 +596,16 @@ function focusOnSearchbox(){
 </div>
 
 <div class="translation-bar grid">
-	<div class="grid__item one-third">
+	<div class="grid__item two-thirds">
 		<span class="back-action">Translation center</span>
 	</div>
-	<div class="document-actions language-labels grid__item two-thirds">
-		<button class="review-action btn blue">Review and publish</button>
+	<div class="document-actions language-labels grid__item one-third">
+		<div class="grid">
+		<div class="progress big grid__item one-half"><span class="bar"></span></div>
+		<div class="grid__item one-half">
+			<button class="review-action btn blue">Review and publish</button>	
+		</div>
+		</div>
 	</div>
 	
 </div>
