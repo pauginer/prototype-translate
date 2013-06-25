@@ -416,7 +416,7 @@ function focusOnSearchbox(){
 		
 		var noSelection = (activeWord == "" && suggestions == null)
 		
-		var context = {suggestions: suggestions, glossary:getGlossaryMatch(activeWord),activeWord:activeWord, progress: progress, noSelection: noSelection, translationDirty:translationDirty}
+		var context = {suggestions: suggestions, glossary:getGlossaryMatch(activeWord),activeWord:activeWord, progress: progress, noSelection: noSelection, translationDirty: translationDirty}
 		var html    = aids_template(context);
 		$(".context-panel .aids").html(html);
 		
@@ -509,6 +509,9 @@ function focusOnSearchbox(){
 		cursorToEnd(target);
 		target.effect("highlight", {}, 500);
 		target.addClass("cleared");
+		translationDirty = true;
+		updateTranslationAids();
+		$(".suggestion-list").remove();
 	}
 	
 	function clearSuggestion() {
@@ -517,6 +520,9 @@ function focusOnSearchbox(){
 		target.focus();
 		target.effect("highlight", {}, 500);
 		target.addClass("cleared");
+		translationDirty = true;
+		updateTranslationAids();
+		$(".suggestion-list").remove();
 	}
 	
 	
