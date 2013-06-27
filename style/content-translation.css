@@ -286,6 +286,12 @@ display:none;
 	padding: 0 15px;
 }
 
+.context-panel .alternatives-label {
+	color: #3892E3;
+	padding-left: 24px;
+	font-size: 18px;
+}
+
 .context-panel .translation-service {
 	color: #888;
 	padding-bottom: 10px;
