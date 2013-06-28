@@ -44,12 +44,25 @@
 			</div>
 			{{/unless}}
 		{{/if}}
-			
-			{{#if glossary}}	
-			<div class="grid__item one-whole">
+		{{#if activeWord}}
+			<div class="grid__item one-whole context-header">
 				<h2>{{activeWord}}</h2>
+				{{#if isLink}}<span class="label">link</span>{{/if}}
 			</div>
-			
+		{{/if}}
+		{{#if isLink}}
+			<div class="grid__item one-whole alternatives-label"> Link source</div>
+			<div class="grid__item one-whole"> [[{{originalWord}}]] ({{sourceLanguage}} Wikipedia)</div>
+			<div class="grid__item one-whole alternatives-label"> Link target</div>
+			<div class="link-adaptation-list">
+				<div class="adapt link-adaptation grid__item one-whole"><label><input type="radio" name="link-adapt" {{#ifeq isLink "adapt"}} checked="checked" {{/ifeq}}  value="adapt">{{activeWord}} <span class="source">({{translatedLanguage}} Wikipedia)</span></input></label> <a href="#">View</a></div>
+				<div class="other link-adaptation grid__item one-whole"><label><input type="radio" name="link-adapt" {{#ifeq isLink "other"}} checked="checked" {{/ifeq}} value="other">Other</input> <input class="other-url"></input></label></div>
+				<label class="keep link-adaptation grid__item one-whole"><input type="radio" name="link-adapt" {{#ifeq isLink "keep"}} checked="checked" {{/ifeq}} value="keep">Keep source link</input></label>
+				<label class="remove link-adaptation grid__item one-whole"><input type="radio" name="link-adapt" {{#ifeq isLink "remove"}} checked="checked" {{/ifeq}} value="remove">Remove link</input></label>
+			</div>
+			<hr/>
+		{{/if}}
+		{{#if glossary}}	
 			<div class="glossary suggestion-list">{{#each glossary}}
 			<div class="description grid__item one-whole">{{{desc}}}</div>
 				{{#each trans}}
@@ -60,9 +73,9 @@
 			{{/each}}</div>
 			{{/if}}
 		{{#if suggestions}}
-		<div class="suggestions-header grid__item one-whole">
+		<div class="suggestions-header context-header grid__item one-whole">
 			<h2>Automatic translation</h2>
-			<span class="translation-service">from Apertium</span> {{#if translationDirty}}<span class="restore-action">Restore initial translation</span>{{/if}}
+			<span class="translation-service label">from Apertium</span> {{#if translationDirty}}<span class="restore-action">Restore initial translation</span>{{/if}}
 		</div>
 		<div class="alternatives-label grid__item">Alternatives</div>
 		<div class="suggestion-list">{{#each suggestions}}
@@ -113,6 +126,7 @@
 	suggestions = null;
 	glossary = null;
 	translatedTitle=null;
+	sourceLanguage = null;
 	translatedLanguage = null;
 	
 	translationDirty = false;
@@ -130,13 +144,14 @@
 	}
 	
 	function clearWordInfo(){
-		$("i").removeClass("active");
+		$("i,a").removeClass("active");
 	}
 	
 	function loadArticle(file){
 		
 		$.getJSON('messages/content-translation/'+file+'.json',function(data) {
 		var context = data;
+		sourceLanguage = data.sourceLanguage;
 		context.translatedTitle=translatedTitle;
 		context.translatedLanguage = translatedLanguage;
 		var html    = article_template(context);
@@ -402,9 +417,9 @@ function focusOnSearchbox(){
 				translationDirty = false;
 			}
 			
-			$("i",pair).click(function(){
+			$("i,a",pair).click(function(){
 					var alreadyActive = $(this).hasClass("active");
-					$("i").removeClass("active");
+					$("i,a").removeClass("active");
 					//if(!alreadyActive)
 						$(this).addClass("active");
 					updateTranslationAids();
@@ -426,15 +441,26 @@ function focusOnSearchbox(){
 		
 		
 		var activeWord = null;
-		activeWord=$(".message-pair.active i.active").text();
+		var activeElement=$(".message-pair.active .active");
+		activeWord=activeElement.text();
 		var suggestions = suggestionsForPar(p);
+		var isLink = null;
+		if (activeElement.prop("tagName") == "A"){
+			isLink = "adapt";
+			var typeOfLink  = activeElement.data("type");
+			if(typeOfLink)
+				isLink = typeOfLink;
+		}
+		
 		
 		//Initial:
 		var progress= calculateProgress();
 		
 		var noSelection = (activeWord == "" && suggestions == null)
-		
-		var context = {suggestions: suggestions, glossary:getGlossaryMatch(activeWord),activeWord:activeWord, progress: progress, noSelection: noSelection, translationDirty: translationDirty}
+		var relevantSuggestions = suggestions;
+		if(activeWord !="")
+			relevantSuggestions=[];
+		var context = {suggestions: relevantSuggestions, glossary:getGlossaryMatch(activeWord),originalWord:getOriginalForTranslation(activeWord),activeWord:activeWord, progress: progress, noSelection: noSelection, translationDirty: translationDirty, isLink:isLink, sourceLanguage:sourceLanguage, translatedLanguage:translatedLanguage}
 		var html    = aids_template(context);
 		$(".context-panel .aids").html(html);
 		
@@ -446,6 +472,19 @@ function focusOnSearchbox(){
 		$('.context-panel .clear').click(clearSuggestion);
 		$('.context-panel .restore-action').click(restoreInitialSuggestion);
 		$('.translation-service .action.discard').click(reoveSuggestion);
+		
+		//Link handlers:
+		$(".link-adaptation-list input[type='radio']").change(function(){
+			if($(this).is(':checked')){
+				var value= $(this).val();
+				var elt = $(".message-pair.active a.active");
+				elt.data("type",value);
+				elt.attr("data-type",value);
+				console.debug(value);
+			}
+		});
+		
+		
 	}
 	
 	function reoveSuggestion(e){
@@ -467,7 +506,7 @@ function focusOnSearchbox(){
 	function applyGlossarySuggestion(event){
 		var elt = $(this);
 		var text = $(".word", elt).text();
-		var target = $(".translated.message i.active");
+		var target = $(".translated.message .active");
 		if(target.length){
 			target.text(text);
 			$(".message-pair.active .translated.message p").focus();
