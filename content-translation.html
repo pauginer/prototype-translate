@@ -49,6 +49,13 @@
 				{{#if isLink}}<span class="label">Source links to <a href="#">[[{{originalWord}}]]</a> (from {{sourceLanguage}} Wikipedia)</span>{{/if}}
 			</div>
 		{{/if}}
+		{{#if ref}}
+		<div class="reference grid__item one-whole">{{{ref}}}</div>
+		<div class="ref-adaptation-list grid__item one-whole">
+			<div class="other ref-adaptation grid__item one-whole" data-type="other">Edit reference</div>
+			<div class="remove ref-adaptation grid__item one-whole" data-type="remove">Remove reference</div>
+		</div>
+		{{/if}}
 		{{#if isLink}}
 			<div class="grid__item one-whole alternatives-label hidden"> Link source</div>
 			<div class="grid__item one-whole hidden"> [[{{originalWord}}]] <span class="label">({{sourceLanguage}} Wikipedia)</span></div>
@@ -138,6 +145,7 @@
 	article = articles[0];
 	suggestions = null;
 	glossary = null;
+	references = null;
 	translatedTitle=null;
 	sourceLanguage = null;
 	translatedLanguage = null;
@@ -165,6 +173,7 @@
 		$.getJSON('messages/content-translation/'+file+'.json',function(data) {
 		var context = data;
 		sourceLanguage = data.sourceLanguage;
+		references = data.references;
 		context.translatedTitle=translatedTitle;
 		context.translatedLanguage = translatedLanguage;
 		var html    = article_template(context);
@@ -454,6 +463,7 @@ function focusOnSearchbox(){
 		
 		
 		var activeWord = null;
+		var ref = null;
 		var activeElement=$(".message-pair.active .active");
 		activeWord=activeElement.text();
 		var suggestions = suggestionsForPar(p);
@@ -463,6 +473,14 @@ function focusOnSearchbox(){
 			var typeOfLink  = activeElement.data("type");
 			if(typeOfLink)
 				isLink = typeOfLink;
+			//Refs:
+			var refRegex = /[\d+]+/;
+			var match = refRegex.exec(activeWord);
+			if(match != null){
+				ref = references[parseInt(match[0]) -1];	
+				isLink = false;
+			}
+			console.debug(ref);
 		}
 		
 		
@@ -473,7 +491,7 @@ function focusOnSearchbox(){
 		var relevantSuggestions = suggestions;
 		if(activeWord !="")
 			relevantSuggestions=[];
-		var context = {suggestions: relevantSuggestions, glossary:getGlossaryMatch(activeWord),originalWord:getOriginalForTranslation(activeWord),activeWord:activeWord, progress: progress, noSelection: noSelection, translationDirty: translationDirty, isLink:isLink, sourceLanguage:sourceLanguage, translatedLanguage:translatedLanguage}
+		var context = {suggestions: relevantSuggestions, glossary:getGlossaryMatch(activeWord),originalWord:getOriginalForTranslation(activeWord),activeWord:activeWord, progress: progress, noSelection: noSelection, translationDirty: translationDirty, isLink:isLink, sourceLanguage:sourceLanguage, translatedLanguage:translatedLanguage, ref:ref}
 		var html    = aids_template(context);
 		$(".context-panel .aids").html(html);
 		
@@ -487,7 +505,7 @@ function focusOnSearchbox(){
 		$('.translation-service .action.discard').click(reoveSuggestion);
 		
 		//Link handlers:
-		$(".link-adaptation").click(function(){
+		$(".link-adaptation, .ref-adaptation,").click(function(){
 				var value= $(this).data("type");
 				var elt = $(".message-pair.active a.active");
 				elt.data("type",value);

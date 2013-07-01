@@ -420,6 +420,7 @@ display:none;
 	background-size: auto 16px;
 }
 
+.remove.ref-adaptation,
 .remove.link-adaptation,
 .suggestion-action.clear {
 	background: transparent url(../images/close.png) center left no-repeat;
@@ -455,7 +456,8 @@ display:none;
 	padding-bottom: 10px;
 }
 
-.link-adaptation-list .link-adaptation {
+.link-adaptation-list .link-adaptation,
+.ref-adaptation-list .ref-adaptation {
 	padding-top: 5px;
 	padding-bottom: 5px;
 	color: #3892E2;
