@@ -7,6 +7,7 @@
 	{"word": "headed", "desc":"<b>Head (verb).</b>To move in a direction.", "trans": [{"word":"de afdeling", "match":"30%"}]},
 	{"word": "widely", "desc":"<b>Widely (adverb).</b> To a wide extent.", "trans": [{"word":"wijd", "match":"40%"},{"word":"breed", "match":"40%"},{"word":"op velerlei gebied", "match":"40%"}]},
 	{"word": "architect", "desc":"<b>Architect (noun).</b> A professional who designs buildings or other structures, or who prepares plans and superintends construction.", "trans": [{"word":"architect", "match":"100%"},{"word":"bouwmeester", "match":"10%"}]},
+	{"word": "Bauhaus", "desc":"<b>Bauhaus (noun).</b> A school in Germany that combined crafts and the fine arts, and was famous for the approach to design that it publicized and taught.", "trans": [{"word":"Bauhaus", "match":"100%"},{"word":"bauhaus", "match":"10%"}]},
 	{"word": "found", "desc":"Find", "trans": [{"word":"trobat", "match":"g"},{"word":"trobar", "match":"20%"}]}
 ],
 "suggestions": [

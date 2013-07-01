@@ -445,6 +445,14 @@ display:none;
 	cursor: pointer;
 }
 
+.alternatives-label {
+	padding-top: 10px;
+}
+
+.link-adaptation-list .link-adaptation {
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
 
 .label{
 	color: #888;
@@ -457,6 +465,10 @@ display:none;
 
 .hidden {
 	display: none !important;
+}
+
+a {
+	text-decoration: none;
 }
 
 hr {

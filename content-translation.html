@@ -24,7 +24,6 @@
 			<div class="grid__item one-whole">
 				<h2>Create a translation</h2>
 			</div>
-			
 			{{#unless progress}}
 			<div class="initial-instructions grid__item one-whole">
 			
@@ -47,15 +46,15 @@
 		{{#if activeWord}}
 			<div class="grid__item one-whole context-header">
 				<h2>{{activeWord}}</h2>
-				{{#if isLink}}<span class="label">link</span>{{/if}}
+				{{#if isLink}}<span class="label">Source links to <a href="#">[[{{originalWord}}]]</a> (from {{sourceLanguage}} Wikipedia)</span>{{/if}}
 			</div>
 		{{/if}}
 		{{#if isLink}}
-			<div class="grid__item one-whole alternatives-label"> Link source</div>
-			<div class="grid__item one-whole"> [[{{originalWord}}]] ({{sourceLanguage}} Wikipedia)</div>
+			<div class="grid__item one-whole alternatives-label hidden"> Link source</div>
+			<div class="grid__item one-whole hidden"> [[{{originalWord}}]] <span class="label">({{sourceLanguage}} Wikipedia)</span></div>
 			<div class="grid__item one-whole alternatives-label"> Link target</div>
 			<div class="link-adaptation-list">
-				<div class="adapt link-adaptation grid__item one-whole"><label><input type="radio" name="link-adapt" {{#ifeq isLink "adapt"}} checked="checked" {{/ifeq}}  value="adapt">{{activeWord}} <span class="source">({{translatedLanguage}} Wikipedia)</span></input></label> <a href="#">View</a></div>
+				<div class="adapt link-adaptation grid__item one-whole"><label><input type="radio" name="link-adapt" {{#ifeq isLink "adapt"}} checked="checked" {{/ifeq}}  value="adapt">[[{{activeWord}}]] <span class="source label">({{translatedLanguage}} Wikipedia)</span></input></label> <a href="#">View</a></div>
 				<div class="other link-adaptation grid__item one-whole"><label><input type="radio" name="link-adapt" {{#ifeq isLink "other"}} checked="checked" {{/ifeq}} value="other">Other</input> <input class="other-url"></input></label></div>
 				<label class="keep link-adaptation grid__item one-whole"><input type="radio" name="link-adapt" {{#ifeq isLink "keep"}} checked="checked" {{/ifeq}} value="keep">Keep source link</input></label>
 				<label class="remove link-adaptation grid__item one-whole"><input type="radio" name="link-adapt" {{#ifeq isLink "remove"}} checked="checked" {{/ifeq}} value="remove">Remove link</input></label>
