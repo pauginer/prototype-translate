@@ -412,14 +412,16 @@ display:none;
 	margin-left: 20px;
 }
 
-.suggestion-action.paste{
+.keep.link-adaptation,
+.suggestion-action.paste {
 	background: transparent url(../images/paste.png) center left no-repeat;
 	background-image: linear-gradient(transparent, transparent), url(../images/paste.svg);
 	padding-left: 25px;
 	background-size: auto 16px;
 }
 
-.suggestion-action.clear{
+.remove.link-adaptation,
+.suggestion-action.clear {
 	background: transparent url(../images/close.png) center left no-repeat;
 	background-image: linear-gradient(transparent, transparent), url(../images/close.svg);
 	padding-left: 25px;
@@ -449,9 +451,15 @@ display:none;
 	padding-top: 10px;
 }
 
+.link-adaptation-list .link-target {
+	padding-bottom: 10px;
+}
+
 .link-adaptation-list .link-adaptation {
 	padding-top: 5px;
 	padding-bottom: 5px;
+	color: #3892E2;
+	cursor: pointer;
 }
 
 .label{

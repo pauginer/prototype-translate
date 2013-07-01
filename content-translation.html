@@ -53,11 +53,25 @@
 			<div class="grid__item one-whole alternatives-label hidden"> Link source</div>
 			<div class="grid__item one-whole hidden"> [[{{originalWord}}]] <span class="label">({{sourceLanguage}} Wikipedia)</span></div>
 			<div class="grid__item one-whole alternatives-label"> Link target</div>
-			<div class="link-adaptation-list">
-				<div class="adapt link-adaptation grid__item one-whole"><label><input type="radio" name="link-adapt" {{#ifeq isLink "adapt"}} checked="checked" {{/ifeq}}  value="adapt">[[{{activeWord}}]] <span class="source label">({{translatedLanguage}} Wikipedia)</span></input></label> <a href="#">View</a></div>
-				<div class="other link-adaptation grid__item one-whole"><label><input type="radio" name="link-adapt" {{#ifeq isLink "other"}} checked="checked" {{/ifeq}} value="other">Other</input> <input class="other-url"></input></label></div>
-				<label class="keep link-adaptation grid__item one-whole"><input type="radio" name="link-adapt" {{#ifeq isLink "keep"}} checked="checked" {{/ifeq}} value="keep">Keep source link</input></label>
-				<label class="remove link-adaptation grid__item one-whole"><input type="radio" name="link-adapt" {{#ifeq isLink "remove"}} checked="checked" {{/ifeq}} value="remove">Remove link</input></label>
+			<div class="link-adaptation-list grid__item one-whole">
+				{{#ifeq isLink "adapt"}}
+				<div class="link-target">[[{{activeWord}}]] <span class="source label">({{translatedLanguage}} Wikipedia)</span> <a class="link-adaptation" data-type="other">Edit</a></div>
+				<div class="keep link-adaptation grid__item one-whole" data-type="keep">Copy source link</div>
+				<div class="remove link-adaptation grid__item one-whole" data-type="remove">Remove link</div>
+				{{/ifeq}}
+				{{#ifeq isLink "keep"}}
+				<div class="link-target">[[{{originalWord}}]] <span class="label">({{sourceLanguage}} Wikipedia)</span> <a class="link-adaptation" data-type="other">Edit</a> <a class="link-adaptation" data-type="adapt">Revert</a></div>
+				<div class="remove link-adaptation grid__item one-whole" data-type="remove">Remove link</div>
+				{{/ifeq}}
+				{{#ifeq isLink "other"}}
+				<div class="link-target"><input value="[[{{activeWord}}]]"></input> <a href="#">View</a> <a class="link-adaptation" data-type="adapt">Cancel</a></div>
+				<div class="keep link-adaptation grid__item one-whole" data-type="keep">Copy source link</div>
+				<div class="remove link-adaptation grid__item one-whole" data-type="remove">Remove link</div>
+				{{/ifeq}}
+				{{#ifeq isLink "remove"}}
+				<div class="link-target"><span class="source label">None</span> <a class="link-adaptation" data-type="other">Edit</a> <a class="link-adaptation" data-type="adapt">Revert</a></div>
+				<div class="keep link-adaptation grid__item one-whole" data-type="keep">Copy source link</div>
+				{{/ifeq}}
 			</div>
 			<hr/>
 		{{/if}}
@@ -473,14 +487,13 @@ function focusOnSearchbox(){
 		$('.translation-service .action.discard').click(reoveSuggestion);
 		
 		//Link handlers:
-		$(".link-adaptation-list input[type='radio']").change(function(){
-			if($(this).is(':checked')){
-				var value= $(this).val();
+		$(".link-adaptation").click(function(){
+				var value= $(this).data("type");
 				var elt = $(".message-pair.active a.active");
 				elt.data("type",value);
 				elt.attr("data-type",value);
-				console.debug(value);
-			}
+				updateTranslationAids();
+				$(".link-adaptation-list .link-target").effect("highlight", {}, 500);
 		});
 		
 		
