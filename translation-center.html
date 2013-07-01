@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Content transation</title>
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0">
+	<script src="libs/jquery.js"></script>
+	<script src="libs/jquery.i18n.min.js"></script>
+	<script src="libs/jquery-ui.min.js"></script>
+	<script src="libs/rangy-core.js"></script>
+	<script src="libs/rangy-cssclassapplier.js"></script>
+		<script src="libs/rangy-highlighter.js"></script>
+	<script src="libs/rangy-selectionsaverestore.js"></script>
+	<script src="libs/rangy-serializer.js"></script>
+	<script src="libs/rangy-textrange.js"></script>
+	<script src="libs/handlebars.js"></script>
+	<script src="libs/handlebars-helpers.js"></script>
+	<link rel="stylesheet" href="libs/csswizardry-grids.css">
+	<link rel="stylesheet" href="style/buttons.css">
+	<link rel="stylesheet" href="style/translation-center.css">
+	
+	<script id="list-item-template" type="text/x-handlebars-template">
+	{{#each articles}}
+	<div class="article grid">
+		<div class="grid__item one-sixth"><img src="{{image}}" width="100%">
+		</div>
+		<div class="info grid__item one-half">
+				<div class="grid">
+							<div class="title grid__item one-whole">{{title}}</div>
+							<div class="desc grid__item one-whole">{{desc}}</div>
+							<div class="readers grid__item one-whole">{{readers}} readers per day</div>		
+				</div>
+		</div>
+		<div class="status grid__item one-third">
+				 <div class="grid">
+							<div class="languages grid__item one-whole">{{sourceLanguage}} → {{translatedLanguage}}</div>
+							<div class="completed grid__item one-whole"><div class="progress big grid__item one-half"><span class="bar" style="width:{{completed}}%;"></span></div></div>
+							<div class="stats grid__item one-whole">{{completed}}% completed {{time}} days ago</div>		
+				</div>
+		</div>
+	</div>
+	{{/each}}
+	</script>
+	<script id="new-translation-template" type="text/x-handlebars-template">
+	<div class="grid">
+		<div class="row"><div class="title grid__item one-whole">New translation</div></div>
+		<div class="row"><div class="label grid__item one-eighth">From:</div><div class="grid__item two-eighths"><div class="language-selector">English</div></div><div class="search-article grid__item five-eighths"><input class="searchbox clean-input" placeholder="Search source article"></input></div></div>
+		<div class="row"><div class="label grid__item one-eighth">To:</div><div class="grid__item two-eighths"><div class="language-selector">Select</div></div><div class="name-article grid__item five-eighths"><input class="clean-input" placeholder="Translation title (if differs from source)"></input></div></div>
+		<div class="row"><div class="grid__item one-eighth"></div> <div class="grid__item seven-eighths"><button class="btn blue">Create translation</button> <button class="btn">Cancel</button></div></div>
+	</div>
+	</script>
+	<script>
+	context= {};
+	$( document ).ready( function() {
+		var options = {
+			"articles":[
+				{"image":"http://upload.wikimedia.org/wikipedia/commons/c/cb/Park_G%C3%BCell_02.jpg","title":"Parc Güell","desc":"A garden complex with architectural elements","sourceLanguage":"Català","translatedLanguage":"English","readers":50,"completed":20, "time":4},
+				{"image":"http://upload.wikimedia.org/wikipedia/commons/c/cb/Park_G%C3%BCell_02.jpg","title":"Parc Güell","desc":"A garden complex with architectural elements","sourceLanguage":"Català","translatedLanguage":"English","readers":50,"completed":20, "time":4}
+			]
+		};
+		jQuery.extend(context, options);
+		
+		
+		var item_template = Handlebars.compile($("#list-item-template").html());
+		var new_template = Handlebars.compile($("#new-translation-template").html());
+		
+		var html    = item_template(context);
+		$(".article-list").html(html);
+		html = new_template(context);
+		$(".new-translation-dialog").html(html);
+		$(".new-translation-dialog").addClass("active");
+		
+	});
+	</script>
+</head>
+<body>
+<div class="grid">
+	<div class="logo grid__item one-third">
+			   <img src="images/wikipedia-logo-landscape.png" height="60px"></img>
+	</div>
+	
+	<div class="grid__item two-thirds">
+		<div class="grid--right">
+			<div class="personal-toolbar grid__item one-whole">
+				  Login info	
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+<h1 class="title">Translations</h1>
+<div class="subtitle">Create a new translation for an article</div>
+<button class="new-translation btn blue">Crete a new translation</button>
+
+
+<div class="new-translation-dialog">
+</div>
+
+<div class="article-list">
+</div>
+
+
+
+</body>
+</html>
