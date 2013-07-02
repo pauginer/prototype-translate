@@ -15,6 +15,7 @@
 	<script src="libs/rangy-textrange.js"></script>
 	<script src="libs/handlebars.js"></script>
 	<script src="libs/handlebars-helpers.js"></script>
+	<script src="libs/typeahead.min.js"></script>
 	<link rel="stylesheet" href="libs/csswizardry-grids.css">
 	<link rel="stylesheet" href="style/buttons.css">
 	<link rel="stylesheet" href="style/translation-center.css">
@@ -44,25 +45,52 @@
 	<script id="new-translation-template" type="text/x-handlebars-template">
 	<div class="grid">
 		<div class="row"><div class="title grid__item one-whole">New translation</div></div>
-		<div class="row"><div class="label grid__item one-eighth">From:</div><div class="grid__item two-eighths"><div class="language-selector">English</div></div><div class="search-article grid__item five-eighths"><input class="searchbox clean-input" placeholder="Search source article"></input></div></div>
-		<div class="row"><div class="label grid__item one-eighth">To:</div><div class="grid__item two-eighths"><div class="language-selector">Select</div></div><div class="name-article grid__item five-eighths"><input class="clean-input" placeholder="Translation title (if differs from source)"></input></div></div>
+		<div class="source row"><div class="label grid__item one-eighth">From:</div><div class="grid__item two-eighths"><div class="language-selector">English</div></div><div class="search-article grid__item five-eighths"><input class="searchbox clean-input" placeholder="Search source article"></input></div></div>
+		<div class="target row disabled"><div class="label grid__item one-eighth">To:</div><div class="grid__item two-eighths"><div class="language-selector">Select</div></div><div class="name-article grid__item five-eighths"><input class="translation-title clean-input" placeholder="Translation title (if differs from source)"></input></div></div>
 		<div class="row"><div class="grid__item one-eighth"></div> <div class="grid__item seven-eighths"><button class="create btn blue">Create translation</button> <button class="cancel btn">Cancel</button></div></div>
 	</div>
 	</script>
 	<script>
 	context= {};
 	
+	function updateTranslateToRow(){
+			var val = $(".search-article .searchbox").val();
+			var placeholder= "Translation title (if differs from source)";
+			console.debug(val);
+			if(val=="Dharamsala"){
+				$(".target.row").removeClass("disabled");
+				placeholder = "Translation title (if differs from \""+val+"\")";
+				placeholder = val;
+				
+			}else{
+				$(".target.row").addClass("disabled");
+			}			
+				$(".target.row .translation-title").attr("placeholder",placeholder);
+	}
+	
 	function createNewTranslationDialog(){
 		var new_template = Handlebars.compile($("#new-translation-template").html());
 		html = new_template(context);
 		$(".new-translation-dialog").html(html);
+		
+		$('.search-article .searchbox').typeahead({                                   
+			name: 'articles', 
+			local: [ 
+			"Ludwig Mies van der Rohe",
+			"Dharamsala"
+			 ]                                                                           
+});
 		//Handlers:
 		$(".new-translation-dialog .create").click(function(){
+			window.location="content-translation.html#mies-nl";
 		});
 		$(".new-translation-dialog .cancel").click(function(){
 			$(".new-translation-dialog").removeClass("active");
 			
 		});
+		$(".search-article .searchbox").keyup(updateTranslateToRow);
+		$(".new-translation-dialog  .twitter-typeahead").click(updateTranslateToRow);
+		
 	}
 	
 	function openNewTranslationDialog(){

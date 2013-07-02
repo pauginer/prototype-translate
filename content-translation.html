@@ -641,6 +641,9 @@ function focusOnSearchbox(){
 		updateProgressBar();
 		$(".tools .tool.search").click(focusOnSearchbox);
 		
+		$(".back-action").click(function(){
+			window.location="translation-center.html";
+		});
 		
 		$("body").click(function(e){
 			activeMessagePair(null);
