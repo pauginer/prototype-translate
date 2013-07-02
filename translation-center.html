@@ -46,18 +46,21 @@
 	<div class="grid">
 		<div class="row"><div class="title grid__item one-whole">New translation</div></div>
 		<div class="source row"><div class="label grid__item one-eighth">From:</div><div class="grid__item two-eighths"><div class="language-selector">English</div></div><div class="search-article grid__item five-eighths"><input class="searchbox clean-input" placeholder="Search source article"></input></div></div>
-		<div class="target row disabled"><div class="label grid__item one-eighth">To:</div><div class="grid__item two-eighths"><div class="language-selector">Select</div></div><div class="name-article grid__item five-eighths"><input class="translation-title clean-input" placeholder="Translation title (if differs from source)"></input></div></div>
+		<div class="target row disabled"><div class="label grid__item one-eighth">To:</div><div class="grid__item two-eighths"><div class="language-selector">Dutch</div></div><div class="name-article grid__item five-eighths"><input class="translation-title clean-input" placeholder="Translation title (if differs from source)"></input></div></div>
 		<div class="row"><div class="grid__item one-eighth"></div> <div class="grid__item seven-eighths"><button class="create btn blue">Create translation</button> <button class="cancel btn">Cancel</button></div></div>
 	</div>
 	</script>
 	<script>
 	context= {};
+	articles = [ 
+			"Ludwig Mies van der Rohe",
+			"Dharamsala"
+			 ];
 	
 	function updateTranslateToRow(){
 			var val = $(".search-article .searchbox").val();
 			var placeholder= "Translation title (if differs from source)";
-			console.debug(val);
-			if(val=="Dharamsala"){
+			if($.inArray(val,articles) != -1){
 				$(".target.row").removeClass("disabled");
 				placeholder = "Translation title (if differs from \""+val+"\")";
 				placeholder = val;
@@ -75,10 +78,7 @@
 		
 		$('.search-article .searchbox').typeahead({                                   
 			name: 'articles', 
-			local: [ 
-			"Ludwig Mies van der Rohe",
-			"Dharamsala"
-			 ]                                                                           
+			local: articles                                                                           
 });
 		//Handlers:
 		$(".new-translation-dialog .create").click(function(){
@@ -94,6 +94,7 @@
 	}
 	
 	function openNewTranslationDialog(){
+		$(".new-translation-dialog .clean-input").val("");
 		$(".new-translation-dialog").addClass("active");
 		
 	}
