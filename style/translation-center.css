@@ -20,6 +20,11 @@
   word-spacing: normal;
 }
 
+.uls-menu {
+	letter-spacing: normal;
+	word-spacing: normal;
+}
+
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700&subset=latin,cyrillic-ext,greek-ext,greek,vietnamese,latin-ext,cyrillic);
 
 body{
@@ -87,6 +92,38 @@ body{
 	display: inline-block;
 	min-width: 40%;
 	
+}
+
+/* ULS */
+
+.uls-menu {
+	border-radius: 0;
+	left: auto !important;
+	position:fixed !important;
+	margin-left: 20%;
+	margin-top: 15px !important;
+}
+
+.uls-menu:before {
+	display: inline-block;
+	content: "";
+	border-bottom: 20px solid #AAA;
+	border-left: 20px solid transparent;
+	border-right: 20px solid transparent;
+	left: 23%;
+	top: -20px;
+	position: absolute;
+}
+
+.uls-menu:after {
+	display: inline-block;
+	content: "";
+	border-bottom: 20px solid white;
+	border-left: 20px solid transparent;
+	border-right: 20px solid transparent;
+	left: 23%;
+	top: -19px;
+	position: absolute;
 }
 
 .language-selector:after {
@@ -183,6 +220,7 @@ body{
 	color: #3892E3;
 	border-bottom: 3px solid #3892E3;
 }
+
 
 
 /* Article */

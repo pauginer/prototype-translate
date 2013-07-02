@@ -16,6 +16,8 @@
 	<script src="libs/handlebars.js"></script>
 	<script src="libs/handlebars-helpers.js"></script>
 	<script src="libs/typeahead.min.js"></script>
+	<script src="libs/jquery.uls/jquery.uls.js"></script>
+	<link href="libs/jquery.uls/css/jquery.uls.css" rel="stylesheet"/>
 	<link rel="stylesheet" href="libs/csswizardry-grids.css">
 	<link rel="stylesheet" href="style/buttons.css">
 	<link rel="stylesheet" href="style/translation-center.css">
@@ -46,7 +48,7 @@
 	<div class="grid">
 		<div class="row"><div class="title grid__item one-whole">New translation</div></div>
 		<div class="source row"><div class="label grid__item one-eighth">From:</div><div class="grid__item two-eighths"><div class="language-selector">English</div></div><div class="search-article grid__item five-eighths"><input class="searchbox clean-input" placeholder="Search source article"></input></div></div>
-		<div class="target row disabled"><div class="label grid__item one-eighth">To:</div><div class="grid__item two-eighths"><div class="language-selector">Dutch</div></div><div class="name-article grid__item five-eighths"><input class="translation-title clean-input" placeholder="Translation title (if differs from source)"></input></div></div>
+		<div class="target row disabled"><div class="label grid__item one-eighth">To:</div><div class="grid__item two-eighths"><div class="language-selector">Select</div></div><div class="name-article grid__item five-eighths"><input class="translation-title clean-input" placeholder="Translation title (if differs from source)"></input></div></div>
 		<div class="row"><div class="grid__item one-eighth"></div> <div class="grid__item seven-eighths"><button class="create btn blue">Create translation</button> <button class="cancel btn">Cancel</button></div></div>
 	</div>
 	</script>
@@ -78,8 +80,28 @@
 		
 		$('.search-article .searchbox').typeahead({                                   
 			name: 'articles', 
-			local: articles                                                                           
-});
+			local: articles });
+			
+		$( '.language-selector' ).uls( {
+				onSelect: function ( language ) {
+					var languageName = $.uls.data.getAutonym( language );
+					$(this.$element).text( languageName );
+					$(".clean-input",$(this.$element).parents(".row")).focus();
+					
+				},
+				quickList: [ 'en', 'hi', 'he', 'ml', 'ta', 'fr','nl']
+			} );
+		$( '.language-selector' ).click( function () {
+				//Hacks to include optional classes and make the dialog close when clicking outside:
+				$( '.uls-menu' ).addClass( 'uls-compact' );
+				$( 'html' ).click( function () {
+					$( '.uls-menu' ).hide();
+				} );
+
+				$( '.uls-menu' ).click( function ( event ) {
+					event.stopPropagation();
+				} );
+		} );
 		//Handlers:
 		$(".new-translation-dialog .create").click(function(){
 			window.location="content-translation.html#mies-nl";
