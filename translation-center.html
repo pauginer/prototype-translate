@@ -46,11 +46,35 @@
 		<div class="row"><div class="title grid__item one-whole">New translation</div></div>
 		<div class="row"><div class="label grid__item one-eighth">From:</div><div class="grid__item two-eighths"><div class="language-selector">English</div></div><div class="search-article grid__item five-eighths"><input class="searchbox clean-input" placeholder="Search source article"></input></div></div>
 		<div class="row"><div class="label grid__item one-eighth">To:</div><div class="grid__item two-eighths"><div class="language-selector">Select</div></div><div class="name-article grid__item five-eighths"><input class="clean-input" placeholder="Translation title (if differs from source)"></input></div></div>
-		<div class="row"><div class="grid__item one-eighth"></div> <div class="grid__item seven-eighths"><button class="btn blue">Create translation</button> <button class="btn">Cancel</button></div></div>
+		<div class="row"><div class="grid__item one-eighth"></div> <div class="grid__item seven-eighths"><button class="create btn blue">Create translation</button> <button class="cancel btn">Cancel</button></div></div>
 	</div>
 	</script>
 	<script>
 	context= {};
+	
+	function createNewTranslationDialog(){
+		var new_template = Handlebars.compile($("#new-translation-template").html());
+		html = new_template(context);
+		$(".new-translation-dialog").html(html);
+		//Handlers:
+		$(".new-translation-dialog .create").click(function(){
+		});
+		$(".new-translation-dialog .cancel").click(function(){
+			$(".new-translation-dialog").removeClass("active");
+			
+		});
+	}
+	
+	function openNewTranslationDialog(){
+		$(".new-translation-dialog").addClass("active");
+		
+	}
+	
+	function changeFilter(){
+		$(".filter",$(this).parent()).removeClass("active");
+		$(this).addClass("active");
+	}
+	
 	$( document ).ready( function() {
 		var options = {
 			"articles":[
@@ -62,13 +86,14 @@
 		
 		
 		var item_template = Handlebars.compile($("#list-item-template").html());
-		var new_template = Handlebars.compile($("#new-translation-template").html());
 		
 		var html    = item_template(context);
 		$(".article-list").html(html);
-		html = new_template(context);
-		$(".new-translation-dialog").html(html);
-		$(".new-translation-dialog").addClass("active");
+				
+		createNewTranslationDialog();
+		//Handlers:
+		$(".new-translation").click(openNewTranslationDialog);
+		$(".filter").click(changeFilter);
 		
 	});
 	</script>
@@ -89,18 +114,35 @@
 	</div>
 </div>
 
-<h1 class="title">Translations</h1>
-<div class="subtitle">Create a new translation for an article</div>
-<button class="new-translation btn blue">Crete a new translation</button>
+<div class="container">
+	
+	<h1 class="page title">Translations</h1>
+	<div class="page subtitle">Create a new translation for an article</div>
+	<button class="new-translation btn blue">Crete a new translation</button>
+	
+	
+	<div class="new-translation-dialog">
+	</div>
+	
+	
+	<div class="filters">
+	  <div class="grid">
+			
+		<div class="grid__item two-thirds">
+			<div class="suggested filter">Suggested</div>
+			<div class="initiated filter active">Initiated</div>
+			<div class="completed filter">Completed</div>
+		</div>
+		<div class="grid__item one-third">
+			
+		</div>
+	  </div>
+	</div>
+	<div class="article-list">
+	</div>
 
 
-<div class="new-translation-dialog">
 </div>
-
-<div class="article-list">
-</div>
-
-
 
 </body>
 </html>
