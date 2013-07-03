@@ -53,7 +53,11 @@ Handlebars.registerHelper('ifequal', function (val1, val2, fn, elseFn) {
  Handlebars.registerHelper('ifeq', function (a, b, options) {
       if (a == b) { return options.fn(this); }
     });
-    
+
+ Handlebars.registerHelper('ifneq', function (a, b, options) {
+      if (a != b) { return options.fn(this); }
+    });
+        
     
 Handlebars.registerHelper('compare', function (lvalue, operator, rvalue, options) {
 

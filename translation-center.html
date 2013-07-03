@@ -37,8 +37,10 @@
 		<div class="status grid__item one-third">
 				 <div class="grid">
 							<div class="languages grid__item one-whole">{{sourceLanguage}} → {{translatedLanguage}}</div>
+							{{#ifneq status "suggested"}}
 							<div class="completed grid__item one-whole"><div class="progress big grid__item one-half"><span class="bar" style="width:{{completed}}%;"></span></div></div>
 							<div class="stats grid__item one-whole">{{completed}}% completed {{time}} days ago</div>		
+							{{/ifneq}}
 				</div>
 		</div>
 	</div>
@@ -58,7 +60,13 @@
 			"Ludwig Mies van der Rohe",
 			"Dharamsala"
 			 ];
-	
+	translations = [
+					{"image":"http://upload.wikimedia.org/wikipedia/commons/c/cb/Park_G%C3%BCell_02.jpg","title":"Parc Güell","desc":"A garden complex with architectural elements","sourceLanguage":"Català","translatedLanguage":"English","readers":50,"completed":20, "time":4, "status":"suggested"},
+					{"image":"images/articles/isotope.jpg","title":"Radioisotope thermoelectric generator","desc":"an electrical generator that obtains its power from radioactive decay.","sourceLanguage":"English","translatedLanguage":"हिन्दी","readers":25,"completed":28, "time":14, "status":"initiated"},
+					{"image":"images/articles/curiosity.jpg","title":"Curiosity (Rover)","desc":"a car-sized robotic rover exploring Gale Crater on Mars as part of NASA's Mars Science Laboratory mission (MSL).","sourceLanguage":"English","translatedLanguage":"Català","readers":125,"completed":82, "time":2, "status":"initiated"},
+					{"image":"http://upload.wikimedia.org/wikipedia/commons/c/cb/Park_G%C3%BCell_02.jpg","title":"Parc Güell","desc":"A garden complex with architectural elements","sourceLanguage":"Català","translatedLanguage":"English","readers":12,"completed":100, "time":12, "status":"completed"}];
+				
+	filter = "initiated";
 	function updateTranslateToRow(){
 			var val = $(".search-article .searchbox").val();
 			var placeholder= "Translation title (if differs from source)";
@@ -94,6 +102,14 @@
 		$( '.language-selector' ).click( function () {
 				//Hacks to include optional classes and make the dialog close when clicking outside:
 				$( '.uls-menu' ).addClass( 'uls-compact' );
+				var left = $(this).offset().left;
+				var top = $(this).offset().top;
+				var width = $(this).width();
+				var height = $(this).height();
+				
+				$('.uls-menu').css("margin-left",left - 30);
+				$('.uls-menu').css("top",top + height );
+				console.debug(top);
 				$( 'html' ).click( function () {
 					$( '.uls-menu' ).hide();
 				} );
@@ -118,21 +134,28 @@
 	function openNewTranslationDialog(){
 		$(".new-translation-dialog .clean-input").val("");
 		$(".new-translation-dialog").addClass("active");
+		$(".new-translation-dialog .searchbox").focus();
 		
 	}
 	
 	function changeFilter(){
 		$(".filter",$(this).parent()).removeClass("active");
 		$(this).addClass("active");
+		filter = $(this).data("type");
+		updateArticleList();
 	}
 	
-	$( document ).ready( function() {
+	
+	function updateArticleList(){
+		
+		var trans = translations.filter(function(e){
+			if(e.status == filter){
+				return true;
+			} return false;		});
 		var options = {
-			"articles":[
-				{"image":"http://upload.wikimedia.org/wikipedia/commons/c/cb/Park_G%C3%BCell_02.jpg","title":"Parc Güell","desc":"A garden complex with architectural elements","sourceLanguage":"Català","translatedLanguage":"English","readers":50,"completed":20, "time":4},
-				{"image":"http://upload.wikimedia.org/wikipedia/commons/c/cb/Park_G%C3%BCell_02.jpg","title":"Parc Güell","desc":"A garden complex with architectural elements","sourceLanguage":"Català","translatedLanguage":"English","readers":50,"completed":20, "time":4}
-			]
+			"articles":trans
 		};
+		
 		jQuery.extend(context, options);
 		
 		
@@ -140,6 +163,11 @@
 		
 		var html    = item_template(context);
 		$(".article-list").html(html);
+		
+	}
+	
+	$( document ).ready( function() {
+		updateArticleList();
 				
 		createNewTranslationDialog();
 		//Handlers:
@@ -158,7 +186,6 @@
 	<div class="grid__item two-thirds">
 		<div class="grid--right">
 			<div class="personal-toolbar grid__item one-whole">
-				  Login info	
 				
 			</div>
 		</div>
@@ -180,15 +207,23 @@
 	  <div class="grid">
 			
 		<div class="grid__item two-thirds">
-			<div class="suggested filter">Suggested</div>
-			<div class="initiated filter active">Initiated</div>
-			<div class="completed filter">Completed</div>
+			<div class="suggested filter" data-type="suggested">Suggested</div>
+			<div class="initiated filter active" data-type="initiated">Initiated</div>
+			<div class="completed filter" data-type="completed">Completed</div>
 		</div>
 		<div class="grid__item one-third">
-			
+			<div class="filter-search"><input class="filterbox" placeholder="Filter translations"></input></div>
 		</div>
 	  </div>
 	</div>
+	<div class="article-language-filters">
+		<div class="grid">
+			<div class="grid__item one-whole">
+				<div class="language-selector">From: All languages</div> <div class="language-selector">To: All languages</div>		
+			</div>
+		</div>
+	</div>
+	
 	<div class="article-list">
 	</div>
 
