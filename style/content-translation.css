@@ -464,6 +464,13 @@ display:none;
 	cursor: pointer;
 }
 
+/*
+.gallery {
+	background: transparent url(../images/gallery.png) left center no-repeat;
+	height: 85px;
+
+}*/
+
 .label{
 	color: #888;
 	padding-bottom: 10px;
