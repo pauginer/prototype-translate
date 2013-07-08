@@ -46,7 +46,7 @@
 		{{#if activeWord}}
 			<div class="grid__item one-whole context-header">
 				<h2>{{activeWord}}</h2>
-				{{#if isLink}}<span class="label">Source links to <a href="#">[[{{originalWord}}]]</a> (from {{sourceLanguage}} Wikipedia)</span>{{/if}}
+				{{#if isLink}}<span class="label">Source links to <a href="https://en.wikipedia.org/wiki/{{originalWord}}" target="_blank">[[{{originalWord}}]]</a> (from {{sourceLanguage}} Wikipedia)</span>{{/if}}
 			</div>
 		{{/if}}
 		{{#if ref}}
@@ -316,8 +316,8 @@ function spanifyText(text){
 	var result = text;
 	var words = getAllDifferentWords();
 	$.each(words, function(i,w){
-		var re = new RegExp(" "+w+"(?!</i>)","g");
-		result = result.replace(re, " <i>"+w+"</i>");
+		var re = new RegExp(" "+w+" (?!</i>)","g");
+		result = result.replace(re, " <i>"+w+"</i> ");
 	});
 	return result;
 	
@@ -327,8 +327,8 @@ function spanifyText(text){
 
 function spanify(elt,word){
 	var text = elt.html();
-	var re = new RegExp(" "+word+"(?!</i>)","g");
-	text = text.replace(re, " <i>"+word+"</i>");
+	var re = new RegExp(" "+word+" (?!</i>)","g");
+	text = text.replace(re, " <i>"+word+"</i> ");
 	elt.html(text);
 }
 

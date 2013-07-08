@@ -135,6 +135,11 @@ body{
 	border-bottom:1px dashed #ddd;
 }
 
+.message-pair.active .translated.message a[data-type='remove'] .reference {
+	text-decoration:line-through;
+}
+
+
 .message-pair.active .translated.message a[data-type='remove'].active, 
 .message-pair.active .translated.message:hover a[data-type='remove'] {
 	background: #F8F8F8;
