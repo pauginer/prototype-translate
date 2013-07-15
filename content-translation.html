@@ -18,6 +18,126 @@
 	<link rel="stylesheet" href="libs/csswizardry-grids.css">
 	<link rel="stylesheet" href="style/buttons.css">
 	<link rel="stylesheet" href="style/content-translation.css">
+	<script id="paragraph-aids-template" type="text/x-handlebars-template">
+		{{#if noSelection}}
+			<div class="grid__item one-whole">
+				<h2>Create a translation</h2>
+			</div>
+			{{#unless progress}}
+			<div class="initial-instructions grid__item one-whole">
+			
+					<ol>
+						<li>Add some paragraphs to the translation.</li>
+						<li>Adjust the automatic translations provided to ensure quality.
+							<ul>
+								<li>Machine translation is a useful starting point for translations, but translators must revise errors as necessary and confirm that the translation is accurate.</li>
+								<li>Do not translate text that appears unreliable or low-quality. If possible, verify the text with references provided in the source article.</li>
+							</ul>
+						</li>
+						
+						<li>When you are happy with the result, select "Publish Translation" to create a new article.</li>
+					</ol>
+					<a href="http://en.wikipedia.org/wiki/Wikipedia:Translation#How_to_translate" target="_blank"> View translation guidelines</a>
+				
+			</div>
+			{{/unless}}
+		{{/if}}
+		{{#unless noSelection}}
+		<div class="suggestions-header context-header grid__item one-whole">
+			<h2>Automatic translation</h2>
+		<div class="suggestion-actions">
+			{{#if translationDirty}}
+				<div class="restore-action suggestion-action grid__item one-whole">Restore initial translation</div>
+			{{/if}}
+			<div class="paste suggestion-action grid__item one-whole">
+				Use source text
+			</div>
+			<div class="clear suggestion-action grid__item one-whole">
+				Clear translation
+			</div>
+		
+		</div>
+		</div>
+		{{/unless}}
+		
+	</script>
+	
+		<script id="contextual-aids-template" type="text/x-handlebars-template">
+		{{#if activeWord}}
+			<div class="grid__item one-whole context-header">
+				<h2>{{activeWord}}</h2>
+				{{#if isLink}}<span class="label">Source links to <a href="https://en.wikipedia.org/wiki/{{originalWord}}" target="_blank">[[{{originalWord}}]]</a> (from {{sourceLanguage}} Wikipedia)</span>{{/if}}
+			</div>
+		{{/if}}
+		{{#if ref}}
+		<div class="reference grid__item one-whole">{{{ref}}}</div>
+		<div class="ref-adaptation-list grid__item one-whole">
+			<div class="other ref-adaptation grid__item one-whole" data-type="other">Edit reference</div>
+			<div class="remove ref-adaptation grid__item one-whole" data-type="remove">Remove reference</div>
+		</div>
+		{{/if}}
+		{{#if isLink}}
+			<div class="grid__item one-whole alternatives-label hidden"> Link source</div>
+			<div class="grid__item one-whole hidden"> [[{{originalWord}}]] <span class="label">({{sourceLanguage}} Wikipedia)</span></div>
+			<div class="grid__item one-whole alternatives-label"> Link target</div>
+			<div class="link-adaptation-list grid__item one-whole">
+				{{#ifeq isLink "adapt"}}
+				<div class="link-target">[[{{activeWord}}]] <span class="source label">({{translatedLanguage}} Wikipedia)</span> <a class="link-adaptation" data-type="other">Edit</a></div>
+				<div class="keep link-adaptation grid__item one-whole" data-type="keep">Copy source link</div>
+				<div class="remove link-adaptation grid__item one-whole" data-type="remove">Remove link</div>
+				{{/ifeq}}
+				{{#ifeq isLink "keep"}}
+				<div class="link-target">[[{{originalWord}}]] <span class="label">({{sourceLanguage}} Wikipedia)</span> <a class="link-adaptation" data-type="other">Edit</a> <a class="link-adaptation" data-type="adapt">Revert</a></div>
+				<div class="remove link-adaptation grid__item one-whole" data-type="remove">Remove link</div>
+				{{/ifeq}}
+				{{#ifeq isLink "other"}}
+				<div class="link-target"><input value="[[{{activeWord}}]]"></input> <a href="#">View</a> <a class="link-adaptation" data-type="adapt">Cancel</a></div>
+				<div class="keep link-adaptation grid__item one-whole" data-type="keep">Copy source link</div>
+				<div class="remove link-adaptation grid__item one-whole" data-type="remove">Remove link</div>
+				{{/ifeq}}
+				{{#ifeq isLink "remove"}}
+				<div class="link-target"><span class="source label">None</span> <a class="link-adaptation" data-type="other">Edit</a> <a class="link-adaptation" data-type="adapt">Revert</a></div>
+				<div class="keep link-adaptation grid__item one-whole" data-type="keep">Copy source link</div>
+				{{/ifeq}}
+			</div>
+			<hr/>
+		{{/if}}
+		{{#if glossary}}	
+			<div class="glossary suggestion-list">{{#each glossary}}
+			<div class="description grid__item one-whole">{{{desc}}}</div>
+				{{#each trans}}
+				<div class="glossary suggestion grid__item {{#ifeq word ../../../activeWord}} active {{/ifeq}}">
+					<span class="word">{{word}}</span>&nbsp;<span class="match">{{match}}</span> 
+				</div>
+				{{/each}}
+			{{/each}}</div><hr/>
+			{{/if}}
+		{{#if suggestions}}
+		<div class="suggestions-header context-header grid__item one-whole">
+			<h2>Automatic translation</h2>
+			<span class="translation-service label">from Apertium</span> {{#if translationDirty}}<span class="restore-action">Restore initial translation</span>{{/if}}
+		</div>
+		<div class="alternatives-label grid__item">Alternatives</div>
+		<div class="suggestion-list">{{#each suggestions}}
+			<div class="paragraph suggestion grid__item one-whole">
+				{{{this}}}	
+				<div class="translation-service"> from Google Translate <span class="action revert">Revert</span> <span class="action discard">Discard</span> </div>
+			</div>
+			{{/each}}</div>
+		<div class="suggestion-actions">
+			<div class="paste suggestion-action grid__item one-whole">
+				Use source text
+			</div>
+			<div class="clear suggestion-action grid__item one-whole">
+				Clear translation
+			</div>
+		
+		</div>
+		{{/if}}
+	</script>
+	
+	
+	
 	
 	<script id="aids-template" type="text/x-handlebars-template">
 		{{#if noSelection}}
@@ -165,7 +285,7 @@
 	}
 	
 	function clearWordInfo(){
-		$("i,a").removeClass("active");
+		$("i,a,em").removeClass("active");
 	}
 	
 	function loadArticle(file){
@@ -439,9 +559,9 @@ function focusOnSearchbox(){
 				translationDirty = false;
 			}
 			
-			$("i,a",pair).click(function(){
+			$("i,a,em",pair).click(function(){
 					var alreadyActive = $(this).hasClass("active");
-					$("i,a").removeClass("active");
+					$("i,a,em").removeClass("active");
 					//if(!alreadyActive)
 						$(this).addClass("active");
 					updateTranslationAids();
@@ -480,7 +600,6 @@ function focusOnSearchbox(){
 				ref = references[parseInt(match[0]) -1];	
 				isLink = false;
 			}
-			console.debug(ref);
 		}
 		
 		
@@ -489,11 +608,27 @@ function focusOnSearchbox(){
 		
 		var noSelection = (activeWord == "" && suggestions == null)
 		var relevantSuggestions = suggestions;
-		if(activeWord !="")
-			relevantSuggestions=[];
+		if(activeWord !=""){ //filter suggestions
+			var suggestionRef = activeElement.data("ref");
+			relevantSuggestions=suggestions.filter(function(e){
+				var result = $("em[data-ref=\""+suggestionRef+"\"]",$("<div>"+e+"</div>")).length >0;
+				return result;
+			});
+			
+		}
 		var context = {suggestions: relevantSuggestions, glossary:getGlossaryMatch(activeWord),originalWord:getOriginalForTranslation(activeWord),activeWord:activeWord, progress: progress, noSelection: noSelection, translationDirty: translationDirty, isLink:isLink, sourceLanguage:sourceLanguage, translatedLanguage:translatedLanguage, ref:ref}
-		var html    = aids_template(context);
-		$(".context-panel .aids").html(html);
+		
+		if(activeWord !=""){ //word aids:
+			var html    = aids_template(context);
+			$(".context-panel .overlay-panel .aids").html(html);
+			$(".context-panel .overlay-panel").addClass("active");
+			
+		} else{ //Paragraph aids:
+			$(".context-panel .overlay-panel").removeClass("active");
+			var	html    = paragraph_aids_template(context);
+			   // html    = aids_template(context);
+			$(".context-panel .initial-panel .aids").html(html);	
+		}
 		
 		//Handlers:
 		$(".context-panel .paragraph.suggestion").hover(previewSuggestion,previewSuggestionClean);
@@ -503,6 +638,39 @@ function focusOnSearchbox(){
 		$('.context-panel .clear').click(clearSuggestion);
 		$('.context-panel .restore-action').click(restoreInitialSuggestion);
 		$('.translation-service .action.discard').click(reoveSuggestion);
+		$('.context-panel .overlay-panel .tool.close').click(function(){clearWordInfo(); updateTranslationAids();});
+		
+		$(".message-pair.active em").mouseenter(function(){
+			var r=$(this).data("ref");
+			var suggests=suggestions.filter(function(e){
+				var result = $("em[data-ref=\""+r+"\"]",$("<div>"+e+"</div>")).length >0;
+				return result;
+			});
+			suggests = suggests.slice(1);
+			
+			$.each(suggests,function(i,e){
+				 $("em",$("<div>"+e+"</div>")).each(function(i,x){
+				 	var xRef = $(x).data("ref");
+				 	$(".message-pair.active em[data-ref=\""+xRef+"\"]").addClass("highlight");
+				 });
+			});
+		});
+		$(".message-pair.active em").mouseleave(function(){
+			var r=$(this).data("ref");
+			var suggests=suggestions.filter(function(e){
+				var result = $("em[data-ref=\""+r+"\"]",$("<div>"+e+"</div>")).length >0;
+				return result;
+			});
+			suggests = suggests.slice(1);
+			
+			$.each(suggests,function(i,e){
+				 $("em",$("<div>"+e+"</div>")).each(function(i,x){
+				 	var xRef = $(x).data("ref");
+				 	$(".message-pair.active em[data-ref=\""+xRef+"\"]").removeClass("highlight");
+				 });
+			});
+		});
+	
 		
 		//Link handlers:
 		$(".link-adaptation, .ref-adaptation,").click(function(){
@@ -613,7 +781,8 @@ function focusOnSearchbox(){
 	}
 	
 	
-	var aids_template = Handlebars.compile($("#aids-template").html());
+	var aids_template = Handlebars.compile($("#contextual-aids-template").html());
+	var paragraph_aids_template = Handlebars.compile($("#paragraph-aids-template").html());
 	var article_template = Handlebars.compile($("#article-template").html());
 	
 	var savedSel = null;
@@ -704,18 +873,34 @@ function focusOnSearchbox(){
 			   
 	</div>
 	<div class="context-panel source-article grid__item one-third palm--one-whole">
-				<div class="grid">
-					<div class="progress grid__item one-whole hidden"><span class="bar"></span></div>
-					<div class="tools grid__item one-whole">
-							<span class="tool settings"></span>
-						<span class="tool search"><input type="search" class="searchbox" placeholder="Search info for a word"></input></span>
+				<div class="panel-container">
+				<div class="initial-panel">	
+					<div class="grid">
+						<div class="progress grid__item one-whole hidden"><span class="bar"></span></div>
+						<div class="tools grid__item one-whole">
+								<span class="tool settings"></span>
+							<span class="tool search"><input type="search" class="searchbox" placeholder="Search info for a word"></input></span>
+							
+						</div>
+					</div>
+					<div class="aids grid">
 						
 					</div>
+				   <div class="panel"></div>	
 				</div>
-				<div class="aids grid">
-					
+				<div class="overlay-panel">	
+					<div class="grid">
+						<div class="tools grid__item one-whole">
+								<span class="tool close"></span>
+							
+						</div>
+					</div>
+					<div class="aids grid">
+						
+					</div>
+				   <div class="panel"></div>	
 				</div>
-			   <div class="panel"></div>	
+				</div>
 	</div>
 	
 </div>
