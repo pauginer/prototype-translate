@@ -281,9 +281,14 @@ display:none;
 	background-image: linear-gradient(transparent, transparent), url(../images/closing.svg);
 	padding-left: 28px;
 	min-height: 23px;
-	min-width: 30px;
+	/*min-width: 30px;*/
 	float: left;
-	cursor: pointer
+	cursor: pointer;
+	opacity: 0.75;
+}
+
+.tools .tool.close:hover{
+	opacity:1;
 }
 
 .tools .searchbox {
@@ -434,6 +439,11 @@ display:none;
 	z-index:10;
 	right:0;
 	bottom:0;
+}
+
+.overlay-panel .word-info {
+	float: left;
+
 }
 
 .context-panel .suggestion.applied:hover em {
