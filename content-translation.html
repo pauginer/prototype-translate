@@ -121,7 +121,8 @@
 		<div class="suggestion-list">{{#each suggestions}}
 			<div class="paragraph suggestion grid__item one-whole">
 				{{{this}}}	
-				<div class="translation-service"> from Google Translate <span class="action revert">Revert</span> <span class="action discard">Discard</span> </div>
+				<div class="translation-service"> from Google Translate </div>
+				<div class="status"></div>
 			</div>
 			{{/each}}</div>
 		<div class="suggestion-actions">
@@ -637,7 +638,6 @@ function focusOnSearchbox(){
 		$('.context-panel .paste').click(pasteSource);
 		$('.context-panel .clear').click(clearSuggestion);
 		$('.context-panel .restore-action').click(restoreInitialSuggestion);
-		$('.translation-service .action.discard').click(reoveSuggestion);
 		$('.context-panel .overlay-panel .tool.close').click(function(){clearWordInfo(); updateTranslationAids();});
 		
 		$(".message-pair.active em").mouseenter(function(){
@@ -722,19 +722,50 @@ function focusOnSearchbox(){
 	
 	function applySuggestion(event){
 		var elt = $(this);
-		elt.addClass("applied");
+		elt.addClass("active");
+		elt.mouseleave(function(){elt.removeClass("active");});
 		$("em", elt).each(function(i,e){ 
 			var ref = $(e).data('ref');
-			var matches=$(".message-pair.active .translated.message p em[data-ref="+ref+"]")
+			var matches=$(".message-pair.active .translated.message p em[data-ref="+ref+"]");
+			var sourceText = matches.text();
+			var suggestionText = $(e).text();
 			$(matches).addClass('highlight');
 			
-			$(matches).text($(e).text());
-			translationDirty = true;
+			var revert = $(e).data("revert");
+			
+			if(elt.hasClass("applied")){
+				$(e).text($(matches).text());
+				$(matches).text(revert);				
+				
+				
+			} else {
+				$(matches).text(suggestionText);
+				translationDirty = true;
+				$(e).data("revert",sourceText);
+			}
+			
+			elt.mouseenter(function(){
+				if(elt.hasClass("applied")){
+						$(e).text(sourceText);
+				}
+			});
+			
+			elt.mouseleave(function(){
+				if(elt.hasClass("applied")){
+						$(e).text(suggestionText);
+				}
+			});
+				
+			
+			
+			
+			
 			$(".message-pair.active .translated.message p").focus();
 			cursorToEnd(matches);
 			});
+			elt.toggleClass("applied");
 			event.stopPropagation();
-			updateTranslationAids();
+			//updateTranslationAids();
 	}
 	function restoreInitialSuggestion(){
 		var target = $(".message-pair.active .translated.message p");

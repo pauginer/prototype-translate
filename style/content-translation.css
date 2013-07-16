@@ -364,6 +364,7 @@ display:none;
 	background: white;
 	border: 1px solid #ddd;
 	cursor: pointer;
+	position: relative;
 }
 
 .glossary.suggestion.active,
@@ -404,7 +405,8 @@ display:none;
 	font-weight: bolder;
 	}
 
-.context-panel .suggestion:hover em {
+.context-panel .suggestion:hover em,
+.context-panel .suggestion.applied.active:hover em {
 	color: #222;
 	font-style: normal;
 	background:#FFFCD3;
@@ -423,6 +425,33 @@ display:none;
 	cursor: default;
 }
 
+.suggestion-list .suggestion .status {
+	display: none;
+	width: 24px;
+	height: 25px;
+	z-index:10;
+	right:0;
+	bottom:0;
+}
+
+.context-panel .suggestion.applied:hover em {
+	background:#f0f0f0;
+	}
+
+
+.suggestion-list .suggestion.applied .status,
+.suggestion-list .suggestion.applied.active:hover .status  {
+	background: transparent url(../images/check-triangle.png) right bottom no-repeat;
+	background-image: linear-gradient(transparent, transparent), url(../images/check-triangle.svg);
+	display: inline-block;
+	position: absolute;
+}
+
+.suggestion-list .suggestion.applied:hover .status {
+	background-image: url(../images/uncheck-triangle.png);
+	background-image: linear-gradient(transparent, transparent), url(../images/uncheck-triangle.svg);
+
+}
 
 .suggestion-list .suggestion.applied .translation-service {
 }
