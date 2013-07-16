@@ -336,7 +336,7 @@ display:none;
 
 .context-panel h2{
 	font-weight: lighter;
-	color: #3892E3;
+	color: #666;
 }
 
 
@@ -347,12 +347,14 @@ display:none;
 	text-decoration: none;
 	color: #3892E3;
 }
+
 .suggestion-list {
-	padding: 0 15px;
+	padding: 0 25px;
 }
 
 .context-panel .alternatives-label {
 	color: #3892E3;
+	color: #666;
 	padding-left: 24px;
 	font-size: 18px;
 }
@@ -487,7 +489,11 @@ display:none;
 	color: #3892E3;
 	cursor: pointer;
 	padding: 5px 0;
-	margin-left: 20px;
+	margin-left: 25px;
+}
+
+.initial-panel .suggestion-action {
+	margin-left: 0px;
 }
 
 .suggestion-action.restore-action {
