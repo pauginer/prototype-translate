@@ -499,7 +499,7 @@ function focusOnSearchbox(){
   		}
   function scroll(){
   		var header = $(".translation-area");
-		var target = $(".context-panel");
+		var target = $(".context-panel,.warning-bar");
 		var progress = $(".context-panel .progress");
 		var origOffsetY = header.offset().top;
 		if(window.scrollY >= origOffsetY) { 
@@ -552,6 +552,12 @@ function focusOnSearchbox(){
 		var hasBeenCleared = trans.hasClass("cleared");
 		var suggest = null;
 		if(isTranslationEmpty && !hasBeenCleared){
+			
+			//Warning:
+			if(p==4){
+				$(".warning-bar").addClass("active");
+			}
+			
 			
 			suggest = suggestionsForPar(p);
 			if( suggest != null){
@@ -844,6 +850,10 @@ function focusOnSearchbox(){
 			window.location="translation-center.html";
 		});
 		
+		$(".warning-bar .close").click(function(){
+			$(".warning-bar").removeClass("active");
+		});
+		
 		$("body").click(function(e){
 			activeMessagePair(null);
 			
@@ -883,6 +893,16 @@ function focusOnSearchbox(){
 			<button class="review-action btn blue">Publish Translation</button>	
 		</div>
 		</div>
+	</div>
+	
+</div>
+<div class="warning-bar grid">
+	<div class="grid__item five-sixths">
+		<h2>Your translation contains 80% of unmodified content</h2>
+		<p>Automatic translations are provided as initial templates, but make sure to check that the final text <b>reads natural in your language</b>.</p>
+	</div>
+	<div class="grid__item one-sixth">
+		<span class="close"></span>
 	</div>
 	
 </div>

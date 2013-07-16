@@ -566,6 +566,47 @@ display:none;
 	cursor: pointer;
 }
 
+.warning-bar {
+	background: #FFFEEC;
+	padding: 10px 15px 0px 35px;
+	color: #444;
+	border-bottom: 1px solid #eee;
+	box-shadow: 0 1px 4px;
+	display:none;
+	/*padding-left: 60px;
+	background: #FFFEEC url(../images/sad-robot.png) 30px 10px no-repeat;*/
+}
+
+.warning-bar.sticky {
+  position: fixed;
+  top: 0;
+  right:0;
+  left:0;
+  z-index:200;
+}
+
+.warning-bar.active{
+	display:block;
+	
+}
+.warning-bar  h2 {
+	font-size: 20px;
+	font-weight: lighter;
+	margin:0;
+}
+.warning-bar  p {
+	margin-top:5px;
+}
+.warning-bar .close {
+	background: transparent url(../images/closing.png) right center no-repeat;
+background-image: linear-gradient(transparent, transparent), url(../images/closing.svg);
+padding-left: 28px;
+min-height: 23px;
+min-width: 30px;
+float: right;
+cursor: pointer;
+opacity: 0.75;
+}
 /*
 .gallery {
 	background: transparent url(../images/gallery.png) left center no-repeat;
