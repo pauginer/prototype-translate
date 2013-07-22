@@ -16,6 +16,7 @@
 	<script src="libs/handlebars.js"></script>
 	<script src="libs/handlebars-helpers.js"></script>
 	<link rel="stylesheet" href="libs/csswizardry-grids.css">
+	<link rel="stylesheet" href="style/mediawiki.ui.vector.css">
 	<link rel="stylesheet" href="style/buttons.css">
 	<link rel="stylesheet" href="style/content-translation.css">
 	<script id="paragraph-aids-template" type="text/x-handlebars-template">
@@ -43,8 +44,14 @@
 			{{/unless}}
 		{{/if}}
 		{{#unless noSelection}}
-		<div class="suggestions-header context-header grid__item one-whole">
-			<h2>Automatic translation</h2>
+		<div class="suggestions-header context-header grid__item one-whole"> <span class="tool search"></span>
+			<h2 class="automatic-translation-aid">Automatic translation</h2>
+			<div class="menu">
+						<div class="section grid__item one-whole">Default translation service </div>
+						<div class="option active grid__item one-whole">Apertium </div>
+						<div class="option grid__item one-whole" >Google Translate</div>		
+						<div class="option grid__item one-whole" >Microsoft Translate</div>				
+			</div>
 		<div class="suggestion-actions">
 			{{#if translationDirty}}
 				<div class="restore-action suggestion-action grid__item one-whole">Restore initial translation</div>
@@ -76,26 +83,54 @@
 		</div>
 		{{/if}}
 		{{#if isLink}}
-			<div class="alternatives-label grid__item one-whole"> Links to <a class="link-target" href="#" target="_blank">[[{{activeWord}}]]</a></div>
+			<div class='alternatives-label grid__item one-whole {{#ifeq isLink "remove"}}stroked{{/ifeq}}'> Links to <a class="link-target" href="#" target="_blank">[[{{activeWord}}]]</a></div>
 			<div class="link-adaptation-list grid__item one-whole">
 				{{#ifeq isLink "adapt"}}
 				<div class="source label">{{translatedLanguage}} Wikipedia</div>
-				<a class="link-adaptation" data-type="other">Edit</a>
-				<div class="keep link-adaptation grid__item one-whole" data-type="keep">Copy source link</div>
-				<div class="remove link-adaptation grid__item one-whole" data-type="remove">Remove link</div>
+				<div class="button-group">
+					<button class="btn"><span class="edit link-adaptation" data-type="other">Edit</span></button>
+					<button class="btn more">&nbsp;</button>
+				</div>
+				<div class="menu">
+						<div class="keep link-adaptation grid__item one-whole" data-type="keep">Copy source link</div>
+						<div class="remove link-adaptation grid__item one-whole" data-type="remove">Remove link</div>				
+				</div>
+
 				{{/ifeq}}
 				{{#ifeq isLink "keep"}}
-				<div class="link-target"> <span class="label">({{sourceLanguage}} Wikipedia)</span> <a class="link-adaptation" data-type="other">Edit</a> <a class="link-adaptation" data-type="adapt">Revert</a></div>
-				<div class="remove link-adaptation grid__item one-whole" data-type="remove">Remove link</div>
+				<div class="link-target"> <span class="label">{{sourceLanguage}} Wikipedia</span></div>
+				<div class="button-group">
+					<button class="btn"><span class="edit link-adaptation" data-type="other">Edit</span></button>
+					<button class="btn more">&nbsp;</button>
+				</div>
+				<div class="menu">
+						<div class="revert link-adaptation grid__item one-whole" data-type="adapt">Link to {{translatedLanguage}} </div>
+						<div class="remove link-adaptation grid__item one-whole" data-type="remove">Remove link</div>				
+				</div>
+				
 				{{/ifeq}}
 				{{#ifeq isLink "other"}}
 				<div class="link-target"><input value="[[{{activeWord}}]]"></input> <a href="#">View</a> <a class="link-adaptation" data-type="adapt">Cancel</a></div>
-				<div class="keep link-adaptation grid__item one-whole" data-type="keep">Copy source link</div>
-				<div class="remove link-adaptation grid__item one-whole" data-type="remove">Remove link</div>
+				<div class="button-group">
+					<button class="btn"><span class="keep link-adaptation" data-type="keep">Paste source link</span></button>
+					<button class="btn more">&nbsp;</button>
+				</div>
+				<div class="menu">
+						<div class="revert link-adaptation grid__item one-whole" data-type="adapt">Link to {{translatedLanguage}} </div>
+						<div class="remove link-adaptation grid__item one-whole" data-type="remove">Remove link</div>				
+				</div>
+				
 				{{/ifeq}}
 				{{#ifeq isLink "remove"}}
-				<div class="link-target"><span class="source label">None</span> <a class="link-adaptation" data-type="other">Edit</a> <a class="link-adaptation" data-type="adapt">Revert</a></div>
-				<div class="keep link-adaptation grid__item one-whole" data-type="keep">Copy source link</div>
+				<div class="button-group">
+					<button class="btn"><span class="edit link-adaptation" data-type="other">Edit</span></button>
+					<button class="btn more">&nbsp;</button>
+				</div>
+				<div class="menu">
+						<div class="revert link-adaptation grid__item one-whole" data-type="adapt">Link to {{translatedLanguage}} </div>
+						<div class="keep link-adaptation grid__item one-whole" data-type="keep">Copy source link</div>
+						<div class="remove link-adaptation grid__item one-whole" data-type="remove">Remove link</div>				
+				</div>
 				{{/ifeq}}
 			</div>
 			<hr/>
@@ -135,9 +170,6 @@
 		</div>
 		{{/if}}
 	</script>
-	
-	
-	
 	
 	<script id="aids-template" type="text/x-handlebars-template">
 		{{#if noSelection}}
@@ -675,6 +707,7 @@ function focusOnSearchbox(){
 				 });
 			});
 		});
+		
 	
 		
 		//Link handlers:
@@ -687,6 +720,12 @@ function focusOnSearchbox(){
 				$(".link-adaptation-list .link-target").effect("highlight", {}, 500);
 		});
 		
+		$(".button-group .more").click(function(){
+			$(this).parents(".button-group").toggleClass("active");
+		});
+		$(".automatic-translation-aid").click(function(){
+			$(this).toggleClass("active");
+		});
 		
 	}
 	
@@ -927,7 +966,7 @@ function focusOnSearchbox(){
 				<div class="initial-panel">	
 					<div class="grid">
 						<div class="progress grid__item one-whole hidden"><span class="bar"></span></div>
-						<div class="tools grid__item one-whole">
+						<div class="tools grid__item one-whole hidden">
 								<span class="tool settings"></span>
 							<span class="tool search"><input type="search" class="searchbox" placeholder="Search info for a word"></input></span>
 							

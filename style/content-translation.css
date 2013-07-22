@@ -263,6 +263,24 @@ display:none;
 	background-size: 23px auto;
 }
 
+.suggestions-header .tool.search {
+	background: transparent url(../images/search.png) center center no-repeat;
+	background-image: linear-gradient(transparent, transparent), url(../images/search.svg);
+	padding-left: 28px;
+	min-height: 28px;
+	background-size: 23px auto;	
+	border: 1px solid transparent;
+	float: right;
+	border-radius: 3px;
+	margin-top: 10px;
+	margin-right: 15px;
+	cursor: pointer;
+}
+
+.suggestions-header .tool.search:hover {
+	border: 1px solid #ddd;
+}
+
 .tools .tool.settings {
 	background: transparent url(../images/cog.png) center right no-repeat;
 	background-image: linear-gradient(transparent, transparent), url(../images/cog.svg);
@@ -342,8 +360,48 @@ display:none;
 .context-panel h2{
 	font-weight: lighter;
 	color: #666;
+	margin-top: 5px;
 }
 
+.context-panel .automatic-translation-aid {
+	position: relative;
+	display: inline-block;
+	border: 1px solid transparent;
+	padding:0  4px;
+	padding-right: 15px;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+.context-panel .automatic-translation-aid:hover {
+	border: 1px solid #ddd;
+	
+}
+
+.context-panel .automatic-translation-aid:after {
+	display: inline;
+	content: "";
+	border-top: 4px solid #999;
+	border-right: 4px solid transparent;
+	border-left: 4px solid transparent;
+	vertical-align: middle;
+	position:absolute;
+	top:50%;
+	margin-left: 4px;
+}
+
+.context-panel .automatic-translation-aid + .menu {
+	display: none;
+}
+
+.context-panel .automatic-translation-aid.active {
+	background: #aaa;
+	border: 1px solid #ddd;
+}
+.context-panel .automatic-translation-aid.active + .menu {
+	display: block;
+	
+}
 
 .context-panel .initial-instructions li {
 	padding: 5px 0;
@@ -506,9 +564,17 @@ display:none;
 	margin-left: 0px;
 }
 
+
 .suggestion-action.restore-action {
 	background: transparent url(../images/reverting.png) center left no-repeat;
 	background-image: linear-gradient(transparent, transparent), url(../images/reverting.svg);
+	padding-left: 25px;
+	background-size: auto 16px;
+}
+
+.link-adaptation.edit {
+	background: transparent url(../images/label-pen.png) center left no-repeat;
+	background-image: linear-gradient(transparent, transparent), url(../images/label-pen.svg);
 	padding-left: 25px;
 	background-size: auto 16px;
 }
@@ -530,6 +596,7 @@ display:none;
 	padding-left: 25px;
 	background-size: auto 16px;
 }
+
 
 
 .title.message {
@@ -562,8 +629,15 @@ display:none;
 .ref-adaptation-list .ref-adaptation {
 	padding-top: 5px;
 	padding-bottom: 5px;
-	color: #3892E2;
+	color:#444;
 	cursor: pointer;
+	font-size: 14px;
+}
+
+.button:hover > .link-adaptation,
+.link-adaptation-list .link-adaptation:hover,
+.ref-adaptation-list .ref-adaptation:hover {
+	color: #3892E2;
 }
 
 .warning-bar {
@@ -625,6 +699,9 @@ opacity: 0.75;
 
 .hidden {
 	display: none !important;
+}
+.stroked {
+	text-decoration: line-through !important;	
 }
 
 a {

@@ -1,4 +1,5 @@
 .btn {
+	margin:0;
   display: inline-block;
   padding: 0.4065em 1.2195em 0.4065em;
   font: bold 0.813em Arial, sans-serif;
@@ -222,4 +223,91 @@
   border-color: #5e89d1;
   -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#7297d7', endColorstr='#7297d7', GradientType=0)";
       filter: progid:dximagetransform.microsoft.gradient(startColorstr='#7297d7', endColorstr='#7297d7', GradientType=0);
+}
+
+.button-group > .btn {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+  float: left;
+  position: relative;
+}
+/* line 64, src/scss/components/default/_buttons.scss */
+.button-group > .btn:first-child {
+  -moz-border-radius-topleft: 3px;
+  -webkit-border-top-left-radius: 3px;
+  border-top-left-radius: 3px;
+  -moz-border-radius-bottomleft: 3px;
+  -webkit-border-bottom-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+/* line 69, src/scss/components/default/_buttons.scss */
+.button-group > .btn:last-child {
+  -moz-border-radius-topright: 3px;
+  -webkit-border-top-right-radius: 3px;
+  border-top-right-radius: 3px;
+  -moz-border-radius-bottomright: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.button-group .more {
+		min-height: 14px ;
+		padding: 5px 8px;
+		font-size: 14px;
+}
+.button-group .more:after{
+	content: "";
+	border-top: 4px solid #888;
+	border-right: 4px solid transparent;
+	border-left: 4px solid transparent;
+	vertical-align: middle;
+	position: absolute;
+	top:50%;
+	left: 6px;
+}
+
+.button-group.active .more{
+	background: #999;
+}
+
+.button-group + .menu{
+	display:none;
+}
+
+.button-group.active +.menu {
+	display:block;
+	margin-top: 1.8em;
+	
+}
+
+ .menu{
+ 	display:none;
+	position:absolute;
+	background: white;
+	border: 1px solid #ccc;
+	padding: 8px;
+	box-shadow: 0 0 2px #bbb;
+}
+
+.menu .section {
+	font-weight: bolder;
+	padding-left: 10px;
+}
+
+.menu .option {
+	padding-left: 30px;
+}
+
+.menu .option:hover,
+.menu .option.active:hover {
+	background-color: #f8f8f8;
+	cursor: pointer !important;
+}
+
+.menu .option.active {
+	background: transparent url(../images/label-tick.png) 10px center no-repeat;
+	background-image: linear-gradient(transparent, transparent), url(../images/label-tick.svg);
 }
