@@ -23,6 +23,18 @@
 	<link rel="stylesheet" href="style/translation-center.css">
 	
 	<script id="list-item-template" type="text/x-handlebars-template">
+	{{#if searching}}
+	<div class="article grid">
+		<div class="info grid__item one-whole">
+				<div class="grid">
+							<div class="desc grid__item one-whole">No existing translations for <b>{{search}}</b>.</div>
+							<div class="desc grid__item one-whole">
+								<button class="no-results-create btn">Create a new translation</button>
+							</div>
+				</div>
+		</div>
+	</div>
+	{{else}}
 	{{#each articles}}
 	<div class="article grid">
 		<div class="grid__item one-sixth"><img src="{{image}}" width="100%">
@@ -45,6 +57,7 @@
 		</div>
 	</div>
 	{{/each}}
+	{{/if}}
 	</script>
 	<script id="new-translation-template" type="text/x-handlebars-template">
 	<div class="grid">
@@ -147,6 +160,21 @@
 		updateArticleList();
 	}
 	
+	function updateSearch(){
+		var elt = $(this);
+		var q = elt.val().trim();
+		if(q != context.search){
+			context.search=q;
+			context.searching = !!q;
+			updateArticleList();
+			//Handlers:
+			$(".no-results-create").click(function(){
+				openNewTranslationDialog();
+				$(".new-translation-dialog .searchbox").val(q);
+			});
+		}
+	}
+	
 	
 	function updateArticleList(){
 		
@@ -175,6 +203,7 @@
 		//Handlers:
 		$(".new-translation").click(openNewTranslationDialog);
 		$(".filter").click(changeFilter);
+		$(".filterbox").keyup(updateSearch);
 		
 	});
 	</script>
