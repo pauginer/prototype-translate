@@ -209,6 +209,8 @@
 	
 	translationDirty = false;
 	
+	keycount=0;
+	
 	function loadData(art,ln){
 	$.getJSON('messages/content-translation/'+art+'-'+ln+'.json',function(data) {
 		suggestions=data.suggestions;
@@ -239,10 +241,12 @@
 		
 		$('p[contenteditable]').keypress(function(){
 			console.debug("***");
+			keycount = keycount+1;
 			if(translationDirty == false){
 				translationDirty = true;
 				updateTranslationAids();
 			}
+			updateProgressBar();
 		});
 		
 		$(".message-pair").click(function(){
@@ -414,6 +418,19 @@ function focusOnSearchbox(){
 
 	function updateProgress(percent) {
 		$(".progress .bar").css("width",percent+"%")
+		if(percent>=0){
+			$(".progress-percentage").text(percent+"%");
+			$(".progress-info").removeClass("hidden");
+		} else {
+			$(".progress-info").addClass("hidden");
+		}
+	}
+
+	function updateManualProgress(percent,totalPercent) {
+		$(".progress .manual-bar").css("width",percent+"%")
+		var val = ((totalPercent - percent)/totalPercent)*100;
+			val=Math.round(val);
+		$(".automatic-percentage").text(val+"%")
 	}
 
 	function calculateProgress() {
@@ -423,10 +440,24 @@ function focusOnSearchbox(){
 		return val;
 	}
 	
+	function calculateManualProgress() {
+		var pending = $(".translated.message:visible p:empty").length;	
+		var total = $(".source.message:visible").length - 1;
+		var progress = 100*((total - pending)/ total);
+		var keyPerPar = keycount/(total-pending);
+		var autoFactor = keyPerPar >=100? 1: (keyPerPar)/100;
+		var val = progress*autoFactor;
+		return val;
+	}
+	
 	function updateProgressBar() {
 		var val = calculateProgress();
 		val=Math.round(val);
 		updateProgress(val);
+		
+		var valManual = calculateManualProgress();
+		valManual=Math.round(valManual);
+		updateManualProgress(valManual, val);
 	}
 	
 	function adjustSize(){
@@ -840,7 +871,14 @@ function focusOnSearchbox(){
 	</div>
 	<div class="document-actions language-labels grid__item one-third">
 		<div class="grid">
-		<div class="progress big grid__item one-half"><span class="bar"></span></div>
+		<div class="grid__item one-half">
+			<div class="grid">
+				<div class="grid__item  one-whole progress big"><span class="bar"></span><span class="manual-bar hidden"></span></div>
+				<div class="grid__item  one-whole  progress-info grid__item one-whole">
+					<span class="progress-percentage"></span> translated <span class="automatic-percentage hidden">80%</span></div>
+			</div>	
+		</div>
+		
 		<div class="grid__item one-half">
 			<button class="review-action btn blue">Publish Translation</button>
 			<div class="dialog publish-warning">
@@ -858,7 +896,7 @@ function focusOnSearchbox(){
 </div>
 <div class="warning-bar grid">
 	<div class="grid__item five-sixths">
-		<h2>Your translation contains 80% of unmodified content</h2>
+		<h2>Your translation contains <span class="automatic-percentage">80%</span> of unmodified content</h2>
 		<p>Automatic translations are provided as templates, but you need to make sure that the final text <b>reads natural in your language</b>.</p>
 	</div>
 	<div class="grid__item one-sixth">
@@ -885,12 +923,10 @@ function focusOnSearchbox(){
 	<div class="context-panel source-article grid__item one-third palm--one-whole">
 				<div class="panel-container">
 				<div class="initial-panel">	
-					<div class="grid">
-						<div class="progress grid__item one-whole hidden"><span class="bar"></span></div>
-						<div class="tools grid__item one-whole hidden">
-								<span class="tool settings"></span>
-							<span class="tool search"><input type="search" class="searchbox" placeholder="Search info for a word"></input></span>
-							
+					<div class="grid progress-block">
+						<div class="progress grid__item one-whole hidden"><span class="bar"></span><span class="manual-bar"></span></div>
+						<div class="progress-info grid__item one-whole">
+							<span class="progress-percentage"></span> translated (<span class="automatic-percentage"></span> from automatic translation)			
 						</div>
 					</div>
 					<div class="aids grid">
