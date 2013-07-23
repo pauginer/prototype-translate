@@ -681,6 +681,63 @@ float: right;
 cursor: pointer;
 opacity: 0.75;
 }
+
+/* dialog:*/
+.dialog {
+	display:none;
+	position:absolute;
+	padding:7px;
+	width: 400px;
+	z-index: 10;
+	right:0;
+	text-align: left;
+}
+
+.dialog .grid {
+	border: 1px solid #999;
+	box-shadow: 0 0 4px 1px rgba(0,0,0,0.3);
+	background: #fbfbfb;
+	padding-bottom: 5px;
+}
+
+.dialog .row {
+	padding: 6px 0;
+}
+.dialog.active {
+	display: block;
+}
+
+.dialog .title {
+	font-size: 20px;
+	font-weight: lighter;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #eee;
+	background: white;
+	padding-top:5px;
+}
+
+
+.publish-warning:after{
+	content:"";
+	display: inline;
+	border-bottom: 8px solid white;
+	border-right: 8px solid transparent;
+	border-left: 8px solid transparent;
+	position: absolute;
+	top:0px;
+	right:40px;
+}
+.publish-warning:before{
+	content:"";
+	display: inline;
+	border-bottom: 8px solid #333;
+	border-right: 8px solid transparent;
+	border-left: 8px solid transparent;
+	position: absolute;
+	top:-1px;
+	right:40px;
+}
+
 /*
 .gallery {
 	background: transparent url(../images/gallery.png) left center no-repeat;

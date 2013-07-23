@@ -169,105 +169,7 @@
 		
 		</div>
 		{{/if}}
-	</script>
-	
-	<script id="aids-template" type="text/x-handlebars-template">
-		{{#if noSelection}}
-			<div class="grid__item one-whole">
-				<h2>Create a translation</h2>
-			</div>
-			{{#unless progress}}
-			<div class="initial-instructions grid__item one-whole">
-			
-					<ol>
-						<li>Add some paragraphs to the translation.</li>
-						<li>Adjust the automatic translations provided to ensure quality.
-							<ul>
-								<li>Machine translation is a useful starting point for translations, but translators must revise errors as necessary and confirm that the translation is accurate.</li>
-								<li>Do not translate text that appears unreliable or low-quality. If possible, verify the text with references provided in the source article.</li>
-							</ul>
-						</li>
-						
-						<li>When you are happy with the result, select "Publish Translation" to create a new article.</li>
-					</ol>
-					<a href="http://en.wikipedia.org/wiki/Wikipedia:Translation#How_to_translate" target="_blank"> View translation guidelines</a>
-				
-			</div>
-			{{/unless}}
-		{{/if}}
-		{{#if activeWord}}
-			<div class="grid__item one-whole context-header">
-				<h2>{{activeWord}}</h2>
-				{{#if isLink}}<span class="label">Source links to <a href="https://en.wikipedia.org/wiki/{{originalWord}}" target="_blank">[[{{originalWord}}]]</a> (from {{sourceLanguage}} Wikipedia)</span>{{/if}}
-			</div>
-		{{/if}}
-		{{#if ref}}
-		<div class="reference grid__item one-whole">{{{ref}}}</div>
-		<div class="ref-adaptation-list grid__item one-whole">
-			<div class="other ref-adaptation grid__item one-whole" data-type="other">Edit reference</div>
-			<div class="remove ref-adaptation grid__item one-whole" data-type="remove">Remove reference</div>
-		</div>
-		{{/if}}
-		{{#if isLink}}
-			<div class="grid__item one-whole alternatives-label hidden"> Link source</div>
-			<div class="grid__item one-whole hidden"> [[{{originalWord}}]] <span class="label">({{sourceLanguage}} Wikipedia)</span></div>
-			<div class="grid__item one-whole alternatives-label"> Link target</div>
-			<div class="link-adaptation-list grid__item one-whole">
-				{{#ifeq isLink "adapt"}}
-				<div class="link-target">[[{{activeWord}}]] <span class="source label">({{translatedLanguage}} Wikipedia)</span> <a class="link-adaptation" data-type="other">Edit</a></div>
-				<div class="keep link-adaptation grid__item one-whole" data-type="keep">Copy source link</div>
-				<div class="remove link-adaptation grid__item one-whole" data-type="remove">Remove link</div>
-				{{/ifeq}}
-				{{#ifeq isLink "keep"}}
-				<div class="link-target">[[{{originalWord}}]] <span class="label">({{sourceLanguage}} Wikipedia)</span> <a class="link-adaptation" data-type="other">Edit</a> <a class="link-adaptation" data-type="adapt">Revert</a></div>
-				<div class="remove link-adaptation grid__item one-whole" data-type="remove">Remove link</div>
-				{{/ifeq}}
-				{{#ifeq isLink "other"}}
-				<div class="link-target"><input value="[[{{activeWord}}]]"></input> <a href="#">View</a> <a class="link-adaptation" data-type="adapt">Cancel</a></div>
-				<div class="keep link-adaptation grid__item one-whole" data-type="keep">Copy source link</div>
-				<div class="remove link-adaptation grid__item one-whole" data-type="remove">Remove link</div>
-				{{/ifeq}}
-				{{#ifeq isLink "remove"}}
-				<div class="link-target"><span class="source label">None</span> <a class="link-adaptation" data-type="other">Edit</a> <a class="link-adaptation" data-type="adapt">Revert</a></div>
-				<div class="keep link-adaptation grid__item one-whole" data-type="keep">Copy source link</div>
-				{{/ifeq}}
-			</div>
-			<hr/>
-		{{/if}}
-		{{#if glossary}}	
-			<div class="glossary suggestion-list">{{#each glossary}}
-			<div class="description grid__item one-whole">{{{desc}}}</div>
-				{{#each trans}}
-				<div class="glossary suggestion grid__item {{#ifeq word ../../../activeWord}} active {{/ifeq}}">
-					<span class="word">{{word}}</span>&nbsp;<span class="match">{{match}}</span> 
-				</div>
-				{{/each}}
-			{{/each}}</div>
-			{{/if}}
-		{{#if suggestions}}
-		<div class="suggestions-header context-header grid__item one-whole">
-			<h2>Automatic translation</h2>
-			<span class="translation-service label">from Apertium</span> {{#if translationDirty}}<span class="restore-action">Restore initial translation</span>{{/if}}
-		</div>
-		<div class="alternatives-label grid__item">Alternatives</div>
-		<div class="suggestion-list">{{#each suggestions}}
-			<div class="paragraph suggestion grid__item one-whole">
-				{{{this}}}	
-				<div class="translation-service"> from Google Translate <span class="action revert">Revert</span> <span class="action discard">Discard</span> </div>
-			</div>
-			{{/each}}</div>
-		<div class="suggestion-actions">
-			<div class="paste suggestion-action grid__item one-whole">
-				Use source text
-			</div>
-			<div class="clear suggestion-action grid__item one-whole">
-				Clear translation
-			</div>
-		
-		</div>
-		{{/if}}
-	</script>
-	
+	</script>	
 	<script id="article-template" type="text/x-handlebars-template">
 			<div class="source title message grid__item one-half">
 				<h1>{{sourceTitle}}</h1>
@@ -893,6 +795,14 @@ function focusOnSearchbox(){
 			$(".warning-bar").removeClass("active");
 		});
 		
+		$(".review-action").click(function(){
+			$(".publish-warning").addClass("active");
+		});
+		$(".publish-warning .cancel").click(function(){
+			$(".publish-warning").removeClass("active");
+		});
+		
+		
 		$("body").click(function(e){
 			activeMessagePair(null);
 			
@@ -929,7 +839,15 @@ function focusOnSearchbox(){
 		<div class="grid">
 		<div class="progress big grid__item one-half"><span class="bar"></span></div>
 		<div class="grid__item one-half">
-			<button class="review-action btn blue">Publish Translation</button>	
+			<button class="review-action btn blue">Publish Translation</button>
+			<div class="dialog publish-warning">
+				<div class="grid">
+					<div class="row"><div class="title grid__item one-whole">The page you are trying to publish already exists.</div></div>
+					<div class="row"><div class="grid__item one-whole">By publishing the translation, existing content in the page will be lost.</div></div>
+					<div class="row"><div class="grid__item one-whole"><a href="#" class="">View page</a></div></div>
+					<div class="row"><div class="grid__item one-whole"><button class="publish btn blue">Publish anyway</button> <button class="cancel btn">Rename</button> <button class="cancel btn">Cancel</button></div></div>
+				</div>
+			</div>
 		</div>
 		</div>
 	</div>
