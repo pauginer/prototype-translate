@@ -560,6 +560,12 @@ display:none;
 	margin-left: 25px;
 }
 
+.suggestion-action.small {
+	font-size: 12px;	
+	padding-left: 25px;
+	padding-top:0;
+}
+
 .initial-panel .suggestion-action {
 	margin-left: 0px;
 }
