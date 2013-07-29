@@ -211,6 +211,8 @@
 	
 	keycount=0;
 	
+	wordSeparator=" ";
+	
 	function loadData(art,ln){
 	$.getJSON('messages/content-translation/'+art+'-'+ln+'.json',function(data) {
 		suggestions=data.suggestions;
@@ -377,8 +379,8 @@ function spanifyText(text){
 	var result = text;
 	var words = getAllDifferentWords();
 	$.each(words, function(i,w){
-		var re = new RegExp(" "+w+" (?!</i>)","g");
-		result = result.replace(re, " <i>"+w+"</i> ");
+		var re = new RegExp(wordSeparator+w+wordSeparator+"(?!</i>)","g");
+		result = result.replace(re, wordSeparator+"<i>"+w+"</i>"+wordSeparator);
 	});
 	return result;
 	
@@ -388,8 +390,8 @@ function spanifyText(text){
 
 function spanify(elt,word){
 	var text = elt.html();
-	var re = new RegExp(" "+word+" (?!</i>)","g");
-	text = text.replace(re, " <i>"+word+"</i> ");
+	var re = new RegExp(wordSeparator+word+wordSeparator+"(?!</i>)","g");
+	text = text.replace(re, wordSeparator+"<i>"+word+"</i>"+wordSeparator);
 	elt.html(text);
 }
 
@@ -808,6 +810,9 @@ function focusOnSearchbox(){
 				lang=e;
 				if(e=="he"){
 					$("head").append('<link rel="stylesheet" href="style/rtl.css">');
+				}
+				if(e=="zh"){
+					wordSeparator="";
 				}
 				
 			} else if ($.inArray(e,articles)!=-1){
